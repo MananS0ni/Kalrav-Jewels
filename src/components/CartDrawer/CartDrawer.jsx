@@ -1,0 +1,94 @@
+import { useCart } from '../../context/CartContext';
+import { useAuth } from '../../context/AuthContext';
+import './CartDrawer.css';
+
+const CartDrawer = () => {
+  const { items, removeFromCart, updateQty, totalItems, totalPrice, cartOpen, setCartOpen } = useCart();
+  const { user } = useAuth();
+
+  const formatted = (n) => '₹' + n.toLocaleString('en-IN');
+
+  return (
+    <>
+      {/* Backdrop */}
+      {cartOpen && (
+        <div className="cart-backdrop" onClick={() => setCartOpen(false)} />
+      )}
+
+      {/* Drawer */}
+      <div className={`cart-drawer ${cartOpen ? 'cart-drawer--open' : ''}`} id="cart-drawer">
+        {/* Header */}
+        <div className="cart-drawer__header">
+          <div>
+            <p className="cart-drawer__label">Your Selection</p>
+            <h2 className="cart-drawer__title">Shopping Bag</h2>
+          </div>
+          <button className="cart-drawer__close" onClick={() => setCartOpen(false)} aria-label="Close cart">✕</button>
+        </div>
+
+        <div className="cart-drawer__divider"></div>
+
+        {/* Items */}
+        <div className="cart-drawer__body">
+          {items.length === 0 ? (
+            <div className="cart-empty">
+              <p className="cart-empty__icon">◇</p>
+              <p className="cart-empty__title">Your bag is empty</p>
+              <p className="cart-empty__sub">Discover our curated collections</p>
+              <button className="btn-outline cart-empty__btn" onClick={() => setCartOpen(false)}>
+                Explore Collections
+              </button>
+            </div>
+          ) : (
+            <ul className="cart-items">
+              {items.map((item) => (
+                <li key={item.id} className="cart-item">
+                  <div className="cart-item__img-wrap">
+                    <img src={item.image} alt={item.name} className="cart-item__img" />
+                  </div>
+                  <div className="cart-item__info">
+                    <p className="cart-item__category">{item.category}</p>
+                    <p className="cart-item__name">{item.name}</p>
+                    <p className="cart-item__meta">{item.metal} · {item.purity}</p>
+                    <div className="cart-item__bottom">
+                      <div className="cart-item__qty">
+                        <button onClick={() => updateQty(item.id, item.qty - 1)} className="qty-btn" aria-label="Decrease">−</button>
+                        <span className="qty-val">{item.qty}</span>
+                        <button onClick={() => updateQty(item.id, item.qty + 1)} className="qty-btn" aria-label="Increase">+</button>
+                      </div>
+                      <p className="cart-item__price">{item.price}</p>
+                    </div>
+                  </div>
+                  <button className="cart-item__remove" onClick={() => removeFromCart(item.id)} aria-label="Remove">✕</button>
+                </li>
+              ))}
+            </ul>
+          )}
+        </div>
+
+        {/* Footer */}
+        {items.length > 0 && (
+          <div className="cart-drawer__footer">
+            <div className="cart-total-row">
+              <span className="cart-total__label">Estimated Total</span>
+              <span className="cart-total__value">{formatted(totalPrice)}</span>
+            </div>
+            <p className="cart-total__note">Taxes & custom duties may apply</p>
+            <button
+              className="btn-primary cart-checkout-btn"
+              id="cart-checkout-btn"
+              onClick={() => alert(user ? 'Proceeding to checkout...' : 'Please sign in to checkout.')}
+            >
+              <span>{user ? 'Proceed to Checkout' : 'Sign In to Checkout'}</span>
+            </button>
+            <button className="cart-continue" onClick={() => setCartOpen(false)}>
+              Continue Shopping
+            </button>
+          </div>
+        )}
+      </div>
+    </>
+  );
+};
+
+export default CartDrawer;
