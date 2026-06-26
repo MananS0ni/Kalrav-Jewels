@@ -2,6 +2,7 @@ import { useState, useMemo, useEffect } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
 import './Collections.css';
 
+const API = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
 const categories = [
   { slug: 'all', label: 'All Pieces' },
   { slug: 'rings', label: 'Rings' },
@@ -20,7 +21,7 @@ const Collections = () => {
   const [error, setError] = useState('');
 
   useEffect(() => {
-    fetch('http://localhost:5000/api/products')
+    fetch(`${API}/products`)
       .then((res) => res.json())
       .then((data) => { setAllProducts(data); setLoading(false); })
       .catch(() => { setError('Failed to load products.'); setLoading(false); });

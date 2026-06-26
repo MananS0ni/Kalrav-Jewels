@@ -2,6 +2,7 @@ const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
 const dns = require('dns');
+const path = require('path');
 require('dotenv').config();
 
 // Fix: Windows DNS blocks SRV queries — use Google DNS instead
@@ -27,8 +28,18 @@ app.use('/api/orders', orderRoutes);
 
 // Health check
 app.get('/api/health', (req, res) => {
-  res.json({ status: 'NH Soni backend is running ✓' });
+  res.json({ status: 'Kalrav backend is running ✓' });
 });
+
+// ── Serve React frontend in production ──
+if (process.env.NODE_ENV === 'production') {
+  app.use(express.static(path.join(__dirname, '..', 'dist')));
+
+  // Any route that is NOT /api/* → serve React's index.html
+  app.get('*', (req, res) => {
+    res.sendFile(path.join(__dirname, '..', 'dist', 'index.html'));
+  });
+}
 
 // Connect to MongoDB and start server
 mongoose

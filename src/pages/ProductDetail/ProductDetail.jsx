@@ -3,6 +3,8 @@ import { useState, useEffect } from 'react';
 import { useCart } from '../../context/CartContext';
 import './ProductDetail.css';
 
+const API = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
+
 const ProductDetail = () => {
   const { id } = useParams();
   const [product, setProduct] = useState(null);
@@ -16,12 +18,12 @@ const ProductDetail = () => {
 
   useEffect(() => {
     setLoading(true);
-    fetch(`http://localhost:5000/api/products/${id}`)
+    fetch(`${API}/products/${id}`)
       .then((res) => res.json())
       .then((data) => {
         setProduct(data);
         // fetch related (same category)
-        return fetch(`http://localhost:5000/api/products?category=${data.category}`);
+        return fetch(`${API}/products?category=${data.category}`);
       })
       .then((res) => res.json())
       .then((data) => setRelated(data.filter((p) => p._id !== id).slice(0, 3)))

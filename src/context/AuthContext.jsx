@@ -2,7 +2,7 @@ import { createContext, useContext, useState } from 'react';
 
 const AuthContext = createContext(null);
 
-const API = 'http://localhost:5000/api';
+const API = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
 
 export const AuthProvider = ({ children }) => {
   // Load user & token from localStorage on app start
