@@ -1,0 +1,234 @@
+/* ═══════════════════════════════════════════════
+   ORDER CONFIRMATION PAGE
+   ═══════════════════════════════════════════════ */
+
+.oc-page {
+  min-height: 100vh;
+  background: var(--bg);
+  padding: 80px 0 100px;
+}
+.oc-layout {
+  max-width: 720px;
+  margin: 0 auto;
+}
+
+.oc-loading, .oc-gate {
+  min-height: 60vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  color: var(--text-muted);
+  font-family: var(--font-display);
+}
+.oc-gate h2 {
+  font-weight: 400;
+  letter-spacing: 1px;
+}
+
+/* ── Hero ── */
+.oc-hero {
+  text-align: center;
+  margin-bottom: 48px;
+}
+.oc-check-circle {
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  background: rgba(109, 171, 109, 0.12);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 24px;
+  animation: oc-pop 0.5s ease;
+}
+.oc-check-circle svg {
+  width: 36px;
+  height: 36px;
+  color: #6dab6d;
+}
+@keyframes oc-pop {
+  0% { transform: scale(0); opacity: 0; }
+  60% { transform: scale(1.15); }
+  100% { transform: scale(1); opacity: 1; }
+}
+.oc-label {
+  color: var(--gold);
+  font-size: 0.72rem;
+  letter-spacing: 4px;
+  margin-bottom: 10px;
+}
+.oc-title {
+  font-family: var(--font-display);
+  font-size: 2.6rem;
+  font-weight: 400;
+  color: var(--text);
+  letter-spacing: 2px;
+}
+.oc-sub {
+  color: var(--text-muted);
+  font-size: 1rem;
+  margin-top: 8px;
+}
+.oc-order-id {
+  color: var(--text-muted);
+  font-size: 0.82rem;
+  margin-top: 16px;
+  letter-spacing: 0.5px;
+}
+.oc-order-id strong {
+  color: var(--text);
+  font-weight: 600;
+}
+
+/* ── Card ── */
+.oc-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 32px;
+  margin-bottom: 36px;
+}
+.oc-card-heading {
+  font-family: var(--font-display);
+  font-size: 0.85rem;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--gold);
+  font-weight: 400;
+  margin-bottom: 16px;
+}
+.oc-divider {
+  height: 1px;
+  background: var(--border);
+  margin: 24px 0;
+}
+.oc-divider-sm {
+  height: 1px;
+  background: var(--border);
+  margin: 12px 0;
+}
+
+/* ── Items ── */
+.oc-items {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+.oc-item {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+.oc-item__img-wrap {
+  width: 56px;
+  height: 56px;
+  border-radius: 8px;
+  overflow: hidden;
+  background: #f5f0e8;
+  flex-shrink: 0;
+}
+.oc-item__img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.oc-item__info {
+  flex: 1;
+}
+.oc-item__name {
+  font-weight: 600;
+  color: var(--text);
+  font-size: 0.9rem;
+}
+.oc-item__qty {
+  color: var(--text-muted);
+  font-size: 0.8rem;
+  margin-top: 2px;
+}
+.oc-item__price {
+  font-weight: 600;
+  color: var(--text);
+  font-size: 0.9rem;
+  white-space: nowrap;
+}
+
+/* ── Two columns ── */
+.oc-card-cols {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 32px;
+}
+.oc-address {
+  color: var(--text-muted);
+  font-size: 0.88rem;
+  line-height: 1.7;
+}
+
+/* ── Summary rows ── */
+.oc-summary-row {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.88rem;
+  color: var(--text-muted);
+  margin-bottom: 6px;
+}
+.oc-summary-row--total {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--text);
+  margin-top: 4px;
+}
+.oc-free {
+  color: #6dab6d;
+  font-weight: 600;
+}
+
+/* ── Badges ── */
+.oc-status-badges {
+  display: flex;
+  gap: 8px;
+  margin-top: 16px;
+}
+.oc-badge {
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 0.72rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+.oc-badge--status {
+  background: rgba(184, 150, 12, 0.1);
+  color: var(--gold);
+}
+.oc-badge--payment {
+  background: rgba(109, 171, 109, 0.1);
+  color: #6dab6d;
+}
+
+/* ── Actions ── */
+.oc-actions {
+  display: flex;
+  gap: 16px;
+  justify-content: center;
+}
+
+/* ── Responsive ── */
+@media (max-width: 600px) {
+  .oc-card-cols {
+    grid-template-columns: 1fr;
+    gap: 24px;
+  }
+  .oc-title {
+    font-size: 2rem;
+  }
+  .oc-actions {
+    flex-direction: column;
+    align-items: center;
+  }
+}

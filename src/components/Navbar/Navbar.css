@@ -319,6 +319,23 @@
   margin-bottom: 12px;
 }
 
+.user-dropdown__link {
+  display: block;
+  text-align: center;
+  padding: 8px;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--gray-mid);
+  text-decoration: none;
+  transition: all var(--transition);
+}
+.user-dropdown__link:hover {
+  color: var(--gold);
+}
+
 .user-dropdown__logout {
   background: none;
   border: 1px solid var(--border);

@@ -70,6 +70,10 @@ const Navbar = () => {
                       <p className="user-dropdown__name">{user.name}</p>
                       <p className="user-dropdown__email">{user.email}</p>
                       <div className="user-dropdown__divider"></div>
+                      <Link to="/my-orders" className="user-dropdown__link" onClick={() => setUserMenuOpen(false)}>
+                        My Orders
+                      </Link>
+                      <div className="user-dropdown__divider"></div>
                       <button className="user-dropdown__logout" onClick={() => { logout(); setUserMenuOpen(false); }} id="logout-btn">
                         Sign Out
                       </button>

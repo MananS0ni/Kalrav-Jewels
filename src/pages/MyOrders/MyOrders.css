@@ -1,0 +1,231 @@
+/* ═══════════════════════════════════════════════
+   MY ORDERS PAGE
+   ═══════════════════════════════════════════════ */
+
+.mo-page {
+  min-height: 100vh;
+  background: var(--bg);
+  padding: 60px 0 100px;
+}
+
+/* ── Gate ── */
+.mo-gate {
+  min-height: 60vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+}
+.mo-gate h2 {
+  font-family: var(--font-display);
+  font-weight: 400;
+  letter-spacing: 1px;
+  color: var(--text);
+}
+
+/* ── Header ── */
+.mo-header {
+  text-align: center;
+  margin-bottom: 48px;
+}
+.mo-label {
+  color: var(--gold);
+  font-size: 0.72rem;
+  letter-spacing: 4px;
+  margin-bottom: 10px;
+}
+.mo-title {
+  font-family: var(--font-display);
+  font-size: 2.4rem;
+  font-weight: 400;
+  color: var(--text);
+  letter-spacing: 2px;
+}
+
+/* ── Loading / Empty ── */
+.mo-loading {
+  text-align: center;
+  color: var(--text-muted);
+  padding: 80px 0;
+}
+.mo-empty {
+  text-align: center;
+  padding: 80px 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}
+.mo-empty__icon {
+  font-size: 2.5rem;
+  color: var(--gold);
+  opacity: 0.5;
+}
+.mo-empty__title {
+  font-family: var(--font-display);
+  font-size: 1.5rem;
+  font-weight: 400;
+  color: var(--text);
+}
+.mo-empty__sub {
+  color: var(--text-muted);
+  font-size: 0.9rem;
+  margin-bottom: 10px;
+}
+
+/* ── Orders List ── */
+.mo-list {
+  max-width: 780px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+/* ── Order Card ── */
+.mo-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 28px;
+  transition: border-color 0.3s;
+}
+.mo-card:hover {
+  border-color: rgba(184, 150, 12, 0.3);
+}
+
+.mo-card__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+.mo-card__date {
+  font-size: 0.95rem;
+  color: var(--text);
+  font-weight: 600;
+}
+.mo-card__id {
+  color: var(--text-muted);
+  font-size: 0.78rem;
+  margin-top: 2px;
+  letter-spacing: 0.5px;
+}
+.mo-card__right {
+  text-align: right;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 6px;
+}
+.mo-card__total {
+  font-weight: 700;
+  font-size: 1.1rem;
+  color: var(--text);
+}
+
+.mo-status-badge {
+  padding: 3px 12px;
+  border-radius: 20px;
+  font-size: 0.7rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.mo-card__divider {
+  height: 1px;
+  background: var(--border);
+  margin: 18px 0;
+}
+
+/* ── Items inside card ── */
+.mo-card__items {
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+.mo-card__item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex: 1;
+  min-width: 200px;
+}
+.mo-card__item-img-wrap {
+  width: 50px;
+  height: 50px;
+  border-radius: 8px;
+  overflow: hidden;
+  background: #f5f0e8;
+  flex-shrink: 0;
+}
+.mo-card__item-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.mo-card__item-name {
+  font-weight: 600;
+  color: var(--text);
+  font-size: 0.88rem;
+}
+.mo-card__item-meta {
+  color: var(--text-muted);
+  font-size: 0.78rem;
+  margin-top: 2px;
+}
+
+/* ── Footer ── */
+.mo-card__footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 18px;
+  padding-top: 18px;
+  border-top: 1px solid var(--border);
+}
+.mo-card__address {
+  color: var(--text-muted);
+  font-size: 0.82rem;
+}
+.mo-card__addr-label {
+  color: var(--text-muted);
+  font-size: 0.72rem;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  display: block;
+  margin-bottom: 2px;
+}
+.mo-card__details-link {
+  color: var(--gold);
+  font-size: 0.85rem;
+  font-weight: 600;
+  text-decoration: none;
+  letter-spacing: 0.5px;
+  transition: opacity 0.3s;
+}
+.mo-card__details-link:hover {
+  opacity: 0.7;
+}
+
+/* ── Responsive ── */
+@media (max-width: 600px) {
+  .mo-card__header {
+    flex-direction: column;
+    gap: 12px;
+  }
+  .mo-card__right {
+    align-items: flex-start;
+    flex-direction: row;
+    gap: 12px;
+  }
+  .mo-card__items {
+    flex-direction: column;
+  }
+  .mo-card__footer {
+    flex-direction: column;
+    gap: 12px;
+    align-items: flex-start;
+  }
+}

@@ -15,6 +15,7 @@ const ProductDetail = () => {
   const { addToCart } = useCart();
   const [sizerOpen, setSizerOpen] = useState(false);
   const [circumference, setCircumference] = useState('');
+  const [activeMediaIndex, setActiveMediaIndex] = useState(0);
 
   useEffect(() => {
     setLoading(true);
@@ -22,6 +23,7 @@ const ProductDetail = () => {
       .then((res) => res.json())
       .then((data) => {
         setProduct(data);
+        setActiveMediaIndex(0); // Reset gallery on product change
         // fetch related (same category)
         return fetch(`${API}/products?category=${data.category}`);
       })
@@ -50,7 +52,7 @@ const ProductDetail = () => {
   const result = circumference ? getRingSize(parseFloat(circumference)) : null;
 
   const handleAddToCart = () => {
-    addToCart({ ...product, image: product.images?.[0], price: `₹${product.price?.toLocaleString('en-IN')}` });
+    addToCart(product);
     setAdded(true);
     setTimeout(() => setAdded(false), 2000);
   };
@@ -86,9 +88,40 @@ const ProductDetail = () => {
         {/* Image */}
         <div className="product-detail__gallery">
           <div className="product-detail__image-wrap">
-            <img src={product.images?.[0] || '/ring_product.png'} alt={product.name} className="product-detail__image" />
+            {product.images?.[activeMediaIndex]?.endsWith('.mp4') ? (
+              <video 
+                src={product.images[activeMediaIndex]} 
+                autoPlay loop muted playsInline 
+                className="product-detail__image" 
+              />
+            ) : (
+              <img 
+                src={product.images?.[activeMediaIndex] || '/ring_product.png'} 
+                alt={product.name} 
+                className="product-detail__image" 
+              />
+            )}
             {product.tags?.[0] && <span className="product-detail__tag">{product.tags[0]}</span>}
           </div>
+          
+          {/* Thumbnails */}
+          {product.images && product.images.length > 1 && (
+            <div className="product-detail__thumbnails">
+              {product.images.map((media, idx) => (
+                <button 
+                  key={idx} 
+                  className={`thumbnail-btn ${idx === activeMediaIndex ? 'active' : ''}`}
+                  onClick={() => setActiveMediaIndex(idx)}
+                >
+                  {media.endsWith('.mp4') ? (
+                    <video src={media} muted className="thumbnail-img" />
+                  ) : (
+                    <img src={media} alt={`Thumbnail ${idx+1}`} className="thumbnail-img" />
+                  )}
+                </button>
+              ))}
+            </div>
+          )}
         </div>
 
         {/* Info */}

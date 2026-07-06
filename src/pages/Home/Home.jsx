@@ -49,6 +49,7 @@ const categories = [
   { name: 'Necklaces', slug: 'necklaces', desc: 'Sets & Pendants', image: '/necklace_product.png' },
   { name: 'Earrings', slug: 'earrings', desc: 'Drops & Studs', image: '/earring_product.png' },
   { name: 'Bracelets', slug: 'bracelets', desc: 'Tennis & Bangles', image: '/bracelet_product.png' },
+  { name: 'Chains', slug: 'chains', desc: 'Link & Snake', image: '/silver-link-chain/hero-1.jpg' },
 ];
 
 const Home = () => {

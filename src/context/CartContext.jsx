@@ -8,31 +8,39 @@ export const CartProvider = ({ children }) => {
 
   const addToCart = (product) => {
     setItems((prev) => {
-      const existing = prev.find((i) => i.id === product.id);
+      // Use _id (MongoDB) or id as fallback
+      const productId = product._id || product.id;
+      const existing = prev.find((i) => i.productId === productId);
       if (existing) {
-        return prev.map((i) => i.id === product.id ? { ...i, qty: i.qty + 1 } : i);
+        return prev.map((i) => i.productId === productId ? { ...i, qty: i.qty + 1 } : i);
       }
-      return [...prev, { ...product, qty: 1 }];
+      return [...prev, {
+        productId,
+        name: product.name,
+        image: product.images?.[0] || product.image || '/ring_product.png',
+        category: product.category || '',
+        material: product.material || '',
+        purity: product.purity || '',
+        price: typeof product.price === 'number' ? product.price : parseInt(String(product.price).replace(/[^0-9]/g, '')),
+        qty: 1,
+      }];
     });
     setCartOpen(true);
   };
 
-  const removeFromCart = (id) => {
-    setItems((prev) => prev.filter((i) => i.id !== id));
+  const removeFromCart = (productId) => {
+    setItems((prev) => prev.filter((i) => i.productId !== productId));
   };
 
-  const updateQty = (id, qty) => {
-    if (qty < 1) { removeFromCart(id); return; }
-    setItems((prev) => prev.map((i) => i.id === id ? { ...i, qty } : i));
+  const updateQty = (productId, qty) => {
+    if (qty < 1) { removeFromCart(productId); return; }
+    setItems((prev) => prev.map((i) => i.productId === productId ? { ...i, qty } : i));
   };
 
   const clearCart = () => setItems([]);
 
   const totalItems = items.reduce((sum, i) => sum + i.qty, 0);
-  const totalPrice = items.reduce((sum, i) => {
-    const num = parseInt(i.price.replace(/[^0-9]/g, ''));
-    return sum + num * i.qty;
-  }, 0);
+  const totalPrice = items.reduce((sum, i) => sum + i.price * i.qty, 0);
 
   return (
     <CartContext.Provider value={{ items, addToCart, removeFromCart, updateQty, clearCart, totalItems, totalPrice, cartOpen, setCartOpen }}>

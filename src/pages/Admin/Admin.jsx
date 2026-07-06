@@ -10,9 +10,21 @@ const emptyForm = {
   isFeatured: false, tags: '', images: '',
 };
 
+const statusOptions = ['pending', 'confirmed', 'processing', 'shipped', 'delivered', 'cancelled'];
+const paymentOptions = ['pending', 'paid', 'failed', 'refunded'];
+const statusColors = {
+  pending: '#b8960c', confirmed: '#5b8fb9', processing: '#c4842d',
+  shipped: '#6dab6d', delivered: '#4a9a4a', cancelled: '#cf6f6f',
+};
+const paymentColors = {
+  pending: '#b8960c', paid: '#4a9a4a', failed: '#cf6f6f', refunded: '#5b8fb9',
+};
+
 const Admin = () => {
   const { user, token } = useAuth();
+  const [tab, setTab] = useState('products');
   const [products, setProducts] = useState([]);
+  const [orders, setOrders] = useState([]);
   const [form, setForm] = useState(emptyForm);
   const [editId, setEditId] = useState(null);
   const [msg, setMsg] = useState('');
@@ -23,10 +35,15 @@ const Admin = () => {
   const fetchProducts = () =>
     fetch(`${API}/products`).then(r => r.json()).then(setProducts);
 
-  useEffect(() => { fetchProducts(); }, []);
+  const fetchOrders = () =>
+    fetch(`${API}/orders`, { headers }).then(r => r.json()).then(setOrders);
+
+  useEffect(() => { fetchProducts(); fetchOrders(); }, []);
 
   const flash = (m) => { setMsg(m); setTimeout(() => setMsg(''), 3000); };
+  const formatted = (n) => '₹' + n.toLocaleString('en-IN');
 
+  // ── Product handlers ──
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
     setForm(f => ({ ...f, [name]: type === 'checkbox' ? checked : value }));
@@ -76,6 +93,23 @@ const Admin = () => {
     fetchProducts();
   };
 
+  // ── Order handlers ──
+  const updateOrderStatus = async (orderId, orderStatus, paymentStatus) => {
+    try {
+      const res = await fetch(`${API}/orders/${orderId}/status`, {
+        method: 'PUT',
+        headers,
+        body: JSON.stringify({ orderStatus, paymentStatus }),
+      });
+      if (!res.ok) throw new Error('Update failed');
+      flash('✓ Order updated!');
+      fetchOrders();
+    } catch (err) {
+      flash('✗ ' + err.message);
+    }
+  };
+
+  // ── Access Gate ──
   if (!user || user.role !== 'admin') {
     return (
       <div className="admin-gate">
@@ -94,109 +128,226 @@ const Admin = () => {
 
       {msg && <div className={`admin-flash ${msg.startsWith('✗') ? 'admin-flash--err' : ''}`}>{msg}</div>}
 
-      {/* Form */}
-      <div className="admin-section">
-        <h2 className="admin-section-title">{editId ? 'Edit Product' : 'Add New Product'}</h2>
-        <form className="admin-form" onSubmit={handleSubmit}>
-          <div className="admin-form-grid">
-            <div className="admin-field">
-              <label>Product Name *</label>
-              <input name="name" value={form.name} onChange={handleChange} required placeholder="Diamond Solitaire Ring" />
-            </div>
-            <div className="admin-field">
-              <label>Category *</label>
-              <select name="category" value={form.category} onChange={handleChange}>
-                <option value="rings">Rings</option>
-                <option value="necklaces">Necklaces</option>
-                <option value="earrings">Earrings</option>
-                <option value="bracelets">Bracelets</option>
-              </select>
-            </div>
-            <div className="admin-field">
-              <label>Price (₹) *</label>
-              <input name="price" type="number" value={form.price} onChange={handleChange} required placeholder="185000" />
-            </div>
-            <div className="admin-field">
-              <label>Stock</label>
-              <input name="stock" type="number" value={form.stock} onChange={handleChange} placeholder="10" />
-            </div>
-            <div className="admin-field">
-              <label>Material</label>
-              <input name="material" value={form.material} onChange={handleChange} placeholder="18K Gold" />
-            </div>
-            <div className="admin-field">
-              <label>Weight</label>
-              <input name="weight" value={form.weight} onChange={handleChange} placeholder="3.2g" />
-            </div>
-            <div className="admin-field">
-              <label>Purity / Stone</label>
-              <input name="purity" value={form.purity} onChange={handleChange} placeholder="VS1 Diamond" />
-            </div>
-            <div className="admin-field">
-              <label>Tags (comma separated)</label>
-              <input name="tags" value={form.tags} onChange={handleChange} placeholder="bestseller, new" />
-            </div>
-            <div className="admin-field admin-field--full">
-              <label>Images (comma separated paths)</label>
-              <input name="images" value={form.images} onChange={handleChange} placeholder="/ring_product.png" />
-            </div>
-            <div className="admin-field admin-field--full">
-              <label>Description *</label>
-              <textarea name="description" value={form.description} onChange={handleChange} required rows={3} placeholder="A breathtaking solitaire..." />
-            </div>
-            <div className="admin-field admin-field--check">
-              <label>
-                <input type="checkbox" name="isFeatured" checked={form.isFeatured} onChange={handleChange} />
-                Featured on homepage
-              </label>
-            </div>
-          </div>
-          <div className="admin-form-actions">
-            <button type="submit" className="admin-btn admin-btn--primary" disabled={loading}>
-              {loading ? 'Saving...' : editId ? 'Update Product' : 'Add Product'}
-            </button>
-            {editId && (
-              <button type="button" className="admin-btn admin-btn--ghost" onClick={() => { setEditId(null); setForm(emptyForm); }}>
-                Cancel
-              </button>
-            )}
-          </div>
-        </form>
+      {/* ── Tabs ── */}
+      <div className="admin-tabs">
+        <button
+          className={`admin-tab ${tab === 'products' ? 'admin-tab--active' : ''}`}
+          onClick={() => setTab('products')}
+        >
+          Products ({products.length})
+        </button>
+        <button
+          className={`admin-tab ${tab === 'orders' ? 'admin-tab--active' : ''}`}
+          onClick={() => setTab('orders')}
+        >
+          Orders ({orders.length})
+        </button>
       </div>
 
-      {/* Products Table */}
-      <div className="admin-section">
-        <h2 className="admin-section-title">All Products ({products.length})</h2>
-        <div className="admin-table-wrap">
-          <table className="admin-table">
-            <thead>
-              <tr>
-                <th>Name</th>
-                <th>Category</th>
-                <th>Price</th>
-                <th>Stock</th>
-                <th>Featured</th>
-                <th>Actions</th>
-              </tr>
-            </thead>
-            <tbody>
-              {products.map(p => (
-                <tr key={p._id}>
-                  <td>{p.name}</td>
-                  <td className="admin-cat">{p.category}</td>
-                  <td>₹{p.price.toLocaleString('en-IN')}</td>
-                  <td className={p.stock === 0 ? 'admin-out' : ''}>{p.stock}</td>
-                  <td>{p.isFeatured ? '★' : '—'}</td>
-                  <td>
-                    <button className="admin-btn admin-btn--edit" onClick={() => handleEdit(p)}>Edit</button>
-                    <button className="admin-btn admin-btn--del" onClick={() => handleDelete(p._id)}>Delete</button>
-                  </td>
-                </tr>
+      {/* ═══════════════════ PRODUCTS TAB ═══════════════════ */}
+      {tab === 'products' && (
+        <>
+          {/* Form */}
+          <div className="admin-section">
+            <h2 className="admin-section-title">{editId ? 'Edit Product' : 'Add New Product'}</h2>
+            <form className="admin-form" onSubmit={handleSubmit}>
+              <div className="admin-form-grid">
+                <div className="admin-field">
+                  <label>Product Name *</label>
+                  <input name="name" value={form.name} onChange={handleChange} required placeholder="Diamond Solitaire Ring" />
+                </div>
+                <div className="admin-field">
+                  <label>Category *</label>
+                  <select name="category" value={form.category} onChange={handleChange}>
+                    <option value="rings">Rings</option>
+                    <option value="necklaces">Necklaces</option>
+                    <option value="earrings">Earrings</option>
+                    <option value="bracelets">Bracelets</option>
+                  </select>
+                </div>
+                <div className="admin-field">
+                  <label>Price (₹) *</label>
+                  <input name="price" type="number" value={form.price} onChange={handleChange} required placeholder="185000" />
+                </div>
+                <div className="admin-field">
+                  <label>Stock</label>
+                  <input name="stock" type="number" value={form.stock} onChange={handleChange} placeholder="10" />
+                </div>
+                <div className="admin-field">
+                  <label>Material</label>
+                  <input name="material" value={form.material} onChange={handleChange} placeholder="18K Gold" />
+                </div>
+                <div className="admin-field">
+                  <label>Weight</label>
+                  <input name="weight" value={form.weight} onChange={handleChange} placeholder="3.2g" />
+                </div>
+                <div className="admin-field">
+                  <label>Purity / Stone</label>
+                  <input name="purity" value={form.purity} onChange={handleChange} placeholder="VS1 Diamond" />
+                </div>
+                <div className="admin-field">
+                  <label>Tags (comma separated)</label>
+                  <input name="tags" value={form.tags} onChange={handleChange} placeholder="bestseller, new" />
+                </div>
+                <div className="admin-field admin-field--full">
+                  <label>Images (comma separated paths)</label>
+                  <input name="images" value={form.images} onChange={handleChange} placeholder="/ring_product.png" />
+                </div>
+                <div className="admin-field admin-field--full">
+                  <label>Description *</label>
+                  <textarea name="description" value={form.description} onChange={handleChange} required rows={3} placeholder="A breathtaking solitaire..." />
+                </div>
+                <div className="admin-field admin-field--check">
+                  <label>
+                    <input type="checkbox" name="isFeatured" checked={form.isFeatured} onChange={handleChange} />
+                    Featured on homepage
+                  </label>
+                </div>
+              </div>
+              <div className="admin-form-actions">
+                <button type="submit" className="admin-btn admin-btn--primary" disabled={loading}>
+                  {loading ? 'Saving...' : editId ? 'Update Product' : 'Add Product'}
+                </button>
+                {editId && (
+                  <button type="button" className="admin-btn admin-btn--ghost" onClick={() => { setEditId(null); setForm(emptyForm); }}>
+                    Cancel
+                  </button>
+                )}
+              </div>
+            </form>
+          </div>
+
+          {/* Products Table */}
+          <div className="admin-section">
+            <h2 className="admin-section-title">All Products ({products.length})</h2>
+            <div className="admin-table-wrap">
+              <table className="admin-table">
+                <thead>
+                  <tr>
+                    <th>Name</th>
+                    <th>Category</th>
+                    <th>Price</th>
+                    <th>Stock</th>
+                    <th>Featured</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {products.map(p => (
+                    <tr key={p._id}>
+                      <td>{p.name}</td>
+                      <td className="admin-cat">{p.category}</td>
+                      <td>₹{p.price.toLocaleString('en-IN')}</td>
+                      <td className={p.stock === 0 ? 'admin-out' : ''}>{p.stock}</td>
+                      <td>{p.isFeatured ? '★' : '—'}</td>
+                      <td>
+                        <button className="admin-btn admin-btn--edit" onClick={() => handleEdit(p)}>Edit</button>
+                        <button className="admin-btn admin-btn--del" onClick={() => handleDelete(p._id)}>Delete</button>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </>
+      )}
+
+      {/* ═══════════════════ ORDERS TAB ═══════════════════ */}
+      {tab === 'orders' && (
+        <div className="admin-section">
+          <h2 className="admin-section-title">All Orders ({orders.length})</h2>
+
+          {orders.length === 0 ? (
+            <p style={{ color: '#888', textAlign: 'center', padding: '40px' }}>No orders yet.</p>
+          ) : (
+            <div className="admin-orders-list">
+              {orders.map(order => (
+                <div key={order._id} className="admin-order-card">
+                  {/* Order Header */}
+                  <div className="admin-order-header">
+                    <div>
+                      <p className="admin-order-date">
+                        {new Date(order.createdAt).toLocaleDateString('en-IN', {
+                          day: 'numeric', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit',
+                        })}
+                      </p>
+                      <p className="admin-order-id">#{order._id.slice(-8).toUpperCase()}</p>
+                    </div>
+                    <div className="admin-order-total">{formatted(order.totalAmount)}</div>
+                  </div>
+
+                  {/* Customer Info */}
+                  <div className="admin-order-customer">
+                    <div className="admin-order-customer-info">
+                      <span className="admin-order-cust-label">Customer</span>
+                      <span className="admin-order-cust-name">
+                        {order.user?.name || 'Unknown'} — {order.user?.email || ''}
+                      </span>
+                    </div>
+                    <div className="admin-order-customer-info">
+                      <span className="admin-order-cust-label">Ship to</span>
+                      <span className="admin-order-cust-name">
+                        {order.shippingAddress.fullName}, {order.shippingAddress.phone}
+                        <br />
+                        {order.shippingAddress.addressLine}, {order.shippingAddress.city}, {order.shippingAddress.state} — {order.shippingAddress.pincode}
+                      </span>
+                    </div>
+                  </div>
+
+                  {/* Items */}
+                  <div className="admin-order-items">
+                    {order.items.map((item, i) => (
+                      <div key={i} className="admin-order-item">
+                        <img src={item.image || '/ring_product.png'} alt={item.name} className="admin-order-item-img" />
+                        <div className="admin-order-item-info">
+                          <span className="admin-order-item-name">{item.name}</span>
+                          <span className="admin-order-item-meta">Qty: {item.quantity} × {formatted(item.price)}</span>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+
+                  {/* Status Controls */}
+                  <div className="admin-order-controls">
+                    <div className="admin-order-control">
+                      <label>Order Status</label>
+                      <select
+                        value={order.orderStatus}
+                        onChange={(e) => updateOrderStatus(order._id, e.target.value, null)}
+                        style={{ borderColor: statusColors[order.orderStatus] }}
+                      >
+                        {statusOptions.map(s => <option key={s} value={s}>{s.charAt(0).toUpperCase() + s.slice(1)}</option>)}
+                      </select>
+                    </div>
+                    <div className="admin-order-control">
+                      <label>Payment</label>
+                      <select
+                        value={order.paymentStatus}
+                        onChange={(e) => updateOrderStatus(order._id, null, e.target.value)}
+                        style={{ borderColor: paymentColors[order.paymentStatus] }}
+                      >
+                        {paymentOptions.map(s => <option key={s} value={s}>{s.charAt(0).toUpperCase() + s.slice(1)}</option>)}
+                      </select>
+                    </div>
+                    <div className="admin-order-badges">
+                      <span className="admin-order-badge" style={{ background: `${statusColors[order.orderStatus]}18`, color: statusColors[order.orderStatus] }}>
+                        {order.orderStatus}
+                      </span>
+                      <span className="admin-order-badge" style={{ background: `${paymentColors[order.paymentStatus]}18`, color: paymentColors[order.paymentStatus] }}>
+                        {order.paymentStatus}
+                      </span>
+                      <span className="admin-order-badge" style={{ background: '#3a3a3a', color: '#aaa' }}>
+                        {order.paymentMethod.toUpperCase()}
+                      </span>
+                    </div>
+                  </div>
+                </div>
               ))}
-            </tbody>
-          </table>
+            </div>
+          )}
         </div>
-      </div>
+      )}
     </div>
   );
 };

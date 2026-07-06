@@ -11,6 +11,9 @@ import About from './pages/About/About';
 import Contact from './pages/Contact/Contact';
 import ProductDetail from './pages/ProductDetail/ProductDetail';
 import Admin from './pages/Admin/Admin';
+import Checkout from './pages/Checkout/Checkout';
+import OrderConfirmation from './pages/OrderConfirmation/OrderConfirmation';
+import MyOrders from './pages/MyOrders/MyOrders';
 import './App.css';
 
 const AppLayout = () => {
@@ -30,6 +33,9 @@ const AppLayout = () => {
           <Route path="/about" element={<About />} />
           <Route path="/contact" element={<Contact />} />
           <Route path="/admin-kalrav-panel" element={<Admin />} />
+          <Route path="/checkout" element={<Checkout />} />
+          <Route path="/order-confirmation/:orderId" element={<OrderConfirmation />} />
+          <Route path="/my-orders" element={<MyOrders />} />
         </Routes>
       </main>
       {!isAdmin && <Footer />}

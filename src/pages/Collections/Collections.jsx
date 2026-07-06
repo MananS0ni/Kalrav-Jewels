@@ -9,6 +9,7 @@ const categories = [
   { slug: 'necklaces', label: 'Necklaces' },
   { slug: 'earrings', label: 'Earrings' },
   { slug: 'bracelets', label: 'Bracelets' },
+  { slug: 'chains', label: 'Chains' },
 ];
 
 const Collections = () => {

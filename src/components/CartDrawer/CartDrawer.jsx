@@ -1,3 +1,4 @@
+import { useNavigate } from 'react-router-dom';
 import { useCart } from '../../context/CartContext';
 import { useAuth } from '../../context/AuthContext';
 import './CartDrawer.css';
@@ -5,8 +6,18 @@ import './CartDrawer.css';
 const CartDrawer = () => {
   const { items, removeFromCart, updateQty, totalItems, totalPrice, cartOpen, setCartOpen } = useCart();
   const { user } = useAuth();
+  const navigate = useNavigate();
 
   const formatted = (n) => '₹' + n.toLocaleString('en-IN');
+
+  const handleCheckout = () => {
+    if (!user) {
+      alert('Please sign in to checkout.');
+      return;
+    }
+    setCartOpen(false);
+    navigate('/checkout');
+  };
 
   return (
     <>
@@ -42,24 +53,24 @@ const CartDrawer = () => {
           ) : (
             <ul className="cart-items">
               {items.map((item) => (
-                <li key={item.id} className="cart-item">
+                <li key={item.productId} className="cart-item">
                   <div className="cart-item__img-wrap">
                     <img src={item.image} alt={item.name} className="cart-item__img" />
                   </div>
                   <div className="cart-item__info">
                     <p className="cart-item__category">{item.category}</p>
                     <p className="cart-item__name">{item.name}</p>
-                    <p className="cart-item__meta">{item.metal} · {item.purity}</p>
+                    <p className="cart-item__meta">{item.material} · {item.purity}</p>
                     <div className="cart-item__bottom">
                       <div className="cart-item__qty">
-                        <button onClick={() => updateQty(item.id, item.qty - 1)} className="qty-btn" aria-label="Decrease">−</button>
+                        <button onClick={() => updateQty(item.productId, item.qty - 1)} className="qty-btn" aria-label="Decrease">−</button>
                         <span className="qty-val">{item.qty}</span>
-                        <button onClick={() => updateQty(item.id, item.qty + 1)} className="qty-btn" aria-label="Increase">+</button>
+                        <button onClick={() => updateQty(item.productId, item.qty + 1)} className="qty-btn" aria-label="Increase">+</button>
                       </div>
-                      <p className="cart-item__price">{item.price}</p>
+                      <p className="cart-item__price">{formatted(item.price)}</p>
                     </div>
                   </div>
-                  <button className="cart-item__remove" onClick={() => removeFromCart(item.id)} aria-label="Remove">✕</button>
+                  <button className="cart-item__remove" onClick={() => removeFromCart(item.productId)} aria-label="Remove">✕</button>
                 </li>
               ))}
             </ul>
@@ -77,7 +88,7 @@ const CartDrawer = () => {
             <button
               className="btn-primary cart-checkout-btn"
               id="cart-checkout-btn"
-              onClick={() => alert(user ? 'Proceeding to checkout...' : 'Please sign in to checkout.')}
+              onClick={handleCheckout}
             >
               <span>{user ? 'Proceed to Checkout' : 'Sign In to Checkout'}</span>
             </button>
