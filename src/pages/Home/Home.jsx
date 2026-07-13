@@ -38,9 +38,9 @@ const products = [
 ];
 
 const stats = [
-  { value: '1952', label: 'Established' },
-  { value: '70+', label: 'Years of Legacy' },
-  { value: '10,000+', label: 'Happy Families' },
+  { value: '3', label: 'Generations of Trust' },
+  { value: 'Family', label: 'Owned & Operated' },
+  { value: '100%', label: 'Authentic Craftsmanship' },
   { value: '925', label: 'Sterling Silver' },
 ];
 
@@ -70,7 +70,7 @@ const Home = () => {
         </div>
         <div className="hero__content container">
           <div className="hero__text-wrap">
-            <p className="hero__label section-label">Since 1952</p>
+            <p className="hero__label section-label">A Family Legacy</p>
             <h1 className="hero__title">
               Where Silver Meets<br />
               <em>Timeless Grace</em>

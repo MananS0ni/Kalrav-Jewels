@@ -2,12 +2,10 @@ import './About.css';
 import { Link } from 'react-router-dom';
 
 const milestones = [
-  { year: '1952', title: 'Founded', desc: 'Shri Narendra H. Soni establishes the first shop with a vision for exquisite handcrafted silver jewellery.' },
-  { year: '1975', title: 'Legacy Grows', desc: 'Second generation joins the family craft, introducing new design sensibilities and silver techniques.' },
-  { year: '1998', title: 'Modern Atelier', desc: 'Kalrav Jewel expands into a full-fledged atelier with in-house craftsmen specialising in 925 sterling silver.' },
-  { year: '2008', title: '925 Certification', desc: 'Among the first in the region to achieve hallmarking certification for all 925 sterling silver pieces.' },
-  { year: '2020', title: 'Digital Presence', desc: 'Bringing the showroom experience to the world through our digital storefront.' },
-  { year: 'Today', title: 'Timeless Craft', desc: 'Continuing to serve families across generations with integrity, artistry, and sterling silver.' },
+  { year: 'Generation 1', title: 'The Foundation', desc: 'My grandfather established our family\'s first jewellery shop with a vision for exquisite handcrafted silver pieces.' },
+  { year: 'Generation 2', title: 'The Legacy Grows', desc: 'My father took over the physical store, expanding our offerings and cementing our reputation for trust and purity.' },
+  { year: 'Generation 3', title: 'The Digital Era', desc: 'I am taking our family business online with Kalrav Jewels, bringing our heritage to customers nationwide.' },
+  { year: 'Today', title: 'Timeless Craft', desc: 'Continuing to serve families across generations with integrity, artistry, and 925 sterling silver.' },
 ];
 
 const values = [
@@ -28,7 +26,7 @@ const About = () => {
           <div className="gold-line-center" style={{ marginTop: '14px' }}></div>
           <h1 className="page-header__title">Our Story</h1>
           <p className="page-header__subtitle">
-            Seven decades of devotion, craftsmanship, and trust.
+            Three generations of devotion, craftsmanship, and trust.
           </p>
         </div>
       </div>
@@ -39,25 +37,21 @@ const About = () => {
           <div className="founder-image-wrap">
             <img src="/store_interior.png" alt="Kalrav Jewel heritage" className="founder-img" />
             <div className="founder-badge">
-              <span className="founder-badge-top">Est.</span>
-              <span className="founder-badge-year">1952</span>
+              <span className="founder-badge-top">3</span>
+              <span className="founder-badge-year">Gens</span>
             </div>
           </div>
           <div className="founder-content">
-            <p className="section-label">The Founding Vision</p>
+            <p className="section-label">Our Family Legacy</p>
             <div className="gold-line" style={{ marginTop: '14px' }}></div>
-            <h2 className="section-title">A Dream Forged<br />in Sterling Silver</h2>
+            <h2 className="section-title">A Tradition Forged<br />in Sterling Silver</h2>
             <p className="section-subtitle" style={{ marginTop: '20px' }}>
-              In 1952, Shri Narendra H. Soni set up a modest shop with a singular vision: 
+              Our story begins with my grandfather, who set up a modest shop with a singular vision: 
               to create 925 sterling silver jewellery that would be passed down through generations. Armed with 
-              traditional craftsmanship learned from master silversmiths and an unwavering 
-              commitment to purity, he built more than a business — he built a legacy.
+              traditional craftsmanship and an unwavering commitment to purity, he built more than a business — he built a legacy.
             </p>
             <p className="section-subtitle" style={{ marginTop: '14px' }}>
-              Today, Kalrav Jewel stands as a symbol of trust for thousands of families 
-              across India. Our craft has evolved, but our values remain exactly as our 
-              founder intended — rooted in honesty, artistry, and the celebration of life's 
-              most precious moments.
+              That legacy was passed down to my father, who continues to run our family's physical store today, maintaining the trust of countless families. Now, as the third generation, I am bringing our family's heritage into the digital age with Kalrav Jewels online. Our craft is evolving, but our values remain exactly as my grandfather intended — rooted in honesty, artistry, and the celebration of life's most precious moments.
             </p>
           </div>
         </div>
