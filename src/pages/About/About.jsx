@@ -2,9 +2,9 @@ import './About.css';
 import { Link } from 'react-router-dom';
 
 const milestones = [
-  { year: 'Generation 1', title: 'The Foundation', desc: 'My grandfather established our family\'s first jewellery shop with a vision for exquisite handcrafted silver pieces.' },
-  { year: 'Generation 2', title: 'The Legacy Grows', desc: 'My father took over the physical store, expanding our offerings and cementing our reputation for trust and purity.' },
-  { year: 'Generation 3', title: 'The Digital Era', desc: 'I am taking our family business online with Kalrav Jewels, bringing our heritage to customers nationwide.' },
+  { year: 'Generation 1', title: 'The Foundation', desc: 'My grandfather established our family\'s first jewellery shop with a vision for exquisite handcrafted pieces.' },
+  { year: 'Generation 2', title: 'The Legacy Grows', desc: 'My father took over the physical store, expanding our fine gold and silver offerings and cementing our reputation for trust and purity.' },
+  { year: 'Generation 3', title: 'The Digital Era', desc: 'I am taking our family business online with Kalrav Jewels, dedicating this new digital storefront exclusively to premium 925 sterling silver.' },
   { year: 'Today', title: 'Timeless Craft', desc: 'Continuing to serve families across generations with integrity, artistry, and 925 sterling silver.' },
 ];
 
@@ -37,14 +37,14 @@ const About = () => {
           <div className="founder-content">
             <p className="section-label">Our Family Legacy</p>
             <div className="gold-line-center" style={{ marginTop: '14px' }}></div>
-            <h2 className="section-title">A Tradition Forged<br />in Sterling Silver</h2>
+            <h2 className="section-title">A Tradition Forged<br />in Precious Metals</h2>
             <p className="section-subtitle" style={{ marginTop: '20px' }}>
               Our story begins with my grandfather, who set up a modest shop with a singular vision: 
-              to create 925 sterling silver jewellery that would be passed down through generations. Armed with 
+              to create fine gold and silver jewellery that would be passed down through generations. Armed with 
               traditional craftsmanship and an unwavering commitment to purity, he built more than a business — he built a legacy.
             </p>
             <p className="section-subtitle" style={{ marginTop: '14px' }}>
-              That legacy was passed down to my father, who continues to run our family's physical store today, maintaining the trust of countless families. Now, as the third generation, I am bringing our family's heritage into the digital age with Kalrav Jewels online. Our craft is evolving, but our values remain exactly as my grandfather intended — rooted in honesty, artistry, and the celebration of life's most precious moments.
+              That legacy was passed down to my father, who continues to run our family's physical store today, crafting in both gold and silver and maintaining the trust of countless families. Now, as the third generation, I am bringing our heritage into the digital age with Kalrav Jewels online — focusing exclusively on premium 925 sterling silver. Our craft is evolving, but our values remain exactly as my grandfather intended — rooted in honesty, artistry, and the celebration of life's most precious moments.
             </p>
           </div>
         </div>
