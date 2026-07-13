@@ -34,16 +34,9 @@ const About = () => {
       {/* Founder Story */}
       <section className="founder-section" id="founder-section">
         <div className="container founder-section__inner">
-          <div className="founder-image-wrap">
-            <img src="/store_interior.png" alt="Kalrav Jewel heritage" className="founder-img" />
-            <div className="founder-badge">
-              <span className="founder-badge-top">3</span>
-              <span className="founder-badge-year">Gens</span>
-            </div>
-          </div>
           <div className="founder-content">
             <p className="section-label">Our Family Legacy</p>
-            <div className="gold-line" style={{ marginTop: '14px' }}></div>
+            <div className="gold-line-center" style={{ marginTop: '14px' }}></div>
             <h2 className="section-title">A Tradition Forged<br />in Sterling Silver</h2>
             <p className="section-subtitle" style={{ marginTop: '20px' }}>
               Our story begins with my grandfather, who set up a modest shop with a singular vision: 

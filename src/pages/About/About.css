@@ -5,10 +5,9 @@
 }
 
 .founder-section__inner {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 80px;
-  align-items: center;
+  max-width: 800px;
+  margin: 0 auto;
+  text-align: center;
 }
 
 .founder-image-wrap {
