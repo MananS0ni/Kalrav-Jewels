@@ -795,7 +795,7 @@
     grid-template-columns: repeat(2, 1fr);
   }
 
-  .category-card:last-child {
+  .category-card:nth-child(odd):last-child {
     grid-column: span 2;
   }
 
