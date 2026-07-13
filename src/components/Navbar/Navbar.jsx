@@ -47,6 +47,7 @@ const Navbar = () => {
 
           {/* Right Nav */}
           <nav className="navbar__links navbar__links--right" aria-label="Primary right navigation">
+            <NavLink to="/about" className={({ isActive }) => isActive ? 'nav-link nav-link--active' : 'nav-link'}>Our Story</NavLink>
             <NavLink to="/contact" className={({ isActive }) => isActive ? 'nav-link nav-link--active' : 'nav-link'}>Contact</NavLink>
 
             {/* User Icon */}
@@ -136,6 +137,7 @@ const Navbar = () => {
           <nav aria-label="Mobile navigation">
             <NavLink to="/" className="mobile-link">Home</NavLink>
             <NavLink to="/collections" className="mobile-link">Collections</NavLink>
+            <NavLink to="/about" className="mobile-link">Our Story</NavLink>
             <NavLink to="/contact" className="mobile-link">Contact</NavLink>
             {user ? (
               <button className="mobile-link mobile-link--btn" onClick={() => logout()}>Sign Out ({user.name.split(' ')[0]})</button>
