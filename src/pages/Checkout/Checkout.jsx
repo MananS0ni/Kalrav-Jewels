@@ -6,6 +6,17 @@ import './Checkout.css';
 
 const API = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
 
+// Dynamically load the Razorpay script
+const loadRazorpayScript = () =>
+  new Promise((resolve) => {
+    if (window.Razorpay) return resolve(true);
+    const script = document.createElement('script');
+    script.src = 'https://checkout.razorpay.com/v1/checkout.js';
+    script.onload = () => resolve(true);
+    script.onerror = () => resolve(false);
+    document.body.appendChild(script);
+  });
+
 const Checkout = () => {
   const { items, totalPrice, clearCart } = useCart();
   const { user, token } = useAuth();
@@ -21,6 +32,7 @@ const Checkout = () => {
   });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+  const [paymentMethod, setPaymentMethod] = useState('razorpay');
 
   const formatted = (n) => '₹' + n.toLocaleString('en-IN');
 
@@ -28,37 +40,112 @@ const Checkout = () => {
     setForm((f) => ({ ...f, [e.target.name]: e.target.value }));
   };
 
+  // Step 1: Save order in our DB, Step 2: Launch Razorpay
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
     setLoading(true);
 
     try {
-      const res = await fetch(`${API}/orders`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify({
-          items: items.map((i) => ({ productId: i.productId, quantity: i.qty })),
-          shippingAddress: form,
-          paymentMethod: 'cod',
-        }),
-      });
+      if (paymentMethod === 'cod') {
+        // Cash on Delivery — directly create the order
+        const res = await fetch(`${API}/orders`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify({
+            items: items.map((i) => ({ productId: i.productId, quantity: i.qty })),
+            shippingAddress: form,
+            paymentMethod: 'cod',
+          }),
+        });
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.message || 'Order failed');
+        clearCart();
+        navigate(`/order-confirmation/${data._id}`);
 
-      const data = await res.json();
-      if (!res.ok) throw new Error(data.message || 'Order failed');
+      } else {
+        // Razorpay payment flow
+        const scriptLoaded = await loadRazorpayScript();
+        if (!scriptLoaded) throw new Error('Failed to load payment gateway. Check your internet connection.');
 
-      clearCart();
-      navigate(`/order-confirmation/${data._id}`);
+        // Create a Razorpay order on the backend
+        const rzRes = await fetch(`${API}/payments/create-order`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
+          body: JSON.stringify({ amount: totalPrice }),
+        });
+        const rzData = await rzRes.json();
+        if (!rzRes.ok) throw new Error(rzData.message || 'Could not initiate payment');
+
+        // Open Razorpay checkout popup
+        const options = {
+          key: rzData.key,
+          amount: totalPrice * 100,
+          currency: 'INR',
+          name: 'Kalrav Jewels',
+          description: `Order for ${items.length} item(s)`,
+          order_id: rzData.orderId,
+          prefill: {
+            name: form.fullName,
+            contact: form.phone,
+            email: user?.email || '',
+          },
+          theme: { color: '#c9a84c' },
+
+          handler: async (response) => {
+
+            // Payment succeeded — verify signature then save order in DB
+            const verifyRes = await fetch(`${API}/payments/verify`, {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
+              body: JSON.stringify(response),
+            });
+            const verifyData = await verifyRes.json();
+            if (!verifyData.success) throw new Error('Payment verification failed');
+
+            // Create order record in our DB with paymentId
+            const orderRes = await fetch(`${API}/orders`, {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
+              body: JSON.stringify({
+                items: items.map((i) => ({ productId: i.productId, quantity: i.qty })),
+                shippingAddress: form,
+                paymentMethod: 'razorpay',
+                paymentId: verifyData.paymentId,
+                paymentStatus: 'paid',
+              }),
+            });
+            const orderData = await orderRes.json();
+            if (!orderRes.ok) throw new Error(orderData.message || 'Order save failed');
+
+            clearCart();
+            navigate(`/order-confirmation/${orderData._id}`);
+          },
+          modal: {
+            ondismiss: () => {
+              setLoading(false);
+              setError('Payment was cancelled. You can try again.');
+            },
+          },
+        };
+
+        const rzpInstance = new window.Razorpay(options);
+        rzpInstance.on('payment.failed', (resp) => {
+          setError(`Payment failed: ${resp.error.description}`);
+          setLoading(false);
+        });
+        rzpInstance.open();
+        return; // Don't setLoading(false) here — modal is still open
+      }
     } catch (err) {
       setError(err.message);
     }
     setLoading(false);
   };
 
-  // If not logged in, redirect
   if (!user) {
     return (
       <div className="checkout-gate">
@@ -68,7 +155,6 @@ const Checkout = () => {
     );
   }
 
-  // If cart empty
   if (items.length === 0) {
     return (
       <div className="checkout-gate">
@@ -122,19 +208,49 @@ const Checkout = () => {
               </div>
             </div>
 
+            {/* Payment Method Selection */}
             <div className="checkout-payment-info">
               <p className="checkout-payment-label">Payment Method</p>
-              <div className="checkout-cod-badge">
-                <span className="cod-icon">💳</span>
-                <div>
-                  <p className="cod-title">Cash on Delivery</p>
-                  <p className="cod-sub">Pay when your order arrives</p>
-                </div>
+              <div className="payment-options">
+                <label className={`payment-option ${paymentMethod === 'razorpay' ? 'payment-option--active' : ''}`}>
+                  <input
+                    type="radio"
+                    name="paymentMethod"
+                    value="razorpay"
+                    checked={paymentMethod === 'razorpay'}
+                    onChange={() => setPaymentMethod('razorpay')}
+                  />
+                  <div className="payment-option__content">
+                    <p className="payment-option__title">Pay Online</p>
+                    <p className="payment-option__sub">UPI · Credit/Debit Card · Net Banking · Wallets</p>
+                  </div>
+                  <span className="payment-option__badge">Recommended</span>
+                </label>
+
+                <label className={`payment-option ${paymentMethod === 'cod' ? 'payment-option--active' : ''}`}>
+                  <input
+                    type="radio"
+                    name="paymentMethod"
+                    value="cod"
+                    checked={paymentMethod === 'cod'}
+                    onChange={() => setPaymentMethod('cod')}
+                  />
+                  <div className="payment-option__content">
+                    <p className="payment-option__title">Cash on Delivery</p>
+                    <p className="payment-option__sub">Pay when your order arrives</p>
+                  </div>
+                </label>
               </div>
             </div>
 
             <button type="submit" className="btn-primary checkout-btn" disabled={loading}>
-              <span>{loading ? 'Placing Order...' : `Place Order — ${formatted(totalPrice)}`}</span>
+              <span>
+                {loading
+                  ? 'Processing...'
+                  : paymentMethod === 'razorpay'
+                    ? `Pay Now — ${formatted(totalPrice)}`
+                    : `Place Order — ${formatted(totalPrice)}`}
+              </span>
             </button>
           </form>
         </div>

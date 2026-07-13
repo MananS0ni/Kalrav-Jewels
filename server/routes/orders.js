@@ -3,6 +3,7 @@ const Order = require('../models/Order');
 const Product = require('../models/Product');
 const { protect } = require('../middleware/auth');
 const { adminOnly } = require('../middleware/admin');
+const { sendOrderConfirmation } = require('../utils/email');
 
 const router = express.Router();
 
@@ -62,6 +63,11 @@ router.post('/', protect, async (req, res) => {
         $inc: { stock: -item.quantity },
       });
     }
+
+    // Send order confirmation email (non-blocking)
+    const customerEmail = req.user.email;
+    const customerName = shippingAddress.fullName || req.user.name || 'Valued Customer';
+    sendOrderConfirmation(order, customerEmail, customerName);
 
     res.status(201).json(order);
   } catch (err) {

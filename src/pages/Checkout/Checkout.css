@@ -127,28 +127,59 @@
   color: var(--text-muted);
   margin-bottom: 12px;
 }
-.checkout-cod-badge {
+
+/* ── Payment Options ── */
+.payment-options {
+
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.payment-option {
   display: flex;
   align-items: center;
   gap: 14px;
   padding: 16px;
-  border: 1px solid var(--gold);
+  border: 1px solid var(--border);
   border-radius: 8px;
-  background: rgba(184, 150, 12, 0.04);
+  cursor: pointer;
+  transition: border-color 0.3s, background 0.3s;
+  position: relative;
 }
-.cod-icon {
-  font-size: 1.5rem;
+.payment-option input[type="radio"] {
+  accent-color: var(--gold);
+  width: 18px;
+  height: 18px;
+  flex-shrink: 0;
 }
-.cod-title {
+.payment-option--active {
+  border-color: var(--gold);
+  background: rgba(201, 168, 76, 0.05);
+}
+.payment-option__content {
+  flex: 1;
+}
+.payment-option__title {
   font-weight: 600;
   color: var(--text);
   font-size: 0.95rem;
 }
-.cod-sub {
+.payment-option__sub {
   color: var(--text-muted);
   font-size: 0.82rem;
   margin-top: 2px;
 }
+.payment-option__badge {
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: var(--white);
+  background: var(--gold);
+  padding: 3px 10px;
+  border-radius: 20px;
+}
+
 
 /* ── Submit Button ── */
 .checkout-btn {
