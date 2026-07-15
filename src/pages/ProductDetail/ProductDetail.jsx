@@ -3,7 +3,7 @@ import { useState, useEffect } from 'react';
 import { useCart } from '../../context/CartContext';
 import './ProductDetail.css';
 
-const API = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
+const API = import.meta.env.VITE_API_URL || (window.location.hostname === 'localhost' ? 'http://localhost:5000/api' : '/api');
 
 const ProductDetail = () => {
   const { id } = useParams();

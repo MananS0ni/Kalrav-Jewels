@@ -3,7 +3,7 @@ import { useCart } from './CartContext';
 
 const AuthContext = createContext(null);
 
-const API = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
+const API = import.meta.env.VITE_API_URL || (window.location.hostname === 'localhost' ? 'http://localhost:5000/api' : '/api');
 
 export const AuthProvider = ({ children }) => {
   // Load user & token from localStorage on app start
