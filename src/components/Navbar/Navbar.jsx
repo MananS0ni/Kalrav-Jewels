@@ -39,6 +39,28 @@ const Navbar = () => {
             <NavLink to="/about" className={({ isActive }) => isActive ? 'nav-link nav-link--active' : 'nav-link'}>Our Story</NavLink>
           </nav>
 
+          {/* Mobile Left Controls */}
+          <div className="navbar__mobile-left">
+            <button
+              className={`navbar__hamburger ${menuOpen ? 'open' : ''}`}
+              onClick={() => setMenuOpen(!menuOpen)}
+              aria-label="Toggle navigation menu"
+              id="hamburger-btn"
+            >
+              <span></span>
+              <span></span>
+              <span></span>
+            </button>
+            <button className="navbar__icon-btn navbar__cart-btn" onClick={() => setCartOpen(true)} aria-label="Open cart">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
+                <path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/>
+                <line x1="3" y1="6" x2="21" y2="6"/>
+                <path d="M16 10a4 4 0 0 1-8 0"/>
+              </svg>
+              {totalItems > 0 && <span className="cart-badge">{totalItems}</span>}
+            </button>
+          </div>
+
           {/* Logo */}
           <Link to="/" className="navbar__logo" aria-label="Kalrav Jewel Home">
             <span className="logo-top">KALRAV</span>
@@ -109,27 +131,8 @@ const Navbar = () => {
             </button>
           </nav>
 
-          {/* Mobile Hamburger */}
-          <div className="navbar__mobile-right">
-            <button className="navbar__icon-btn navbar__cart-btn" onClick={() => setCartOpen(true)} aria-label="Open cart">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
-                <path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/>
-                <line x1="3" y1="6" x2="21" y2="6"/>
-                <path d="M16 10a4 4 0 0 1-8 0"/>
-              </svg>
-              {totalItems > 0 && <span className="cart-badge">{totalItems}</span>}
-            </button>
-            <button
-              className={`navbar__hamburger ${menuOpen ? 'open' : ''}`}
-              onClick={() => setMenuOpen(!menuOpen)}
-              aria-label="Toggle navigation menu"
-              id="hamburger-btn"
-            >
-              <span></span>
-              <span></span>
-              <span></span>
-            </button>
-          </div>
+          {/* Mobile Right Spacer (for center alignment) */}
+          <div className="navbar__mobile-right"></div>
         </div>
 
         {/* Mobile Menu */}

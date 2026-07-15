@@ -360,11 +360,16 @@
   color: var(--charcoal);
 }
 
-/* Mobile right side icons */
-.navbar__mobile-right {
+/* Mobile left side icons */
+.navbar__mobile-left {
   display: none;
   align-items: center;
   gap: 16px;
+}
+
+.navbar__mobile-right {
+  display: none;
+  width: 60px; /* roughly matches left icon width to keep center exact */
 }
 
 /* Mobile sign-in link */
@@ -403,8 +408,12 @@
     display: block;
   }
 
-  .navbar__mobile-right {
+  .navbar__mobile-left {
     display: flex;
+  }
+
+  .navbar__mobile-right {
+    display: block;
   }
 
   .navbar__inner {
