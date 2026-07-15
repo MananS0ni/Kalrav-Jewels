@@ -101,6 +101,19 @@ const products = [
     isFeatured: false,
     tags: ['classic'],
   },
+  {
+    name: 'Classic Silver Box Chain',
+    description: 'A durable and minimalist 925 sterling silver box chain. Perfect for wearing alone or layering with pendants.',
+    price: 3500,
+    category: 'chains',
+    images: ['/necklace_product.png'],
+    material: '925 Sterling Silver',
+    weight: '10.2g',
+    purity: '925 Silver',
+    stock: 15,
+    isFeatured: true,
+    tags: ['essential'],
+  },
 ];
 
 async function seed() {

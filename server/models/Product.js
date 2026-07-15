@@ -23,7 +23,7 @@ const productSchema = new mongoose.Schema(
     category: {
       type: String,
       required: true,
-      enum: ['rings', 'necklaces', 'earrings', 'bracelets'],
+      enum: ['rings', 'necklaces', 'earrings', 'bracelets', 'chains'],
     },
     images: {
       type: [String], // array of image URLs
