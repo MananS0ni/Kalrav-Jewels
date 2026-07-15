@@ -45,13 +45,13 @@ const AppLayout = () => {
 
 function App() {
   return (
-    <AuthProvider>
-      <CartProvider>
+    <CartProvider>
+      <AuthProvider>
         <Router>
           <AppLayout />
         </Router>
-      </CartProvider>
-    </AuthProvider>
+      </AuthProvider>
+    </CartProvider>
   );
 }
 

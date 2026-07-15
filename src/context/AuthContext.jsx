@@ -1,4 +1,5 @@
 import { createContext, useContext, useState } from 'react';
+import { useCart } from './CartContext';
 
 const AuthContext = createContext(null);
 
@@ -11,6 +12,8 @@ export const AuthProvider = ({ children }) => {
     catch { return null; }
   });
   const [token, setToken] = useState(() => localStorage.getItem('nh_token') || null);
+
+  const { setCartToken } = useCart();
 
   const register = async (name, email, password) => {
     try {
@@ -26,6 +29,7 @@ export const AuthProvider = ({ children }) => {
       localStorage.setItem('nh_user', JSON.stringify(data.user));
       setToken(data.token);
       setUser(data.user);
+      setCartToken(data.token); // sync cart with new token
       return { success: true };
     } catch {
       return { error: 'Could not connect to server. Please try again.' };
@@ -46,6 +50,7 @@ export const AuthProvider = ({ children }) => {
       localStorage.setItem('nh_user', JSON.stringify(data.user));
       setToken(data.token);
       setUser(data.user);
+      setCartToken(data.token); // sync cart — fetches user's saved cart
       return { success: true };
     } catch {
       return { error: 'Could not connect to server. Please try again.' };
@@ -58,6 +63,7 @@ export const AuthProvider = ({ children }) => {
     localStorage.removeItem('kalrav_cart');
     setUser(null);
     setToken(null);
+    setCartToken(null); // clears cart items on logout
   };
 
   return (
