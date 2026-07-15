@@ -133,7 +133,6 @@ const Home = () => {
                 />
                 <div className="category-card__inner">
                   <h3 className="category-card__name">{cat.name}</h3>
-                  <p className="category-card__desc">{cat.desc}</p>
                   <span className="category-card__cta">View All</span>
                 </div>
               </Link>
