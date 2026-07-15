@@ -297,10 +297,6 @@ const Checkout = () => {
               <span>Subtotal</span>
               <span>{formatted(totalPrice)}</span>
             </div>
-            <div className="summary-row">
-              <span>Shipping</span>
-              <span className="summary-free">Free</span>
-            </div>
             <div className="summary-divider"></div>
             <div className="summary-row summary-row--total">
               <span>Total</span>

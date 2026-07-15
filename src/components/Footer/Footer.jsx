@@ -67,6 +67,17 @@ const Footer = () => {
             </ul>
           </div>
 
+          {/* Legal */}
+          <div className="footer__col">
+            <h4 className="footer__col-title">Legal</h4>
+            <ul className="footer__list">
+              <li><Link to="/policies/terms">Terms & Conditions</Link></li>
+              <li><Link to="/policies/privacy">Privacy Policy</Link></li>
+              <li><Link to="/policies/refund">Refund Policy</Link></li>
+              <li><Link to="/policies/shipping">Shipping Policy</Link></li>
+            </ul>
+          </div>
+
         </div>
       </div>
 
