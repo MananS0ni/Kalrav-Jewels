@@ -25,6 +25,7 @@ const Admin = () => {
   const [tab, setTab] = useState('products');
   const [products, setProducts] = useState([]);
   const [orders, setOrders] = useState([]);
+  const [enquiries, setEnquiries] = useState([]);
   const [form, setForm] = useState(emptyForm);
   const [editId, setEditId] = useState(null);
   const [msg, setMsg] = useState('');
@@ -32,16 +33,26 @@ const Admin = () => {
 
   const headers = { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` };
 
-  const fetchProducts = () =>
-    fetch(`${API}/products`).then(r => r.json()).then(setProducts);
+  const fetchProducts = () => fetch(`${API}/products`).then(r => r.json()).then(setProducts);
+  const fetchOrders = () => fetch(`${API}/orders`, { headers }).then(r => r.json()).then(setOrders);
+  const fetchEnquiries = () => fetch(`${API}/contact`, { headers }).then(r => r.json()).then(setEnquiries);
 
-  const fetchOrders = () =>
-    fetch(`${API}/orders`, { headers }).then(r => r.json()).then(setOrders);
-
-  useEffect(() => { fetchProducts(); fetchOrders(); }, []);
+  useEffect(() => { fetchProducts(); fetchOrders(); fetchEnquiries(); }, []);
 
   const flash = (m) => { setMsg(m); setTimeout(() => setMsg(''), 3000); };
   const formatted = (n) => '₹' + n.toLocaleString('en-IN');
+
+  // ── Enquiry handlers ──
+  const updateEnquiryStatus = async (id, status) => {
+    try {
+      const res = await fetch(`${API}/contact/${id}/status`, { method: 'PUT', headers, body: JSON.stringify({ status }) });
+      if (!res.ok) throw new Error('Failed to update status');
+      flash('✓ Enquiry updated');
+      fetchEnquiries();
+    } catch (err) {
+      flash('✗ ' + err.message);
+    }
+  };
 
   // ── Product handlers ──
   const handleChange = (e) => {
@@ -141,6 +152,12 @@ const Admin = () => {
           onClick={() => setTab('orders')}
         >
           Orders ({orders.length})
+        </button>
+        <button
+          className={`admin-tab ${tab === 'enquiries' ? 'admin-tab--active' : ''}`}
+          onClick={() => setTab('enquiries')}
+        >
+          Enquiries ({enquiries.length})
         </button>
       </div>
 
@@ -342,6 +359,78 @@ const Admin = () => {
                       </span>
                     </div>
                   </div>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+      {/* ═══════════════════ ENQUIRIES TAB ═══════════════════ */}
+      {tab === 'enquiries' && (
+        <div className="admin-section">
+          <h2 className="admin-section-title">Enquiries & Messages ({enquiries.length})</h2>
+          
+          {enquiries.length === 0 ? (
+            <p style={{ color: '#888', textAlign: 'center', padding: '40px' }}>No enquiries yet.</p>
+          ) : (
+            <div className="admin-orders-list">
+              {enquiries.map(enq => (
+                <div key={enq._id} className="admin-order-card" style={{ borderLeft: `4px solid ${enq.status === 'new' ? '#b8960c' : enq.status === 'resolved' ? '#4a9a4a' : '#5b8fb9'}` }}>
+                  <div className="admin-order-header" style={{ borderBottom: '1px solid #eee', paddingBottom: '12px' }}>
+                    <div>
+                      <p className="admin-order-date">
+                        {new Date(enq.createdAt).toLocaleDateString('en-IN', {
+                          day: 'numeric', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit',
+                        })}
+                      </p>
+                      <p style={{ fontWeight: 'bold', fontSize: '1.1rem', color: '#333' }}>
+                        {enq.type === 'product' ? 'Product Callback Request' : 'Contact Form Message'}
+                      </p>
+                    </div>
+                    <div>
+                      <select 
+                        value={enq.status}
+                        onChange={(e) => updateEnquiryStatus(enq._id, e.target.value)}
+                        style={{ padding: '6px 12px', borderRadius: '4px', border: '1px solid #ddd' }}
+                      >
+                        <option value="new">New</option>
+                        <option value="read">Read</option>
+                        <option value="resolved">Resolved</option>
+                      </select>
+                    </div>
+                  </div>
+
+                  <div className="admin-order-customer" style={{ marginTop: '16px' }}>
+                    <div className="admin-order-customer-info">
+                      <span className="admin-order-cust-label">Customer Details</span>
+                      <span className="admin-order-cust-name" style={{ marginTop: '4px' }}>
+                        <strong>Name:</strong> {enq.name} <br/>
+                        <strong>Phone:</strong> {enq.phone || 'N/A'} <br/>
+                        {enq.type === 'contact' && <><strong>Email:</strong> {enq.email} <br/></>}
+                      </span>
+                    </div>
+                    {enq.type === 'product' ? (
+                      <div className="admin-order-customer-info">
+                        <span className="admin-order-cust-label">Product of Interest</span>
+                        <span className="admin-order-cust-name" style={{ color: 'var(--gold)', fontWeight: 'bold', marginTop: '4px' }}>
+                          {enq.productName}
+                        </span>
+                      </div>
+                    ) : (
+                      <div className="admin-order-customer-info">
+                        <span className="admin-order-cust-label">Subject</span>
+                        <span className="admin-order-cust-name" style={{ marginTop: '4px' }}>
+                          {enq.subject}
+                        </span>
+                      </div>
+                    )}
+                  </div>
+                  
+                  {enq.type === 'contact' && enq.message && (
+                    <div style={{ marginTop: '16px', padding: '16px', background: '#f9f9f9', borderRadius: '4px', borderLeft: '3px solid #ddd' }}>
+                      <p style={{ color: '#666', fontSize: '0.85rem', textTransform: 'uppercase', marginBottom: '8px', letterSpacing: '1px' }}>Message</p>
+                      <p style={{ color: '#333', lineHeight: '1.6' }}>{enq.message}</p>
+                    </div>
+                  )}
                 </div>
               ))}
             </div>

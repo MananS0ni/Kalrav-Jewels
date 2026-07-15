@@ -1,90 +1,85 @@
 const express = require('express');
 const nodemailer = require('nodemailer');
+const Enquiry = require('../models/Enquiry');
+const { protect, admin } = require('../middleware/auth');
 
 const router = express.Router();
 
-// Create reusable transporter
 const transporter = nodemailer.createTransport({
   service: 'gmail',
-  auth: {
-    user: process.env.EMAIL_USER,
-    pass: process.env.EMAIL_PASS,
-  },
+  auth: { user: process.env.EMAIL_USER, pass: process.env.EMAIL_PASS },
+});
+
+// GET /api/contact (Admin only)
+router.get('/', protect, admin, async (req, res) => {
+  try {
+    const enquiries = await Enquiry.find({}).sort({ createdAt: -1 });
+    res.json(enquiries);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+});
+
+// PUT /api/contact/:id/status (Admin only)
+router.put('/:id/status', protect, admin, async (req, res) => {
+  try {
+    const enquiry = await Enquiry.findById(req.params.id);
+    if (!enquiry) return res.status(404).json({ message: 'Enquiry not found' });
+    enquiry.status = req.body.status;
+    await enquiry.save();
+    res.json(enquiry);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
 });
 
 // POST /api/contact
 router.post('/', async (req, res) => {
   const { name, email, phone, subject, message } = req.body;
-
-  if (!name || !email || !message) {
-    return res.status(400).json({ message: 'Name, email and message are required.' });
-  }
+  if (!name || !email || !message) return res.status(400).json({ message: 'Required fields missing' });
 
   try {
-    await transporter.sendMail({
+    await Enquiry.create({ type: 'contact', name, email, phone, subject, message });
+    transporter.sendMail({
       from: `"Kalrav Website" <${process.env.EMAIL_USER}>`,
       to: process.env.EMAIL_TO,
       subject: `New Enquiry: ${subject || 'Contact Form'} — ${name}`,
       html: `
-        <div style="font-family: Georgia, serif; max-width: 600px; margin: 0 auto; padding: 32px; background: #fafafa; border: 1px solid #e8e0d0;">
-          <h2 style="color: #b8960c; border-bottom: 1px solid #e8e0d0; padding-bottom: 12px;">New Customer Enquiry</h2>
-          
-          <table style="width: 100%; border-collapse: collapse;">
-            <tr><td style="padding: 8px 0; color: #888; width: 120px;">Name</td><td style="padding: 8px 0; font-weight: bold;">${name}</td></tr>
-            <tr><td style="padding: 8px 0; color: #888;">Email</td><td style="padding: 8px 0;"><a href="mailto:${email}" style="color: #b8960c;">${email}</a></td></tr>
-            <tr><td style="padding: 8px 0; color: #888;">Phone</td><td style="padding: 8px 0;">${phone || 'Not provided'}</td></tr>
-            <tr><td style="padding: 8px 0; color: #888;">Subject</td><td style="padding: 8px 0;">${subject || 'General'}</td></tr>
-          </table>
-
-          <div style="margin-top: 24px; padding: 16px; background: #fff; border-left: 3px solid #b8960c;">
-            <p style="color: #888; margin: 0 0 8px;">Message:</p>
-            <p style="margin: 0; line-height: 1.6;">${message}</p>
-          </div>
-
-          <p style="margin-top: 24px; font-size: 12px; color: #aaa;">Sent from Kalrav website contact form</p>
+        <div style="font-family: Georgia; max-width: 600px; padding: 32px; border: 1px solid #e8e0d0;">
+          <h2 style="color: #b8960c;">New Customer Enquiry</h2>
+          <p><strong>Name:</strong> ${name}<br/><strong>Email:</strong> ${email}<br/><strong>Phone:</strong> ${phone}</p>
+          <p><strong>Message:</strong><br/>${message}</p>
         </div>
       `,
-    });
-
+    }).catch(err => console.log('Email send failed (but saved to DB):', err.message));
     res.json({ success: true, message: 'Message sent successfully.' });
   } catch (err) {
-    console.error('Email error:', err.message);
-    res.status(500).json({ message: 'Failed to send message. Please try again.' });
+    res.status(500).json({ message: 'Failed to send message.' });
   }
 });
 
-// POST /api/contact/enquire (for Product Callback Request)
+// POST /api/contact/enquire
 router.post('/enquire', async (req, res) => {
   const { name, phone, productName } = req.body;
-
-  if (!name || !phone) {
-    return res.status(400).json({ message: 'Name and phone are required.' });
-  }
+  if (!name || !phone) return res.status(400).json({ message: 'Name and phone required' });
 
   try {
-    await transporter.sendMail({
+    await Enquiry.create({ type: 'product', name, phone, productName });
+    transporter.sendMail({
       from: `"Kalrav Enquiries" <${process.env.EMAIL_USER}>`,
       to: process.env.EMAIL_TO,
       subject: `Product Callback Request — ${name}`,
       html: `
-        <div style="font-family: Georgia, serif; max-width: 600px; margin: 0 auto; padding: 32px; background: #fafafa; border: 1px solid #e8e0d0;">
-          <h2 style="color: #b8960c; border-bottom: 1px solid #e8e0d0; padding-bottom: 12px;">Callback Requested</h2>
-          
-          <table style="width: 100%; border-collapse: collapse;">
-            <tr><td style="padding: 8px 0; color: #888; width: 120px;">Name</td><td style="padding: 8px 0; font-weight: bold;">${name}</td></tr>
-            <tr><td style="padding: 8px 0; color: #888;">Phone</td><td style="padding: 8px 0;">${phone}</td></tr>
-            <tr><td style="padding: 8px 0; color: #888;">Product</td><td style="padding: 8px 0; font-weight: bold; color: #b8960c;">${productName}</td></tr>
-          </table>
-
-          <p style="margin-top: 24px; font-size: 12px; color: #aaa;">This customer requested a callback from the Product Details page.</p>
+        <div style="font-family: Georgia; max-width: 600px; padding: 32px; border: 1px solid #e8e0d0;">
+          <h2 style="color: #b8960c;">Callback Requested</h2>
+          <p><strong>Name:</strong> ${name}<br/><strong>Phone:</strong> ${phone}</p>
+          <p><strong>Product:</strong> ${productName}</p>
         </div>
       `,
-    });
-
+    }).catch(err => console.log('Email send failed (but saved to DB):', err.message));
     res.json({ success: true, message: 'Enquiry sent successfully.' });
   } catch (err) {
-    console.error('Email error:', err.message);
-    res.status(500).json({ message: 'Failed to send enquiry. Please try again.' });
+    res.status(500).json({ message: 'Failed to send enquiry.' });
   }
 });
 
