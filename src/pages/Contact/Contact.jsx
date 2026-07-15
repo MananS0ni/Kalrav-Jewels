@@ -4,6 +4,7 @@ import './Contact.css';
 const Contact = () => {
   const [form, setForm] = useState({ name: '', email: '', phone: '', subject: '', message: '' });
   const [submitted, setSubmitted] = useState(false);
+  const [loading, setLoading] = useState(false);
   const [errors, setErrors] = useState({});
 
   const validate = () => {
@@ -33,6 +34,7 @@ const Contact = () => {
       return;
     }
     
+    setLoading(true);
     try {
       const res = await fetch(`${API}/contact`, {
         method: 'POST',
@@ -47,6 +49,8 @@ const Contact = () => {
     } catch (err) {
       console.error(err);
       alert('Network error. Please try again later.');
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -183,8 +187,8 @@ const Contact = () => {
                 {errors.message && <span className="form-error">{errors.message}</span>}
               </div>
 
-              <button type="submit" className="btn-primary" id="contact-submit-btn" style={{ width: '100%', padding: '16px' }}>
-                <span>Send Message</span>
+              <button type="submit" className="btn-primary" id="contact-submit-btn" style={{ width: '100%', padding: '16px' }} disabled={loading}>
+                <span>{loading ? 'Sending...' : 'Send Message'}</span>
               </button>
             </form>
           )}

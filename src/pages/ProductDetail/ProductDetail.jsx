@@ -11,6 +11,7 @@ const ProductDetail = () => {
   const [related, setRelated] = useState([]);
   const [loading, setLoading] = useState(true);
   const [enquirySent, setEnquirySent] = useState(false);
+  const [sendingEnquiry, setSendingEnquiry] = useState(false);
   const [added, setAdded] = useState(false);
   const { addToCart } = useCart();
   const [sizerOpen, setSizerOpen] = useState(false);
@@ -70,6 +71,7 @@ const ProductDetail = () => {
     const name = e.target.elements['enquiry-name'].value;
     const phone = e.target.elements['enquiry-phone'].value;
 
+    setSendingEnquiry(true);
     try {
       const res = await fetch(`${API}/contact/enquire`, {
         method: 'POST',
@@ -84,6 +86,8 @@ const ProductDetail = () => {
     } catch (err) {
       console.error(err);
       alert('Network error. Please try again later.');
+    } finally {
+      setSendingEnquiry(false);
     }
   };
 
@@ -197,6 +201,7 @@ const ProductDetail = () => {
               <p className="enquiry-form__title">Enquire About This Piece</p>
               <input
                 type="text"
+                name="enquiry-name"
                 placeholder="Your Name"
                 required
                 className="form-input"
@@ -204,13 +209,14 @@ const ProductDetail = () => {
               />
               <input
                 type="tel"
+                name="enquiry-phone"
                 placeholder="Phone Number"
                 required
                 className="form-input"
                 id="enquiry-phone"
               />
-              <button type="submit" className="btn-primary" id="enquiry-submit-btn" style={{ width: '100%' }}>
-                <span>Request a Callback</span>
+              <button type="submit" className="btn-primary" id="enquiry-submit-btn" style={{ width: '100%' }} disabled={sendingEnquiry}>
+                <span>{sendingEnquiry ? 'Sending...' : 'Request a Callback'}</span>
               </button>
             </form>
           ) : (
