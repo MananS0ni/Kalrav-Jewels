@@ -65,9 +65,26 @@ const ProductDetail = () => {
     </div>
   );
 
-  const handleEnquiry = (e) => {
+  const handleEnquiry = async (e) => {
     e.preventDefault();
-    setEnquirySent(true);
+    const name = e.target.elements['enquiry-name'].value;
+    const phone = e.target.elements['enquiry-phone'].value;
+
+    try {
+      const res = await fetch(`${API}/contact/enquire`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name, phone, productName: product.name }),
+      });
+      if (res.ok) {
+        setEnquirySent(true);
+      } else {
+        alert('Failed to send enquiry. Please try again.');
+      }
+    } catch (err) {
+      console.error(err);
+      alert('Network error. Please try again later.');
+    }
   };
 
   return (

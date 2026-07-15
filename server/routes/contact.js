@@ -53,4 +53,39 @@ router.post('/', async (req, res) => {
   }
 });
 
+// POST /api/contact/enquire (for Product Callback Request)
+router.post('/enquire', async (req, res) => {
+  const { name, phone, productName } = req.body;
+
+  if (!name || !phone) {
+    return res.status(400).json({ message: 'Name and phone are required.' });
+  }
+
+  try {
+    await transporter.sendMail({
+      from: `"Kalrav Enquiries" <${process.env.EMAIL_USER}>`,
+      to: process.env.EMAIL_TO,
+      subject: `Product Callback Request — ${name}`,
+      html: `
+        <div style="font-family: Georgia, serif; max-width: 600px; margin: 0 auto; padding: 32px; background: #fafafa; border: 1px solid #e8e0d0;">
+          <h2 style="color: #b8960c; border-bottom: 1px solid #e8e0d0; padding-bottom: 12px;">Callback Requested</h2>
+          
+          <table style="width: 100%; border-collapse: collapse;">
+            <tr><td style="padding: 8px 0; color: #888; width: 120px;">Name</td><td style="padding: 8px 0; font-weight: bold;">${name}</td></tr>
+            <tr><td style="padding: 8px 0; color: #888;">Phone</td><td style="padding: 8px 0;">${phone}</td></tr>
+            <tr><td style="padding: 8px 0; color: #888;">Product</td><td style="padding: 8px 0; font-weight: bold; color: #b8960c;">${productName}</td></tr>
+          </table>
+
+          <p style="margin-top: 24px; font-size: 12px; color: #aaa;">This customer requested a callback from the Product Details page.</p>
+        </div>
+      `,
+    });
+
+    res.json({ success: true, message: 'Enquiry sent successfully.' });
+  } catch (err) {
+    console.error('Email error:', err.message);
+    res.status(500).json({ message: 'Failed to send enquiry. Please try again.' });
+  }
+});
+
 module.exports = router;
