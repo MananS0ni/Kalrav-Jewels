@@ -369,7 +369,9 @@
 
 .navbar__mobile-right {
   display: none;
-  width: 60px; /* roughly matches left icon width to keep center exact */
+  align-items: center;
+  justify-content: flex-end;
+  gap: 16px;
 }
 
 /* Mobile sign-in link */
@@ -413,7 +415,7 @@
   }
 
   .navbar__mobile-right {
-    display: block;
+    display: flex;
   }
 
   .navbar__inner {
