@@ -144,7 +144,10 @@ const Navbar = () => {
             <NavLink to="/about" className="mobile-link">Our Story</NavLink>
             <NavLink to="/contact" className="mobile-link">Contact</NavLink>
             {user ? (
-              <button className="mobile-link mobile-link--btn" onClick={() => logout()}>Sign Out ({user.name.split(' ')[0]})</button>
+              <>
+                <NavLink to="/my-orders" className="mobile-link" onClick={() => setMenuOpen(false)}>My Orders</NavLink>
+                <button className="mobile-link mobile-link--btn" onClick={() => { logout(); setMenuOpen(false); }}>Sign Out ({user.name.split(' ')[0]})</button>
+              </>
             ) : (
               <button className="mobile-link mobile-link--btn" onClick={() => { setAuthOpen(true); setMenuOpen(false); }}>Sign In</button>
             )}
