@@ -52,7 +52,7 @@
 }
 
 .cart-drawer__title {
-  font-family: 'Bodoni Moda', serif;
+  font-family: 'Cormorant Garamond', serif;
   font-size: 26px;
   font-weight: 400;
   color: var(--charcoal);
@@ -106,7 +106,7 @@
 }
 
 .cart-empty__title {
-  font-family: 'Bodoni Moda', serif;
+  font-family: 'Cormorant Garamond', serif;
   font-size: 22px;
   font-weight: 400;
   color: var(--charcoal);
@@ -175,7 +175,7 @@
 }
 
 .cart-item__name {
-  font-family: 'Bodoni Moda', serif;
+  font-family: 'Cormorant Garamond', serif;
   font-size: 17px;
   font-weight: 500;
   color: var(--charcoal);
@@ -225,7 +225,7 @@
 }
 
 .qty-val {
-  font-family: 'Bodoni Moda', serif;
+  font-family: 'Cormorant Garamond', serif;
   font-size: 16px;
   font-weight: 500;
   color: var(--charcoal);
@@ -237,7 +237,7 @@
 }
 
 .cart-item__price {
-  font-family: 'Bodoni Moda', serif;
+  font-family: 'Cormorant Garamond', serif;
   font-size: 18px;
   font-weight: 500;
   color: var(--gold-dark);
@@ -284,7 +284,7 @@
 }
 
 .cart-total__value {
-  font-family: 'Bodoni Moda', serif;
+  font-family: 'Cormorant Garamond', serif;
   font-size: 26px;
   font-weight: 500;
   color: var(--charcoal);

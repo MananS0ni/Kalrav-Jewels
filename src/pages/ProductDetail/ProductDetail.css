@@ -130,7 +130,7 @@
 }
 
 .product-detail__name {
-  font-family: 'Bodoni Moda', serif;
+  font-family: 'Cormorant Garamond', serif;
   font-size: clamp(2rem, 3.5vw, 3rem);
   font-weight: 400;
   color: var(--charcoal);
@@ -139,7 +139,7 @@
 }
 
 .product-detail__price {
-  font-family: 'Bodoni Moda', serif;
+  font-family: 'Cormorant Garamond', serif;
   font-size: 28px;
   font-weight: 500;
   color: var(--gold-dark);
@@ -202,7 +202,7 @@
 }
 
 .enquiry-form__title {
-  font-family: 'Bodoni Moda', serif;
+  font-family: 'Cormorant Garamond', serif;
   font-size: 20px;
   font-weight: 500;
   color: var(--charcoal);
@@ -379,7 +379,7 @@
   cursor: pointer;
   padding: 0;
   margin-bottom: 28px;
-  font-family: 'Bodoni Moda', serif;
+  font-family: 'Cormorant Garamond', serif;
   font-size: 17px;
   font-style: italic;
   font-weight: 500;
@@ -486,7 +486,7 @@
 }
 
 .sizer-modal__title {
-  font-family: 'Bodoni Moda', serif;
+  font-family: 'Cormorant Garamond', serif;
   font-size: 30px;
   font-weight: 400;
   color: var(--charcoal);
@@ -523,7 +523,7 @@
   border: 1px solid var(--border);
   background: var(--off-white);
   font-size: 20px;
-  font-family: 'Bodoni Moda', serif;
+  font-family: 'Cormorant Garamond', serif;
   font-weight: 500;
   color: var(--charcoal);
   outline: none;
@@ -548,7 +548,7 @@
 }
 
 .sizer-result__size {
-  font-family: 'Bodoni Moda', serif;
+  font-family: 'Cormorant Garamond', serif;
   font-size: 52px;
   font-weight: 300;
   color: var(--gold-light);
@@ -558,7 +558,7 @@
 
 .sizer-result__label {
   font-size: 16px;
-  font-family: 'Bodoni Moda', serif;
+  font-family: 'Cormorant Garamond', serif;
   font-style: italic;
   color: var(--white);
   flex: 1;
@@ -595,7 +595,7 @@
 }
 
 .sizer-step__num {
-  font-family: 'Bodoni Moda', serif;
+  font-family: 'Cormorant Garamond', serif;
   font-size: 18px;
   font-weight: 500;
   color: var(--gold);

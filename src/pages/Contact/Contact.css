@@ -14,7 +14,7 @@
 
 /* Info column */
 .contact-info__title {
-  font-family: 'Bodoni Moda', serif;
+  font-family: 'Cormorant Garamond', serif;
   font-size: 2rem;
   font-weight: 400;
   color: var(--charcoal);
@@ -94,7 +94,7 @@
 }
 
 .map-label {
-  font-family: 'Bodoni Moda', serif;
+  font-family: 'Cormorant Garamond', serif;
   font-size: 22px;
   font-weight: 500;
   color: var(--gold-dark);
@@ -111,7 +111,7 @@
 
 /* Form column */
 .contact-form__title {
-  font-family: 'Bodoni Moda', serif;
+  font-family: 'Cormorant Garamond', serif;
   font-size: 2rem;
   font-weight: 400;
   color: var(--charcoal);
@@ -217,7 +217,7 @@
 }
 
 .form-success__title {
-  font-family: 'Bodoni Moda', serif;
+  font-family: 'Cormorant Garamond', serif;
   font-size: 28px;
   font-weight: 500;
   color: var(--charcoal);
