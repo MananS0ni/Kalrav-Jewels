@@ -44,6 +44,20 @@ const Checkout = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
+
+    // Form Validations
+    const phoneRegex = /^[0-9]{10}$/;
+    if (!phoneRegex.test(form.phone)) {
+      setError('Please enter a valid 10-digit phone number.');
+      return;
+    }
+
+    const pinRegex = /^[0-9]{6}$/;
+    if (!pinRegex.test(form.pincode)) {
+      setError('Please enter a valid 6-digit pincode.');
+      return;
+    }
+
     setLoading(true);
 
     try {
