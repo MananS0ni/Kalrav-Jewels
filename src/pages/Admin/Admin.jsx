@@ -364,6 +364,7 @@ const Admin = () => {
             </div>
           )}
         </div>
+      )}
       {/* ═══════════════════ ENQUIRIES TAB ═══════════════════ */}
       {tab === 'enquiries' && (
         <div className="admin-section">
