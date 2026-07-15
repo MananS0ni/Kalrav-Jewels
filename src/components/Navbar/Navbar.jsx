@@ -36,6 +36,7 @@ const Navbar = () => {
           <nav className="navbar__links navbar__links--left" aria-label="Primary left navigation">
             <NavLink to="/" className={({ isActive }) => isActive ? 'nav-link nav-link--active' : 'nav-link'}>Home</NavLink>
             <NavLink to="/collections" className={({ isActive }) => isActive ? 'nav-link nav-link--active' : 'nav-link'}>Collections</NavLink>
+            <NavLink to="/about" className={({ isActive }) => isActive ? 'nav-link nav-link--active' : 'nav-link'}>Our Story</NavLink>
           </nav>
 
           {/* Logo */}
@@ -47,7 +48,6 @@ const Navbar = () => {
 
           {/* Right Nav */}
           <nav className="navbar__links navbar__links--right" aria-label="Primary right navigation">
-            <NavLink to="/about" className={({ isActive }) => isActive ? 'nav-link nav-link--active' : 'nav-link'}>Our Story</NavLink>
             <NavLink to="/contact" className={({ isActive }) => isActive ? 'nav-link nav-link--active' : 'nav-link'}>Contact</NavLink>
 
             {/* User Icon */}
