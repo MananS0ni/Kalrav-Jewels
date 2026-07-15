@@ -30,6 +30,10 @@ const Admin = () => {
   const [editId, setEditId] = useState(null);
   const [msg, setMsg] = useState('');
   const [loading, setLoading] = useState(false);
+  
+  // Toggles for completed history
+  const [showCompletedOrders, setShowCompletedOrders] = useState(false);
+  const [showCompletedEnquiries, setShowCompletedEnquiries] = useState(false);
 
   const headers = { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` };
 
@@ -151,13 +155,13 @@ const Admin = () => {
           className={`admin-tab ${tab === 'orders' ? 'admin-tab--active' : ''}`}
           onClick={() => setTab('orders')}
         >
-          Orders ({orders.length})
+          Orders ({orders.filter(o => !(o.orderStatus === 'delivered' && o.paymentStatus === 'paid')).length})
         </button>
         <button
           className={`admin-tab ${tab === 'enquiries' ? 'admin-tab--active' : ''}`}
           onClick={() => setTab('enquiries')}
         >
-          Enquiries ({enquiries.length})
+          Enquiries ({enquiries.filter(e => e.status !== 'resolved').length})
         </button>
       </div>
 
@@ -273,13 +277,19 @@ const Admin = () => {
       {/* ═══════════════════ ORDERS TAB ═══════════════════ */}
       {tab === 'orders' && (
         <div className="admin-section">
-          <h2 className="admin-section-title">All Orders ({orders.length})</h2>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '24px' }}>
+            <h2 className="admin-section-title" style={{ margin: 0 }}>Active Orders</h2>
+            <label style={{ display: 'flex', alignItems: 'center', gap: '8px', cursor: 'pointer', color: '#b8960c', fontSize: '0.9rem', fontWeight: 500 }}>
+              <input type="checkbox" checked={showCompletedOrders} onChange={(e) => setShowCompletedOrders(e.target.checked)} style={{ accentColor: '#b8960c' }} />
+              Show Completed History
+            </label>
+          </div>
 
-          {orders.length === 0 ? (
-            <p style={{ color: '#888', textAlign: 'center', padding: '40px' }}>No orders yet.</p>
+          {orders.filter(o => showCompletedOrders || !(o.orderStatus === 'delivered' && o.paymentStatus === 'paid')).length === 0 ? (
+            <p style={{ color: '#888', textAlign: 'center', padding: '40px' }}>No active orders need your attention right now.</p>
           ) : (
             <div className="admin-orders-list">
-              {orders.map(order => (
+              {orders.filter(o => showCompletedOrders || !(o.orderStatus === 'delivered' && o.paymentStatus === 'paid')).map(order => (
                 <div key={order._id} className="admin-order-card">
                   {/* Order Header */}
                   <div className="admin-order-header">
@@ -368,13 +378,19 @@ const Admin = () => {
       {/* ═══════════════════ ENQUIRIES TAB ═══════════════════ */}
       {tab === 'enquiries' && (
         <div className="admin-section">
-          <h2 className="admin-section-title">Enquiries & Messages ({enquiries.length})</h2>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '24px' }}>
+            <h2 className="admin-section-title" style={{ margin: 0 }}>Active Enquiries</h2>
+            <label style={{ display: 'flex', alignItems: 'center', gap: '8px', cursor: 'pointer', color: '#b8960c', fontSize: '0.9rem', fontWeight: 500 }}>
+              <input type="checkbox" checked={showCompletedEnquiries} onChange={(e) => setShowCompletedEnquiries(e.target.checked)} style={{ accentColor: '#b8960c' }} />
+              Show Resolved History
+            </label>
+          </div>
           
-          {enquiries.length === 0 ? (
-            <p style={{ color: '#888', textAlign: 'center', padding: '40px' }}>No enquiries yet.</p>
+          {enquiries.filter(e => showCompletedEnquiries || e.status !== 'resolved').length === 0 ? (
+            <p style={{ color: '#888', textAlign: 'center', padding: '40px' }}>No active enquiries need your attention right now.</p>
           ) : (
             <div className="admin-orders-list">
-              {enquiries.map(enq => (
+              {enquiries.filter(e => showCompletedEnquiries || e.status !== 'resolved').map(enq => (
                 <div key={enq._id} className="admin-order-card" style={{ borderLeft: `4px solid ${enq.status === 'new' ? '#b8960c' : enq.status === 'resolved' ? '#4a9a4a' : '#5b8fb9'}` }}>
                   <div className="admin-order-header" style={{ borderBottom: '1px solid #eee', paddingBottom: '12px' }}>
                     <div>
