@@ -55,6 +55,7 @@ export const AuthProvider = ({ children }) => {
   const logout = () => {
     localStorage.removeItem('nh_token');
     localStorage.removeItem('nh_user');
+    localStorage.removeItem('kalrav_cart');
     setUser(null);
     setToken(null);
   };
