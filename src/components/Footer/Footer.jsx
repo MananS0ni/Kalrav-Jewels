@@ -11,7 +11,7 @@ const Footer = () => {
             <div className="footer__logo">
               <span className="footer-logo-top">KALRAV</span>
               <span className="footer-logo-line"></span>
-              <span className="footer-logo-bottom">JEWEL</span>
+              <span className="footer-logo-bottom">JEWELS</span>
             </div>
             <p className="footer__tagline">
               Crafting timeless 925 sterling silver jewellery.<br />

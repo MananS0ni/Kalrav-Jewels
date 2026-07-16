@@ -54,10 +54,10 @@ const Navbar = () => {
           </div>
 
           {/* Logo */}
-          <Link to="/" className="navbar__logo" aria-label="Kalrav Jewel Home">
+          <Link to="/" className="navbar__logo" aria-label="Kalrav Jewels Home">
             <span className="logo-top">KALRAV</span>
             <span className="logo-divider"></span>
-            <span className="logo-bottom">JEWEL</span>
+            <span className="logo-bottom">JEWELS</span>
           </Link>
 
           {/* Right Nav */}
