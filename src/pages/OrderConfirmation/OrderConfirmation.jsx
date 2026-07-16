@@ -88,7 +88,7 @@ const OrderConfirmation = () => {
               </div>
               <div className="oc-summary-row">
                 <span>Shipping</span>
-                <span className="oc-free">Free</span>
+                <span>₹{order.shippingCost || 150}</span>
               </div>
               <div className="oc-divider-sm"></div>
               <div className="oc-summary-row oc-summary-row--total">

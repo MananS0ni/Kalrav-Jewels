@@ -42,7 +42,7 @@ router.post('/', protect, async (req, res) => {
       itemsTotal += product.price * item.quantity;
     }
 
-    const shippingCost = 0; // free shipping for now
+    const shippingCost = 150; // Standard shipping rate
     const totalAmount = itemsTotal + shippingCost;
 
     // Create the order

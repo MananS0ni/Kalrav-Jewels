@@ -228,7 +228,7 @@ const ProductDetail = () => {
           )}
 
           <div className="product-detail__assurances">
-            {['Free Home Delivery', 'Lifetime Maintenance', 'Easy Exchange Policy', 'BIS Certified'].map((a, i) => (
+            {['Pan-India Delivery', 'Lifetime Maintenance', 'Easy Exchange Policy', 'BIS Certified'].map((a, i) => (
               <span key={i} className="assurance-badge">{a}</span>
             ))}
           </div>

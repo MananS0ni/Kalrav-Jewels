@@ -78,7 +78,7 @@ const Home = () => {
       {/* ─── Marquee Strip ─── */}
       <div className="marquee-strip">
         <div className="marquee-track">
-          {['925 Sterling Silver', 'Hallmarked Jewellery', 'Handcrafted Designs', 'Custom Orders Welcome', 'Free Home Delivery', 'Lifetime Maintenance', '925 Sterling Silver', 'Hallmarked Jewellery', 'Handcrafted Designs', 'Custom Orders Welcome', 'Free Home Delivery', 'Lifetime Maintenance'].map((item, i) => (
+          {['925 Sterling Silver', 'Hallmarked Jewellery', 'Handcrafted Designs', 'Custom Orders Welcome', 'Pan-India Delivery', 'Lifetime Maintenance', '925 Sterling Silver', 'Hallmarked Jewellery', 'Handcrafted Designs', 'Custom Orders Welcome', 'Pan-India Delivery', 'Lifetime Maintenance'].map((item, i) => (
             <span key={i} className="marquee-item">
               {item}
               <span className="marquee-dot"></span>

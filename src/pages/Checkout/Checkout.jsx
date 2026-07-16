@@ -89,7 +89,7 @@ const Checkout = () => {
         const rzRes = await fetch(`${API}/payments/create-order`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
-          body: JSON.stringify({ amount: totalPrice }),
+          body: JSON.stringify({ amount: totalPrice + 150 }),
         });
         const rzData = await rzRes.json();
         if (!rzRes.ok) throw new Error(rzData.message || 'Could not initiate payment');
@@ -97,7 +97,7 @@ const Checkout = () => {
         // Open Razorpay checkout popup
         const options = {
           key: rzData.key,
-          amount: totalPrice * 100,
+          amount: (totalPrice + 150) * 100,
           currency: 'INR',
           name: 'Kalrav Jewels',
           description: `Order for ${items.length} item(s)`,
@@ -262,8 +262,8 @@ const Checkout = () => {
                 {loading
                   ? 'Processing...'
                   : paymentMethod === 'razorpay'
-                    ? `Pay Now — ${formatted(totalPrice)}`
-                    : `Place Order — ${formatted(totalPrice)}`}
+                    ? `Pay Now — ${formatted(totalPrice + 150)}`
+                    : `Place Order — ${formatted(totalPrice + 150)}`}
               </span>
             </button>
           </form>
@@ -297,10 +297,14 @@ const Checkout = () => {
               <span>Subtotal</span>
               <span>{formatted(totalPrice)}</span>
             </div>
+            <div className="summary-row">
+              <span>Shipping</span>
+              <span>₹150</span>
+            </div>
             <div className="summary-divider"></div>
             <div className="summary-row summary-row--total">
               <span>Total</span>
-              <span>{formatted(totalPrice)}</span>
+              <span>{formatted(totalPrice + 150)}</span>
             </div>
           </div>
         </div>

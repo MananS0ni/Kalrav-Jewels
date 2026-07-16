@@ -127,7 +127,7 @@ const sendOrderConfirmation = async (order, customerEmail, customerName) => {
                   </td>
                   <td width="50%" style="vertical-align:top; padding-left:10px;">
                     <p style="margin:0 0 8px; font-size:10px; letter-spacing:2px; color:#9a9a9a; text-transform:uppercase;">Payment</p>
-                    <p style="margin:0; font-size:13px; color:#2c2c2c; line-height:1.7;">${paymentLabel}<br>Shipping: <span style="color:#4a9a4a; font-weight:600;">Free</span></p>
+                    <p style="margin:0; font-size:13px; color:#2c2c2c; line-height:1.7;">${paymentLabel}<br>Shipping: <span style="color:#2c2c2c; font-weight:600;">₹150</span></p>
                   </td>
                 </tr>
               </table>
@@ -144,7 +144,7 @@ const sendOrderConfirmation = async (order, customerEmail, customerName) => {
                     <table width="100%" cellpadding="0" cellspacing="0">
                       <tr>
                         <td style="font-size:12px; color:rgba(255,255,255,0.7); padding:4px 0;">✦ &nbsp; BIS Hallmarked Jewellery</td>
-                        <td style="font-size:12px; color:rgba(255,255,255,0.7); padding:4px 0;">✦ &nbsp; Free Home Delivery</td>
+                        <td style="font-size:12px; color:rgba(255,255,255,0.7); padding:4px 0;">✦ &nbsp; Pan-India Delivery</td>
                       </tr>
                       <tr>
                         <td style="font-size:12px; color:rgba(255,255,255,0.7); padding:4px 0;">✦ &nbsp; Lifetime Maintenance</td>
