@@ -168,8 +168,42 @@ const Admin = () => {
       {/* ═══════════════════ PRODUCTS TAB ═══════════════════ */}
       {tab === 'products' && (
         <>
-          {/* Form */}
+          {/* Products Table */}
           <div className="admin-section">
+            <h2 className="admin-section-title">All Products ({products.length})</h2>
+            <div className="admin-table-wrap">
+              <table className="admin-table">
+                <thead>
+                  <tr>
+                    <th>Name</th>
+                    <th>Category</th>
+                    <th>Price</th>
+                    <th>Stock</th>
+                    <th>Featured</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {products.map(p => (
+                    <tr key={p._id}>
+                      <td>{p.name}</td>
+                      <td className="admin-cat">{p.category}</td>
+                      <td>₹{p.price.toLocaleString('en-IN')}</td>
+                      <td className={p.stock === 0 ? 'admin-out' : ''}>{p.stock}</td>
+                      <td>{p.isFeatured ? '★' : '—'}</td>
+                      <td>
+                        <button className="admin-btn admin-btn--edit" onClick={() => { handleEdit(p); window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' }); }}>Edit</button>
+                        <button className="admin-btn admin-btn--del" onClick={() => handleDelete(p._id)}>Delete</button>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          {/* Form */}
+          <div className="admin-section" id="product-form">
             <h2 className="admin-section-title">{editId ? 'Edit Product' : 'Add New Product'}</h2>
             <form className="admin-form" onSubmit={handleSubmit}>
               <div className="admin-form-grid">
@@ -230,46 +264,12 @@ const Admin = () => {
                   {loading ? 'Saving...' : editId ? 'Update Product' : 'Add Product'}
                 </button>
                 {editId && (
-                  <button type="button" className="admin-btn admin-btn--ghost" onClick={() => { setEditId(null); setForm(emptyForm); }}>
+                  <button type="button" className="admin-btn admin-btn--ghost" onClick={() => { setEditId(null); setForm(emptyForm); window.scrollTo({ top: 0, behavior: 'smooth' }); }}>
                     Cancel
                   </button>
                 )}
               </div>
             </form>
-          </div>
-
-          {/* Products Table */}
-          <div className="admin-section">
-            <h2 className="admin-section-title">All Products ({products.length})</h2>
-            <div className="admin-table-wrap">
-              <table className="admin-table">
-                <thead>
-                  <tr>
-                    <th>Name</th>
-                    <th>Category</th>
-                    <th>Price</th>
-                    <th>Stock</th>
-                    <th>Featured</th>
-                    <th>Actions</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {products.map(p => (
-                    <tr key={p._id}>
-                      <td>{p.name}</td>
-                      <td className="admin-cat">{p.category}</td>
-                      <td>₹{p.price.toLocaleString('en-IN')}</td>
-                      <td className={p.stock === 0 ? 'admin-out' : ''}>{p.stock}</td>
-                      <td>{p.isFeatured ? '★' : '—'}</td>
-                      <td>
-                        <button className="admin-btn admin-btn--edit" onClick={() => handleEdit(p)}>Edit</button>
-                        <button className="admin-btn admin-btn--del" onClick={() => handleDelete(p._id)}>Delete</button>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
           </div>
         </>
       )}
