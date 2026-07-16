@@ -8,11 +8,10 @@ import './Navbar.css';
 const Navbar = () => {
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
-  const [authOpen, setAuthOpen] = useState(false);
   const [userMenuOpen, setUserMenuOpen] = useState(false);
   const location = useLocation();
   const isHome = location.pathname === '/';
-  const { user, logout } = useAuth();
+  const { user, logout, authOpen, setAuthOpen } = useAuth();
   const { totalItems, setCartOpen } = useCart();
 
   useEffect(() => {

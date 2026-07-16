@@ -5,14 +5,14 @@ import './CartDrawer.css';
 
 const CartDrawer = () => {
   const { items, removeFromCart, updateQty, totalItems, totalPrice, cartOpen, setCartOpen } = useCart();
-  const { user } = useAuth();
+  const { user, setAuthOpen } = useAuth();
   const navigate = useNavigate();
 
   const formatted = (n) => '₹' + n.toLocaleString('en-IN');
 
   const handleCheckout = () => {
     if (!user) {
-      alert('Please sign in to checkout.');
+      setAuthOpen(true);
       return;
     }
     setCartOpen(false);

@@ -12,6 +12,7 @@ export const AuthProvider = ({ children }) => {
     catch { return null; }
   });
   const [token, setToken] = useState(() => localStorage.getItem('nh_token') || null);
+  const [authOpen, setAuthOpen] = useState(false);
 
   const { setCartToken } = useCart();
 
@@ -67,7 +68,7 @@ export const AuthProvider = ({ children }) => {
   };
 
   return (
-    <AuthContext.Provider value={{ user, token, register, login, logout }}>
+    <AuthContext.Provider value={{ user, token, register, login, logout, authOpen, setAuthOpen }}>
       {children}
     </AuthContext.Provider>
   );
