@@ -46,14 +46,17 @@ const orderSchema = new mongoose.Schema(
     },
     paymentStatus: {
       type: String,
-      enum: ['pending', 'paid', 'failed', 'refunded'],
+      enum: ['pending', 'awaitingVerification', 'paid', 'failed', 'refunded'],
       default: 'pending',
     },
     paymentMethod: {
       type: String,
-      enum: ['cod', 'razorpay'],
+      enum: ['cod', 'razorpay', 'upi'],
       default: 'cod',
     },
+
+    // UPI payment reference (customer submits after paying)
+    utrNumber: { type: String, default: '' },
 
     // Razorpay (will use later)
     razorpayOrderId: { type: String, default: '' },

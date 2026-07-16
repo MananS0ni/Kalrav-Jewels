@@ -11,13 +11,13 @@ const emptyForm = {
 };
 
 const statusOptions = ['pending', 'confirmed', 'processing', 'shipped', 'delivered', 'cancelled'];
-const paymentOptions = ['pending', 'paid', 'failed', 'refunded'];
+const paymentOptions = ['pending', 'awaitingVerification', 'paid', 'failed', 'refunded'];
 const statusColors = {
   pending: '#b8960c', confirmed: '#5b8fb9', processing: '#c4842d',
   shipped: '#6dab6d', delivered: '#4a9a4a', cancelled: '#cf6f6f',
 };
 const paymentColors = {
-  pending: '#b8960c', paid: '#4a9a4a', failed: '#cf6f6f', refunded: '#5b8fb9',
+  pending: '#b8960c', awaitingVerification: '#e07b2e', paid: '#4a9a4a', failed: '#cf6f6f', refunded: '#5b8fb9',
 };
 
 const Admin = () => {
@@ -361,12 +361,23 @@ const Admin = () => {
                       <span className="admin-order-badge" style={{ background: `${statusColors[order.orderStatus]}18`, color: statusColors[order.orderStatus] }}>
                         {order.orderStatus}
                       </span>
-                      <span className="admin-order-badge" style={{ background: `${paymentColors[order.paymentStatus]}18`, color: paymentColors[order.paymentStatus] }}>
+                      <span className="admin-order-badge" style={{ background: `${(paymentColors[order.paymentStatus] || '#888')}18`, color: paymentColors[order.paymentStatus] || '#888' }}>
                         {order.paymentStatus}
                       </span>
                       <span className="admin-order-badge" style={{ background: '#3a3a3a', color: '#aaa' }}>
                         {order.paymentMethod.toUpperCase()}
                       </span>
+                      {/* UTR display for UPI orders */}
+                      {order.paymentMethod === 'upi' && order.utrNumber && (
+                        <span className="admin-order-badge" style={{ background: '#1a3a2a', color: '#6dab6d', fontFamily: 'monospace', letterSpacing: '1px' }}>
+                          UTR: {order.utrNumber}
+                        </span>
+                      )}
+                      {order.paymentMethod === 'upi' && !order.utrNumber && (
+                        <span className="admin-order-badge" style={{ background: '#3a1a1a', color: '#cf6f6f' }}>
+                          UTR: Not Provided
+                        </span>
+                      )}
                     </div>
                   </div>
                 </div>

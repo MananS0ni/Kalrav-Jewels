@@ -32,7 +32,9 @@ const Checkout = () => {
   });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
-  const [paymentMethod, setPaymentMethod] = useState('razorpay');
+  const [paymentMethod, setPaymentMethod] = useState('upi'); // Default: UPI
+  const [utrNumber, setUtrNumber] = useState('');            // Customer enters after paying
+  const [upiStep, setUpiStep] = useState('select');          // 'select' | 'pay' | 'confirm'
 
   // ── Live Shipping Calculation ─────────────────────────────────────────────
   const [shipping, setShipping] = useState(null);       // { total, baseCost, codFee, zone, isFree, breakdown, ... }
@@ -88,7 +90,24 @@ const Checkout = () => {
     setLoading(true);
 
     try {
-      if (paymentMethod === 'cod') {
+      if (paymentMethod === 'upi') {
+        // UPI flow — place order with awaitingVerification status
+        const res = await fetch(`${API}/orders`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
+          body: JSON.stringify({
+            items: items.map((i) => ({ productId: i.productId, quantity: i.qty })),
+            shippingAddress: form,
+            paymentMethod: 'upi',
+            utrNumber,
+          }),
+        });
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.message || 'Order failed');
+        clearCart();
+        navigate(`/order-confirmation/${data._id}`);
+
+      } else if (paymentMethod === 'cod') {
         // Cash on Delivery — directly create the order
         const res = await fetch(`${API}/orders`, {
           method: 'POST',
@@ -253,21 +272,24 @@ const Checkout = () => {
             <div className="checkout-payment-info">
               <p className="checkout-payment-label">Payment Method</p>
               <div className="payment-options">
-                <label className={`payment-option ${paymentMethod === 'razorpay' ? 'payment-option--active' : ''}`}>
+
+                {/* UPI — Primary option */}
+                <label className={`payment-option ${paymentMethod === 'upi' ? 'payment-option--active' : ''}`}>
                   <input
                     type="radio"
                     name="paymentMethod"
-                    value="razorpay"
-                    checked={paymentMethod === 'razorpay'}
-                    onChange={() => setPaymentMethod('razorpay')}
+                    value="upi"
+                    checked={paymentMethod === 'upi'}
+                    onChange={() => { setPaymentMethod('upi'); setUpiStep('select'); }}
                   />
                   <div className="payment-option__content">
-                    <p className="payment-option__title">Pay Online</p>
-                    <p className="payment-option__sub">UPI · Credit/Debit Card · Net Banking · Wallets</p>
+                    <p className="payment-option__title">Pay via UPI</p>
+                    <p className="payment-option__sub">GPay · PhonePe · Paytm · Any UPI App</p>
                   </div>
                   <span className="payment-option__badge">Recommended</span>
                 </label>
 
+                {/* COD */}
                 <label className={`payment-option ${paymentMethod === 'cod' ? 'payment-option--active' : ''}`}>
                   <input
                     type="radio"
@@ -281,15 +303,78 @@ const Checkout = () => {
                     <p className="payment-option__sub">Pay when your order arrives</p>
                   </div>
                 </label>
+
+                {/* Razorpay — HIDDEN from UI, code kept for future use */}
+                {/* <label className={`payment-option ${paymentMethod === 'razorpay' ? 'payment-option--active' : ''}`}>
+                  ... Razorpay option ...
+                </label> */}
               </div>
+
+              {/* UPI payment panel — shown when UPI is selected */}
+              {paymentMethod === 'upi' && (
+                <div className="upi-panel">
+                  <div className="upi-panel__top">
+                    <div className="upi-panel__qr-wrap">
+                      <p className="upi-panel__step">Step 1 — Scan & Pay</p>
+                      <div className="upi-panel__qr-box">
+                        {/* Dynamic QR generated with exact amount */}
+                        {grandTotal > 0 && (() => {
+                          const upiLink = `upi://pay?pa=manansoni2905@okhdfcbank&pn=Kalrav+Jewels&am=${grandTotal.toFixed(2)}&tn=Kalrav+Jewels+Order&cu=INR`;
+                          const QRCode = window.__QRCode; // loaded below via import
+                          return (
+                            <img
+                              src={`https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(upiLink)}&bgcolor=fff&color=1a1a1a&margin=2`}
+                              alt="UPI QR Code"
+                              className="upi-panel__qr-img"
+                              width={200}
+                              height={200}
+                            />
+                          );
+                        })()}
+                      </div>
+                      <p className="upi-panel__upi-id">UPI ID: <strong>manansoni2905@okhdfcbank</strong></p>
+                      <p className="upi-panel__amount">Amount: <strong>{formatted(grandTotal)}</strong></p>
+                    </div>
+                    <div className="upi-panel__mobile">
+                      <p className="upi-panel__step">On mobile?</p>
+                      <a
+                        href={`upi://pay?pa=manansoni2905@okhdfcbank&pn=Kalrav+Jewels&am=${grandTotal.toFixed(2)}&tn=Kalrav+Jewels+Order&cu=INR`}
+                        className="btn-primary upi-open-btn"
+                        target="_blank"
+                        rel="noreferrer"
+                      >
+                        <span>Open UPI App</span>
+                      </a>
+                      <p className="upi-panel__note">Opens GPay, PhonePe or Paytm automatically</p>
+                    </div>
+                  </div>
+
+                  <div className="upi-panel__utr">
+                    <p className="upi-panel__step">Step 2 — Enter UPI Reference / UTR Number</p>
+                    <p className="upi-panel__utr-hint">After paying, open your UPI app → tap the transaction → copy the 12-digit UTR or Transaction ID and paste it below.</p>
+                    <input
+                      type="text"
+                      className="form-input upi-utr-input"
+                      placeholder="e.g. 426912345678"
+                      value={utrNumber}
+                      onChange={(e) => setUtrNumber(e.target.value.trim())}
+                      maxLength={30}
+                    />
+                  </div>
+                </div>
+              )}
             </div>
 
-            <button type="submit" className="btn-primary checkout-btn" disabled={loading}>
+            <button
+              type="submit"
+              className="btn-primary checkout-btn"
+              disabled={loading || (paymentMethod === 'upi' && !utrNumber)}
+            >
               <span>
                 {loading
                   ? 'Processing...'
-                  : paymentMethod === 'razorpay'
-                    ? `Pay Now — ${formatted(grandTotal)}`
+                  : paymentMethod === 'upi'
+                    ? utrNumber ? `Confirm UPI Order — ${formatted(grandTotal)}` : 'Pay first, then enter UTR below'
                     : `Place Order — ${formatted(grandTotal)}`}
               </span>
             </button>

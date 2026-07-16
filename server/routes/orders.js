@@ -13,7 +13,7 @@ const router = express.Router();
 // ─────────────────────────────────────────────
 router.post('/', protect, async (req, res) => {
   try {
-    const { items, shippingAddress, paymentMethod = 'cod', notes = '' } = req.body;
+    const { items, shippingAddress, paymentMethod = 'cod', notes = '', utrNumber = '' } = req.body;
 
     if (!items || items.length === 0) {
       return res.status(400).json({ message: 'Order must have at least one item.' });
@@ -53,6 +53,12 @@ router.post('/', protect, async (req, res) => {
     const shippingCost = shippingResult.total;
     const totalAmount = itemsTotal + shippingCost;
 
+    // Set payment status based on method
+    const initialPaymentStatus =
+      paymentMethod === 'upi' ? 'awaitingVerification'
+      : paymentMethod === 'razorpay' ? 'paid'
+      : 'pending'; // cod
+
     // Create the order
     const order = await Order.create({
       user: req.user._id,
@@ -64,6 +70,8 @@ router.post('/', protect, async (req, res) => {
       shippingBreakdown: shippingResult.breakdown,
       totalAmount,
       paymentMethod,
+      paymentStatus: initialPaymentStatus,
+      utrNumber: utrNumber.trim(),
       notes,
     });
 

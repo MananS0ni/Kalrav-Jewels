@@ -180,6 +180,94 @@
   border-radius: 20px;
 }
 
+/* ── UPI Payment Panel ── */
+.upi-panel {
+  margin-top: 20px;
+  border: 1px solid var(--border);
+  background: var(--cream, #faf8f4);
+  padding: 24px;
+  animation: fadeSlideIn 0.3s ease;
+}
+@keyframes fadeSlideIn {
+  from { opacity: 0; transform: translateY(-8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.upi-panel__top {
+  display: flex;
+  gap: 28px;
+  flex-wrap: wrap;
+  margin-bottom: 24px;
+}
+.upi-panel__qr-wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+.upi-panel__qr-box {
+  border: 2px solid var(--gold, #c9a84c);
+  padding: 6px;
+  background: #fff;
+  border-radius: 4px;
+}
+.upi-panel__qr-img {
+  display: block;
+  border-radius: 2px;
+}
+.upi-panel__upi-id {
+  font-size: 11px;
+  color: var(--gray-mid, #888);
+  text-align: center;
+  letter-spacing: 0.3px;
+}
+.upi-panel__amount {
+  font-size: 14px;
+  color: var(--charcoal, #1a1a1a);
+  font-weight: 600;
+  text-align: center;
+}
+.upi-panel__mobile {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 12px;
+}
+.upi-open-btn {
+  display: inline-block;
+  text-align: center;
+  padding: 14px 24px !important;
+  font-size: 0.85rem !important;
+  letter-spacing: 2px;
+  white-space: nowrap;
+}
+.upi-panel__note {
+  font-size: 11px;
+  color: var(--gray-light, #aaa);
+  text-align: center;
+}
+.upi-panel__step {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--gold, #c9a84c);
+  margin-bottom: 8px;
+}
+.upi-panel__utr {
+  border-top: 1px solid var(--border);
+  padding-top: 20px;
+}
+.upi-panel__utr-hint {
+  font-size: 12px;
+  color: var(--gray-mid, #888);
+  line-height: 1.7;
+  margin-bottom: 12px;
+}
+.upi-utr-input {
+  max-width: 300px;
+  font-size: 15px !important;
+  letter-spacing: 2px;
+}
 
 /* ── Submit Button ── */
 .checkout-btn {
