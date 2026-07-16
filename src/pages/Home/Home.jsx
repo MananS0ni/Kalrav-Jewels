@@ -2,40 +2,6 @@ import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import './Home.css';
 
-const products = [
-  {
-    id: 1,
-    name: 'Sterling Silver Solitaire Ring',
-    category: 'Rings',
-    price: '₹4,500',
-    image: '/ring_product.png',
-    tag: 'Bestseller',
-  },
-  {
-    id: 2,
-    name: 'Silver Pearl Drop Necklace',
-    category: 'Necklaces',
-    price: '₹6,200',
-    image: '/necklace_product.png',
-    tag: 'New Arrival',
-  },
-  {
-    id: 3,
-    name: 'Silver Crystal Drop Earrings',
-    category: 'Earrings',
-    price: '₹3,800',
-    image: '/earring_product.png',
-    tag: 'Exquisite',
-  },
-  {
-    id: 4,
-    name: 'Silver Tennis Bracelet',
-    category: 'Bracelets',
-    price: '₹8,500',
-    image: '/bracelet_product.png',
-    tag: 'Signature',
-  },
-];
 
 const stats = [
   { value: '3', label: 'Generations of Trust' },
@@ -54,9 +20,25 @@ const categories = [
 
 const Home = () => {
   const [heroVisible, setHeroVisible] = useState(false);
+  const [featuredProducts, setFeaturedProducts] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  const API = import.meta.env.VITE_API_URL || (window.location.hostname === 'localhost' ? 'http://localhost:5000/api' : '/api');
 
   useEffect(() => {
     const timer = setTimeout(() => setHeroVisible(true), 100);
+
+    fetch(`${API}/products?featured=true`)
+      .then((res) => res.json())
+      .then((data) => {
+        setFeaturedProducts(data.slice(0, 4));
+        setLoading(false);
+      })
+      .catch((err) => {
+        console.error('Failed to load featured products', err);
+        setLoading(false);
+      });
+
     return () => clearTimeout(timer);
   }, []);
 
@@ -150,34 +132,38 @@ const Home = () => {
             <h2 className="section-title">Featured Pieces</h2>
           </div>
 
-          <div className="featured__grid">
-            {products.map((product) => (
-              <Link
-                to={`/collections/${product.id}`}
-                key={product.id}
-                className="product-card"
-                id={`product-card-${product.id}`}
-              >
-                <div className="product-card__image-wrap">
-                  <img
-                    src={product.image}
-                    alt={product.name}
-                    className="product-card__image"
-                    loading="lazy"
-                  />
-                  <span className="product-card__tag">{product.tag}</span>
-                  <div className="product-card__hover-overlay">
-                    <span className="product-card__hover-btn">View Details</span>
+          {loading ? (
+            <p style={{ textAlign: 'center', padding: '40px', color: 'var(--text-muted)' }}>Loading featured pieces...</p>
+          ) : (
+            <div className="featured__grid">
+              {featuredProducts.map((product) => (
+                <Link
+                  to={`/collections/${product._id}`}
+                  key={product._id}
+                  className="product-card"
+                  id={`product-card-${product._id}`}
+                >
+                  <div className="product-card__image-wrap">
+                    <img
+                      src={product.images?.[0] || '/ring_product.png'}
+                      alt={product.name}
+                      className="product-card__image"
+                      loading="lazy"
+                    />
+                    {product.tags?.[0] && <span className="product-card__tag">{product.tags[0]}</span>}
+                    <div className="product-card__hover-overlay">
+                      <span className="product-card__hover-btn">View Details</span>
+                    </div>
                   </div>
-                </div>
-                <div className="product-card__info">
-                  <p className="product-card__category">{product.category}</p>
-                  <h3 className="product-card__name">{product.name}</h3>
-                  <p className="product-card__price">{product.price}</p>
-                </div>
-              </Link>
-            ))}
-          </div>
+                  <div className="product-card__info">
+                    <p className="product-card__category">{product.category.charAt(0).toUpperCase() + product.category.slice(1)}</p>
+                    <h3 className="product-card__name">{product.name}</h3>
+                    <p className="product-card__price">₹{product.price?.toLocaleString('en-IN')}</p>
+                  </div>
+                </Link>
+              ))}
+            </div>
+          )}
 
           <div className="featured__cta">
             <Link to="/collections" className="btn-outline" id="view-all-btn">View All Collections</Link>

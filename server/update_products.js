@@ -6,9 +6,9 @@ dns.setServers(['8.8.8.8','8.8.4.4']);
 mongoose.connect(process.env.MONGO_URI, {family: 4}).then(async () => {
   const db = mongoose.connection.db;
   
-  // Update Gold Tennis Bracelet
+  // Update Silver Tennis Bracelet
   await db.collection('products').updateOne(
-    { name: 'Gold Tennis Bracelet' },
+    { name: 'Silver Tennis Bracelet' },
     { $set: { 
         images: [
           '/tennis-bracelet/hero-1.jpg', 
