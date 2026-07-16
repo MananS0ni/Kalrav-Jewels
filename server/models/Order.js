@@ -33,7 +33,9 @@ const orderSchema = new mongoose.Schema(
 
     // Totals
     itemsTotal: { type: Number, required: true },   // sum of all items
-    shippingCost: { type: Number, default: 0 },      // 0 = free shipping
+    shippingCost: { type: Number, default: 0 },      // calculated shipping
+    shippingZone: { type: String, enum: ['metro', 'standard', 'remote'], default: 'standard' },
+    shippingBreakdown: { type: String, default: '' }, // human-readable summary
     totalAmount: { type: Number, required: true },   // itemsTotal + shippingCost
 
     // Status

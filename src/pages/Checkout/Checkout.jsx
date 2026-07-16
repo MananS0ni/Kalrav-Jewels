@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useCart } from '../../context/CartContext';
 import { useAuth } from '../../context/AuthContext';
@@ -33,6 +33,33 @@ const Checkout = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [paymentMethod, setPaymentMethod] = useState('razorpay');
+
+  // ── Live Shipping Calculation ─────────────────────────────────────────────
+  const [shipping, setShipping] = useState(null);       // { total, baseCost, codFee, zone, isFree, breakdown, ... }
+  const [shippingLoading, setShippingLoading] = useState(false);
+
+  const fetchShipping = useCallback(async (pincode, method, subtotal) => {
+    if (!/^\d{6}$/.test(pincode)) { setShipping(null); return; }
+    setShippingLoading(true);
+    try {
+      const res = await fetch(`${API}/shipping/calculate`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ itemsTotal: subtotal, paymentMethod: method, pincode }),
+      });
+      const data = await res.json();
+      if (res.ok) setShipping(data);
+    } catch { /* silently fail — user can still submit */ }
+    setShippingLoading(false);
+  }, []);
+
+  // Re-calculate whenever pincode or payment method changes
+  useEffect(() => {
+    fetchShipping(form.pincode, paymentMethod, totalPrice);
+  }, [form.pincode, paymentMethod, totalPrice, fetchShipping]);
+
+  const shippingCost = shipping ? shipping.total : 0;
+  const grandTotal = totalPrice + shippingCost;
 
   const formatted = (n) => '₹' + n.toLocaleString('en-IN');
 
@@ -89,7 +116,7 @@ const Checkout = () => {
         const rzRes = await fetch(`${API}/payments/create-order`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
-          body: JSON.stringify({ amount: totalPrice + 150 }),
+          body: JSON.stringify({ amount: grandTotal }),
         });
         const rzData = await rzRes.json();
         if (!rzRes.ok) throw new Error(rzData.message || 'Could not initiate payment');
@@ -97,7 +124,7 @@ const Checkout = () => {
         // Open Razorpay checkout popup
         const options = {
           key: rzData.key,
-          amount: (totalPrice + 150) * 100,
+          amount: grandTotal * 100,
           currency: 'INR',
           name: 'Kalrav Jewels',
           description: `Order for ${items.length} item(s)`,
@@ -262,8 +289,8 @@ const Checkout = () => {
                 {loading
                   ? 'Processing...'
                   : paymentMethod === 'razorpay'
-                    ? `Pay Now — ${formatted(totalPrice + 150)}`
-                    : `Place Order — ${formatted(totalPrice + 150)}`}
+                    ? `Pay Now — ${formatted(grandTotal)}`
+                    : `Place Order — ${formatted(grandTotal)}`}
               </span>
             </button>
           </form>
@@ -297,14 +324,46 @@ const Checkout = () => {
               <span>Subtotal</span>
               <span>{formatted(totalPrice)}</span>
             </div>
+
+            {/* Shipping Breakdown */}
             <div className="summary-row">
-              <span>Shipping</span>
-              <span>₹150</span>
+              <span>Shipping
+                {shipping && (
+                  <span className="summary-shipping-zone"> — {shipping.zone}</span>
+                )}
+              </span>
+              <span>
+                {shippingLoading && <span className="summary-shipping-loading">Calculating...</span>}
+                {!shippingLoading && !shipping && (
+                  <span className="summary-shipping-hint">Enter pincode</span>
+                )}
+                {!shippingLoading && shipping && (
+                  shipping.isFree
+                    ? <span className="summary-shipping-free">FREE</span>
+                    : formatted(shipping.total)
+                )}
+              </span>
             </div>
+
+            {/* COD fee detail line */}
+            {!shippingLoading && shipping && !shipping.isFree && shipping.codFee > 0 && (
+              <div className="summary-row summary-row--sub">
+                <span>COD Handling Fee</span>
+                <span>+{formatted(shipping.codFee)}</span>
+              </div>
+            )}
+
+            {/* Free shipping nudge */}
+            {!shippingLoading && shipping && !shipping.isFree && shipping.amountForFreeShipping > 0 && (
+              <div className="summary-free-nudge">
+                Add {formatted(shipping.amountForFreeShipping)} more for FREE shipping (prepaid)
+              </div>
+            )}
+
             <div className="summary-divider"></div>
             <div className="summary-row summary-row--total">
               <span>Total</span>
-              <span>{formatted(totalPrice + 150)}</span>
+              <span>{formatted(grandTotal)}</span>
             </div>
           </div>
         </div>

@@ -15,6 +15,7 @@ const productRoutes = require('./routes/products');
 const orderRoutes = require('./routes/orders');
 const paymentRoutes = require('./routes/payments');
 const cartRoutes = require('./routes/cart');
+const shippingRoutes = require('./routes/shipping');
 
 const app = express();
 
@@ -29,6 +30,7 @@ app.use('/api/products', productRoutes);
 app.use('/api/orders', orderRoutes);
 app.use('/api/payments', paymentRoutes);
 app.use('/api/cart', cartRoutes);
+app.use('/api/shipping', shippingRoutes);
 
 // Health check
 app.get('/api/health', (req, res) => {

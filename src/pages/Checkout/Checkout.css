@@ -303,6 +303,53 @@
   font-weight: 600;
 }
 
+/* Shipping breakdown UI */
+.summary-row--sub {
+  font-size: 11px;
+  color: var(--gray-mid);
+  padding-top: 0;
+  margin-top: -6px;
+}
+.summary-shipping-zone {
+  font-size: 10px;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  color: var(--gray-light);
+  font-weight: 400;
+}
+.summary-shipping-loading {
+  font-size: 12px;
+  color: var(--gray-light);
+  font-style: italic;
+  animation: pulse 1.2s ease-in-out infinite;
+}
+.summary-shipping-hint {
+  font-size: 12px;
+  color: var(--gray-light);
+  font-style: italic;
+}
+.summary-shipping-free {
+  color: #4a9a4a;
+  font-weight: 700;
+  font-size: 12px;
+  letter-spacing: 1.5px;
+}
+.summary-free-nudge {
+  font-size: 11px;
+  color: var(--gold-dark);
+  background: var(--gold-pale);
+  border: 1px solid var(--gold);
+  border-radius: 2px;
+  padding: 8px 12px;
+  margin: 4px 0 8px;
+  line-height: 1.5;
+}
+@keyframes pulse {
+  0%, 100% { opacity: 0.5; }
+  50% { opacity: 1; }
+}
+
+
 /* ═══════════════════════════════════════════════
    RESPONSIVE
    ═══════════════════════════════════════════════ */

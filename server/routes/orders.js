@@ -4,6 +4,7 @@ const Product = require('../models/Product');
 const { protect } = require('../middleware/auth');
 const { adminOnly } = require('../middleware/admin');
 const { sendOrderConfirmation } = require('../utils/email');
+const { calculateShipping } = require('../utils/shipping');
 
 const router = express.Router();
 
@@ -42,7 +43,14 @@ router.post('/', protect, async (req, res) => {
       itemsTotal += product.price * item.quantity;
     }
 
-    const shippingCost = 150; // Standard shipping rate
+    const { shippingAddress: addr } = req.body;
+    // Use shipping calculator — same logic as the /api/shipping/calculate endpoint
+    const shippingResult = calculateShipping({
+      itemsTotal,
+      paymentMethod,
+      pincode: shippingAddress.pincode,
+    });
+    const shippingCost = shippingResult.total;
     const totalAmount = itemsTotal + shippingCost;
 
     // Create the order
@@ -52,6 +60,8 @@ router.post('/', protect, async (req, res) => {
       shippingAddress,
       itemsTotal,
       shippingCost,
+      shippingZone: shippingResult.zone,
+      shippingBreakdown: shippingResult.breakdown,
       totalAmount,
       paymentMethod,
       notes,
