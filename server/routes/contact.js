@@ -18,7 +18,7 @@ router.get('/', protect, adminOnly, async (req, res) => {
 });
 
 // PUT /api/contact/:id/status (Admin only)
-router.put('/:id/status', protect, admin, async (req, res) => {
+router.put('/:id/status', protect, adminOnly, async (req, res) => {
   try {
     const enquiry = await Enquiry.findById(req.params.id);
     if (!enquiry) return res.status(404).json({ message: 'Enquiry not found' });
