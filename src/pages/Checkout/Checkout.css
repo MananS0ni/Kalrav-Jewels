@@ -355,9 +355,7 @@
   font-weight: 600;
   color: var(--text);
   font-size: 0.9rem;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
+  line-height: 1.4;
 }
 .summary-item__meta {
   color: var(--text-muted);
@@ -449,6 +447,9 @@
   .checkout-summary-section {
     position: static;
     order: -1;
+  }
+  .checkout-summary-card {
+    padding: 24px 20px;
   }
   .checkout-row {
     grid-template-columns: 1fr;
