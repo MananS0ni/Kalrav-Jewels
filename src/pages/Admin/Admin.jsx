@@ -367,15 +367,15 @@ const Admin = () => {
                       <span className="admin-order-badge" style={{ background: '#3a3a3a', color: '#aaa' }}>
                         {order.paymentMethod.toUpperCase()}
                       </span>
-                      {/* UTR display for UPI orders */}
+                      {/* UTR/UPI ID display for UPI orders */}
                       {order.paymentMethod === 'upi' && order.utrNumber && (
                         <span className="admin-order-badge" style={{ background: '#1a3a2a', color: '#6dab6d', fontFamily: 'monospace', letterSpacing: '1px' }}>
-                          UTR: {order.utrNumber}
+                          UPI Ref: {order.utrNumber}
                         </span>
                       )}
                       {order.paymentMethod === 'upi' && !order.utrNumber && (
                         <span className="admin-order-badge" style={{ background: '#3a1a1a', color: '#cf6f6f' }}>
-                          UTR: Not Provided
+                          UPI Ref: Not Provided
                         </span>
                       )}
                     </div>

@@ -350,15 +350,15 @@ const Checkout = () => {
                   </div>
 
                   <div className="upi-panel__utr">
-                    <p className="upi-panel__step">Step 2 — Enter UPI Reference / UTR Number</p>
-                    <p className="upi-panel__utr-hint">After paying, open your UPI app → tap the transaction → copy the 12-digit UTR or Transaction ID and paste it below.</p>
+                    <p className="upi-panel__step">Step 2 — Enter Your UPI ID or UTR</p>
+                    <p className="upi-panel__utr-hint">After paying, please enter your UPI ID (e.g. yourname@bank) or the 12-digit transaction UTR so we can verify your payment.</p>
                     <input
                       type="text"
                       className="form-input upi-utr-input"
-                      placeholder="e.g. 426912345678"
+                      placeholder="e.g. rahul@okhdfcbank or 4269..."
                       value={utrNumber}
                       onChange={(e) => setUtrNumber(e.target.value.trim())}
-                      maxLength={30}
+                      maxLength={50}
                     />
                   </div>
                 </div>
@@ -374,7 +374,7 @@ const Checkout = () => {
                 {loading
                   ? 'Processing...'
                   : paymentMethod === 'upi'
-                    ? utrNumber ? `Confirm UPI Order — ${formatted(grandTotal)}` : 'Pay first, then enter UTR below'
+                    ? utrNumber ? `Confirm UPI Order — ${formatted(grandTotal)}` : 'Pay first, then enter UPI ID below'
                     : `Place Order — ${formatted(grandTotal)}`}
               </span>
             </button>
