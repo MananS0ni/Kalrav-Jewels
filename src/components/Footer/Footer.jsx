@@ -62,7 +62,7 @@ const Footer = () => {
               </li>
               <li>
                 <span className="contact-label">Email</span>
-                <a href="mailto:enquiries.kalravjewels@gmail.com" className="contact-val">enquiries.kalravjewels@gmail.com</a>
+                <a href="mailto:info@kalravjewels.com" className="contact-val">info@kalravjewels.com</a>
               </li>
             </ul>
           </div>

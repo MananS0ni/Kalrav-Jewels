@@ -1,16 +1,10 @@
 const express = require('express');
-const nodemailer = require('nodemailer');
+const { Resend } = require('resend');
+const resend = new Resend(process.env.RESEND_API_KEY);
 const Enquiry = require('../models/Enquiry');
 const { protect, admin } = require('../middleware/auth');
 
 const router = express.Router();
-
-const transporter = nodemailer.createTransport({
-  host: 'smtp.gmail.com',
-  port: 465,
-  secure: true,
-  auth: { user: process.env.EMAIL_USER, pass: process.env.EMAIL_PASS },
-});
 
 // GET /api/contact (Admin only)
 router.get('/', protect, admin, async (req, res) => {
@@ -42,8 +36,8 @@ router.post('/', async (req, res) => {
 
   try {
     await Enquiry.create({ type: 'contact', name, email, phone, subject, message });
-    transporter.sendMail({
-      from: `"Kalrav Website" <${process.env.EMAIL_USER}>`,
+    resend.emails.send({
+      from: 'Kalrav Enquiries <enquiries@kalravjewels.com>',
       to: process.env.EMAIL_TO,
       subject: `New Enquiry: ${subject || 'Contact Form'} — ${name}`,
       html: `
@@ -67,8 +61,8 @@ router.post('/enquire', async (req, res) => {
 
   try {
     await Enquiry.create({ type: 'product', name, phone, productName });
-    transporter.sendMail({
-      from: `"Kalrav Enquiries" <${process.env.EMAIL_USER}>`,
+    resend.emails.send({
+      from: 'Kalrav Enquiries <enquiries@kalravjewels.com>',
       to: process.env.EMAIL_TO,
       subject: `Product Callback Request — ${name}`,
       html: `

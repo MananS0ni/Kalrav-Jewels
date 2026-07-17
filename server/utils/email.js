@@ -1,16 +1,5 @@
-const nodemailer = require('nodemailer');
-
-// Create reusable transporter
-const getTransporter = () =>
-  nodemailer.createTransport({
-    host: 'smtp.gmail.com',
-    port: 465,
-    secure: true,
-    auth: {
-      user: process.env.EMAIL_USER,
-      pass: process.env.EMAIL_PASS,
-    },
-  });
+const { Resend } = require('resend');
+const resend = new Resend(process.env.RESEND_API_KEY);
 
 /**
  * Send order confirmation email to the customer.
@@ -20,7 +9,7 @@ const getTransporter = () =>
  */
 const sendOrderConfirmation = async (order, customerEmail, customerName) => {
   try {
-    const transporter = getTransporter();
+    // Build the items table rows
 
     // Build the items table rows
     const itemRows = order.items
@@ -185,8 +174,8 @@ const sendOrderConfirmation = async (order, customerEmail, customerName) => {
 </body>
 </html>`;
 
-    await transporter.sendMail({
-      from: `"Kalrav Jewels" <${process.env.EMAIL_USER}>`,
+    await resend.emails.send({
+      from: 'Kalrav Jewels <noreply@kalravjewels.com>',
       to: customerEmail,
       subject: `Order Confirmed — #KJ-${orderId} | Kalrav Jewels`,
       html: htmlBody,

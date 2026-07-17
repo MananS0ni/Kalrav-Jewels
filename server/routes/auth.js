@@ -1,26 +1,17 @@
 const express = require('express');
 const jwt = require('jsonwebtoken');
-const nodemailer = require('nodemailer');
+const { Resend } = require('resend');
+const resend = new Resend(process.env.RESEND_API_KEY);
 const User = require('../models/User');
 const { protect } = require('../middleware/auth');
 
 const router = express.Router();
 
-const transporter = nodemailer.createTransport({
-  host: 'smtp.gmail.com',
-  port: 465,
-  secure: true,
-  auth: {
-    user: process.env.EMAIL_USER,
-    pass: process.env.EMAIL_PASS,
-  },
-});
-
 const sendWelcomeEmail = async (name, email) => {
   console.log(`Sending welcome email to: ${email}`);
   try {
-    await transporter.sendMail({
-      from: `"Kalrav Jewels" <${process.env.EMAIL_USER}>`,
+    await resend.emails.send({
+      from: 'Kalrav Jewels <noreply@kalravjewels.com>',
       to: email,
       subject: 'Welcome to Kalrav — Your Account is Ready',
       html: `
