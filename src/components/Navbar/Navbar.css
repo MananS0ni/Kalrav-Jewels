@@ -41,16 +41,12 @@
 }
 
 .navbar__logo-img {
-  height: 60px;
+  height: 80px;
   width: auto;
   object-fit: contain;
-  transform: scale(2.2);
+  transform: scale(3.5);
   transform-origin: center;
-  transition: filter var(--transition), opacity var(--transition);
-}
-
-.navbar--transparent .navbar__logo-img {
-  filter: brightness(0) invert(1);
+  transition: opacity var(--transition);
 }
 
 /* Nav links */
