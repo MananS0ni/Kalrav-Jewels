@@ -32,8 +32,6 @@
   height: 60px;
   width: auto;
   object-fit: contain;
-  transform: scale(2.2);
-  transform-origin: left center;
 }
 
 .footer__tagline {
@@ -171,10 +169,6 @@ a.contact-val:hover {
 
   .footer__logo {
     align-items: center;
-  }
-
-  .footer__logo-img {
-    transform-origin: center center;
   }
 
   .footer__contact-list li {

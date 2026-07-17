@@ -44,9 +44,7 @@
   height: 60px;
   width: auto;
   object-fit: contain;
-  transform: scale(2.2);
-  transform-origin: center;
-  transition: filter var(--transition), opacity var(--transition);
+  transition: filter var(--transition);
 }
 
 .navbar--transparent .navbar__logo-img {
