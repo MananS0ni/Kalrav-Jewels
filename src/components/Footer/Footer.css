@@ -174,11 +174,24 @@ a.contact-val:hover {
 @media (max-width: 600px) {
   .footer__grid {
     grid-template-columns: 1fr;
-    gap: 32px;
+    gap: 40px;
+    text-align: center;
   }
 
   .footer__top {
     padding: 56px 0 40px;
+  }
+
+  .footer__brand {
+    align-items: center;
+  }
+
+  .footer__logo {
+    align-items: center;
+  }
+
+  .footer__contact-list li {
+    align-items: center;
   }
 
   .footer__bottom-inner {
