@@ -29,11 +29,10 @@
 }
 
 .footer__logo-img {
-  height: 60px;
+  height: 200px;
   width: auto;
   object-fit: contain;
-  transform: scale(1.8);
-  transform-origin: left center;
+  margin-left: -20px;
 }
 
 .footer__tagline {
