@@ -155,7 +155,7 @@ const sendOrderConfirmation = async (order, customerEmail, customerName) => {
                 Questions about your order? We're here to help.<br>
                 <a href="tel:+919537068100" style="color:#c9a84c; text-decoration:none; font-weight:600;">+91 95370 68100</a>
                 &nbsp;·&nbsp;
-                <a href="mailto:${process.env.EMAIL_USER}" style="color:#c9a84c; text-decoration:none; font-weight:600;">${process.env.EMAIL_USER}</a>
+                <a href="mailto:info@kalravjewels.com" style="color:#c9a84c; text-decoration:none; font-weight:600;">info@kalravjewels.com</a>
               </p>
             </td>
           </tr>
