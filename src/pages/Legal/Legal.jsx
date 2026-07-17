@@ -28,7 +28,7 @@ const Legal = () => {
           <p>To place an order, you may need to register an account. You are responsible for maintaining the confidentiality of your account password.</p>
 
           <h3>5. Contact Information</h3>
-          <p>For any questions regarding these terms, please contact us at info@kalravjewels.com or +91 95370 68100.</p>
+          <p>For any questions regarding these terms, please contact us at enquiries.kalravjewels@gmail.com or +91 95370 68100.</p>
         </>
       )
     },
