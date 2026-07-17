@@ -30,7 +30,7 @@ const Admin = () => {
   const [editId, setEditId] = useState(null);
   const [msg, setMsg] = useState('');
   const [loading, setLoading] = useState(false);
-  
+
   // Toggles for completed history
   const [showCompletedOrders, setShowCompletedOrders] = useState(false);
   const [showCompletedEnquiries, setShowCompletedEnquiries] = useState(false);
@@ -396,7 +396,7 @@ const Admin = () => {
               Show Resolved History
             </label>
           </div>
-          
+
           {enquiries.filter(e => showCompletedEnquiries || e.status !== 'resolved').length === 0 ? (
             <p style={{ color: '#888', textAlign: 'center', padding: '40px' }}>No active enquiries need your attention right now.</p>
           ) : (
@@ -415,7 +415,7 @@ const Admin = () => {
                       </p>
                     </div>
                     <div>
-                      <select 
+                      <select
                         value={enq.status}
                         onChange={(e) => updateEnquiryStatus(enq._id, e.target.value)}
                         style={{ padding: '6px 12px', borderRadius: '4px', border: '1px solid #ddd' }}
@@ -431,9 +431,9 @@ const Admin = () => {
                     <div className="admin-order-customer-info">
                       <span className="admin-order-cust-label">Customer Details</span>
                       <span className="admin-order-cust-name" style={{ marginTop: '4px' }}>
-                        <strong>Name:</strong> {enq.name} <br/>
-                        <strong>Phone:</strong> {enq.phone || 'N/A'} <br/>
-                        {enq.type === 'contact' && <><strong>Email:</strong> {enq.email} <br/></>}
+                        <strong>Name:</strong> {enq.name} <br />
+                        <strong>Phone:</strong> {enq.phone || 'N/A'} <br />
+                        {enq.type === 'contact' && <><strong>Email:</strong> {enq.email} <br /></>}
                       </span>
                     </div>
                     {enq.type === 'product' ? (
@@ -452,7 +452,7 @@ const Admin = () => {
                       </div>
                     )}
                   </div>
-                  
+
                   {enq.type === 'contact' && enq.message && (
                     <div style={{ marginTop: '16px', padding: '16px', background: '#f9f9f9', borderRadius: '4px', borderLeft: '3px solid #ddd' }}>
                       <p style={{ color: '#666', fontSize: '0.85rem', textTransform: 'uppercase', marginBottom: '8px', letterSpacing: '1px' }}>Message</p>

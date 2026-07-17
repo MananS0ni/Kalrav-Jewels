@@ -28,29 +28,10 @@
   gap: 0;
 }
 
-.footer-logo-top {
-  font-family: 'Cormorant Garamond', serif;
-  font-size: 24px;
-  font-weight: 600;
-  letter-spacing: 8px;
-  color: var(--gold-light);
-  line-height: 1;
-}
-
-.footer-logo-line {
-  display: block;
-  width: 100%;
-  height: 1px;
-  background: var(--gold);
-  margin: 5px 0;
-}
-
-.footer-logo-bottom {
-  font-family: 'Montserrat', sans-serif;
-  font-size: 8px;
-  font-weight: 600;
-  letter-spacing: 5px;
-  color: rgba(255,255,255,0.5);
+.footer__logo-img {
+  height: 60px;
+  width: auto;
+  object-fit: contain;
 }
 
 .footer__tagline {
@@ -208,10 +189,5 @@ a.contact-val:hover {
 
   .footer__top {
     padding: 48px 0 32px;
-  }
-
-  .footer-logo-top {
-    font-size: 20px;
-    letter-spacing: 6px;
   }
 }
