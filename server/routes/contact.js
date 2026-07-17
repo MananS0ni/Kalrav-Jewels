@@ -2,12 +2,13 @@ const express = require('express');
 const { Resend } = require('resend');
 const resend = new Resend(process.env.RESEND_API_KEY);
 const Enquiry = require('../models/Enquiry');
-const { protect, admin } = require('../middleware/auth');
+const { protect } = require('../middleware/auth');
+const { adminOnly } = require('../middleware/admin');
 
 const router = express.Router();
 
 // GET /api/contact (Admin only)
-router.get('/', protect, admin, async (req, res) => {
+router.get('/', protect, adminOnly, async (req, res) => {
   try {
     const enquiries = await Enquiry.find({}).sort({ createdAt: -1 });
     res.json(enquiries);
