@@ -41,10 +41,10 @@
 }
 
 .navbar__logo-img {
-  height: 80px;
+  height: 60px;
   width: auto;
   object-fit: contain;
-  transform: scale(3.5);
+  transform: scale(1.8);
   transform-origin: center;
   transition: opacity var(--transition);
 }
