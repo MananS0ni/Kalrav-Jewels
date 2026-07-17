@@ -39,6 +39,35 @@ router.post('/add', auth, async (req, res) => {
   }
 });
 
+// POST /api/cart/sync — sync local cart items with backend on login
+router.post('/sync', auth, async (req, res) => {
+  try {
+    const { items: localItems } = req.body;
+    if (!localItems || !Array.isArray(localItems)) {
+      return res.status(400).json({ message: 'items array is required' });
+    }
+
+    let cart = await Cart.findOne({ user: req.user._id });
+    if (!cart) {
+      cart = new Cart({ user: req.user._id, items: [] });
+    }
+
+    for (const localItem of localItems) {
+      const existing = cart.items.find((i) => i.productId.toString() === localItem.productId.toString());
+      if (existing) {
+        existing.qty += localItem.qty; // Add quantities together
+      } else {
+        cart.items.push(localItem);
+      }
+    }
+
+    await cart.save();
+    res.json({ items: cart.items });
+  } catch (err) {
+    res.status(500).json({ message: 'Failed to sync cart' });
+  }
+});
+
 // PUT /api/cart/update — update quantity of an item
 router.put('/update', auth, async (req, res) => {
   try {

@@ -5,25 +5,57 @@ const CartContext = createContext(null);
 const API = import.meta.env.VITE_API_URL || (window.location.hostname === 'localhost' ? 'http://localhost:5000/api' : '/api');
 
 export const CartProvider = ({ children }) => {
-  const [items, setItems] = useState([]);
+  const [items, setItems] = useState(() => {
+    try {
+      return JSON.parse(localStorage.getItem('kalrav_cart')) || [];
+    } catch {
+      return [];
+    }
+  });
   const [cartOpen, setCartOpen] = useState(false);
   const [token, setToken] = useState(() => localStorage.getItem('nh_token') || null);
 
   // Called by AuthContext after login — syncs token into CartContext
   const setCartToken = useCallback((t) => setToken(t), []);
 
-  // Fetch cart from backend whenever token changes (login/logout)
+  // Save guest cart to localStorage whenever items change
   useEffect(() => {
     if (!token) {
-      setItems([]); // clear cart on logout
+      localStorage.setItem('kalrav_cart', JSON.stringify(items));
+    }
+  }, [items, token]);
+
+  // Fetch or sync cart from backend whenever token changes (login/logout)
+  useEffect(() => {
+    if (!token) {
+      // Don't clear guest cart on logout here, AuthContext does it
       return;
     }
-    fetch(`${API}/cart`, {
-      headers: { Authorization: `Bearer ${token}` },
-    })
-      .then((res) => res.json())
-      .then((data) => setItems(data.items || []))
-      .catch(() => setItems([]));
+
+    const localItems = JSON.parse(localStorage.getItem('kalrav_cart')) || [];
+    
+    if (localItems.length > 0) {
+      // User just logged in and has local items -> merge them
+      fetch(`${API}/cart/sync`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
+        body: JSON.stringify({ items: localItems }),
+      })
+        .then((res) => res.json())
+        .then((data) => {
+          setItems(data.items || []);
+          localStorage.removeItem('kalrav_cart'); // clear local after successful sync
+        })
+        .catch(() => setItems([]));
+    } else {
+      // No local items -> just fetch user's saved cart
+      fetch(`${API}/cart`, {
+        headers: { Authorization: `Bearer ${token}` },
+      })
+        .then((res) => res.json())
+        .then((data) => setItems(data.items || []))
+        .catch(() => setItems([]));
+    }
   }, [token]);
 
   const addToCart = async (product) => {
