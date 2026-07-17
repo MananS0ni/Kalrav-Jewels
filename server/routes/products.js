@@ -33,7 +33,8 @@ router.get('/:id', async (req, res) => {
 // POST /api/products — add new product (admin only)
 router.post('/', protect, adminOnly, async (req, res) => {
   try {
-    const product = await Product.create(req.body);
+    const { name, description, price, originalPrice, category, images, weight, material, purity, stock, isFeatured, tags } = req.body;
+    const product = await Product.create({ name, description, price, originalPrice, category, images, weight, material, purity, stock, isFeatured, tags });
     res.status(201).json(product);
   } catch (err) {
     res.status(400).json({ message: err.message });
@@ -43,7 +44,8 @@ router.post('/', protect, adminOnly, async (req, res) => {
 // PUT /api/products/:id — update product (admin only)
 router.put('/:id', protect, adminOnly, async (req, res) => {
   try {
-    const product = await Product.findByIdAndUpdate(req.params.id, req.body, {
+    const { name, description, price, originalPrice, category, images, weight, material, purity, stock, isFeatured, tags } = req.body;
+    const product = await Product.findByIdAndUpdate(req.params.id, { name, description, price, originalPrice, category, images, weight, material, purity, stock, isFeatured, tags }, {
       new: true,
       runValidators: true,
     });

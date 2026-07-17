@@ -4,6 +4,8 @@ const cors = require('cors');
 const dns = require('dns');
 const path = require('path');
 require('dotenv').config();
+const helmet = require('helmet');
+const mongoSanitize = require('express-mongo-sanitize');
 
 // Fix: Windows DNS blocks SRV queries — use Google DNS instead
 dns.setServers(['8.8.8.8', '8.8.4.4']);
@@ -19,9 +21,14 @@ const shippingRoutes = require('./routes/shipping');
 
 const app = express();
 
+// Trust Render's reverse proxy — required for express-rate-limit to read real client IPs
+app.set('trust proxy', 1);
+
 // Middleware
+app.use(helmet());
 app.use(cors({ origin: process.env.CLIENT_URL, credentials: true }));
-app.use(express.json());
+app.use(express.json());         // parse body FIRST
+app.use(mongoSanitize());        // then sanitize the parsed body
 
 // Routes
 app.use('/api/auth', authRoutes);

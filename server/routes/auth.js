@@ -4,8 +4,18 @@ const { Resend } = require('resend');
 const resend = new Resend(process.env.RESEND_API_KEY);
 const User = require('../models/User');
 const { protect } = require('../middleware/auth');
+const rateLimit = require('express-rate-limit');
 
 const router = express.Router();
+
+const authLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  max: 10, // Limit each IP to 10 requests per windowMs
+  message: { message: 'Too many requests from this IP, please try again after 15 minutes' }
+});
+
+// Regex for basic email format validation
+const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 const sendWelcomeEmail = async (name, email) => {
   console.log(`Sending welcome email to: ${email}`);
@@ -40,11 +50,15 @@ const generateToken = (id) =>
   jwt.sign({ id }, process.env.JWT_SECRET, { expiresIn: '7d' });
 
 // POST /api/auth/register
-router.post('/register', async (req, res) => {
+router.post('/register', authLimiter, async (req, res) => {
   const { name, email, password } = req.body;
 
   if (!name || !email || !password) {
     return res.status(400).json({ message: 'All fields are required.' });
+  }
+  
+  if (!emailRegex.test(email)) {
+    return res.status(400).json({ message: 'Please provide a valid email address.' });
   }
   if (password.length < 6) {
     return res.status(400).json({ message: 'Password must be at least 6 characters.' });
@@ -73,7 +87,7 @@ router.post('/register', async (req, res) => {
 });
 
 // POST /api/auth/login
-router.post('/login', async (req, res) => {
+router.post('/login', authLimiter, async (req, res) => {
   const { email, password } = req.body;
 
   if (!email || !password) {
