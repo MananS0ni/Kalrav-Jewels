@@ -45,6 +45,7 @@ export const AuthProvider = ({ children }) => {
         body: JSON.stringify({ email, password }),
       });
       const data = await res.json();
+      if (res.status === 429) return { rateLimited: true, error: data.message || 'Too many attempts. Please wait 15 minutes.' };
       if (!res.ok) return { error: data.message || 'Login failed.' };
 
       localStorage.setItem('nh_token', data.token);

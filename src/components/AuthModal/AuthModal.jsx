@@ -8,6 +8,7 @@ const AuthModal = ({ onClose }) => {
   const [form, setForm] = useState({ name: '', email: '', password: '', confirm: '' });
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
+  const [rateLimited, setRateLimited] = useState(false);
 
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
@@ -21,6 +22,7 @@ const AuthModal = ({ onClose }) => {
 
     if (tab === 'login') {
       const res = await login(form.email, form.password);
+      if (res.rateLimited) { setError(res.error); setRateLimited(true); setLoading(false); return; }
       if (res.error) { setError(res.error); setLoading(false); return; }
       onClose();
     } else {
@@ -128,7 +130,7 @@ const AuthModal = ({ onClose }) => {
 
           {error && <p className="auth-error">{error}</p>}
 
-          <button type="submit" className="btn-primary auth-submit" id="auth-submit-btn" disabled={loading}>
+          <button type="submit" className="btn-primary auth-submit" id="auth-submit-btn" disabled={loading || rateLimited}>
             <span>{tab === 'login' ? 'Sign In' : 'Create Account'}</span>
           </button>
         </form>
