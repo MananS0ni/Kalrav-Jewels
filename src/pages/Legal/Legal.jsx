@@ -16,7 +16,7 @@ const Legal = () => {
         <>
           <p>Last updated: {new Date().toLocaleDateString()}</p>
           <h3>1. Introduction</h3>
-          <p>Welcome to Kalrav Jewel. By accessing and using our website, you accept and agree to be bound by the terms and provision of this agreement.</p>
+          <p>Welcome to Kalrav Jewels. By accessing and using our website, you accept and agree to be bound by the terms and provision of this agreement.</p>
           
           <h3>2. Products & Pricing</h3>
           <p>All prices are shown in INR (₹). We reserve the right to modify prices without prior notice. Every effort is made to accurately display the colors and details of our 925 sterling silver jewelry, though variations may occur based on your monitor.</p>
@@ -28,7 +28,7 @@ const Legal = () => {
           <p>To place an order, you may need to register an account. You are responsible for maintaining the confidentiality of your account password.</p>
 
           <h3>5. Contact Information</h3>
-          <p>For any questions regarding these terms, please contact us at info@nhsonijewellers.com or +91 95370 68100.</p>
+          <p>For any questions regarding these terms, please contact us at info@kalravjewels.com or +91 95370 68100.</p>
         </>
       )
     },

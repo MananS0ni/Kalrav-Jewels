@@ -62,7 +62,7 @@ const Footer = () => {
               </li>
               <li>
                 <span className="contact-label">Email</span>
-                <a href="mailto:info@nhsonijewellers.com" className="contact-val">info@nhsonijewellers.com</a>
+                <a href="mailto:info@kalravjewels.com" className="contact-val">info@kalravjewels.com</a>
               </li>
             </ul>
           </div>
@@ -84,7 +84,7 @@ const Footer = () => {
       <div className="footer__bottom">
         <div className="container footer__bottom-inner">
           <p className="footer__copy">
-            &copy; {new Date().getFullYear()} Kalrav Jewel. All Rights Reserved.
+            &copy; {new Date().getFullYear()} Kalrav Jewels. All Rights Reserved.
           </p>
           <p className="footer__crafted">
             Crafted with dedication in India
