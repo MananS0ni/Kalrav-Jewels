@@ -56,6 +56,10 @@ router.post('/register', authLimiter, async (req, res) => {
   if (!name || !email || !password) {
     return res.status(400).json({ message: 'All fields are required.' });
   }
+
+  if (typeof name !== 'string' || typeof email !== 'string' || typeof password !== 'string') {
+    return res.status(400).json({ message: 'Invalid input format.' });
+  }
   
   if (!emailRegex.test(email)) {
     return res.status(400).json({ message: 'Please provide a valid email address.' });
@@ -92,6 +96,10 @@ router.post('/login', authLimiter, async (req, res) => {
 
   if (!email || !password) {
     return res.status(400).json({ message: 'Email and password are required.' });
+  }
+
+  if (typeof email !== 'string' || typeof password !== 'string') {
+    return res.status(400).json({ message: 'Invalid input format.' });
   }
 
   try {
