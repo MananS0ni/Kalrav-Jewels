@@ -22,7 +22,7 @@
   display: grid;
   grid-template-columns: 1fr auto 1fr;
   align-items: center;
-  height: 100px;
+  height: 88px;
 }
 
 /* Logo */
@@ -41,9 +41,11 @@
 }
 
 .navbar__logo-img {
-  height: 200px;
+  height: 60px;
   width: auto;
   object-fit: contain;
+  transform: scale(1.8);
+  transform-origin: center;
   transition: opacity var(--transition);
 }
 
