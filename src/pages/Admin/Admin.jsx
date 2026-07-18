@@ -220,7 +220,7 @@ const Admin = () => {
                 </div>
                 <div className="admin-field admin-field--full">
                   <label>Images (comma separated paths)</label>
-                  <input name="images" value={form.images} onChange={handleChange} placeholder="/ring_product.png" />
+                  <input name="images" value={form.images} onChange={handleChange} placeholder="/ring_product.webp" />
                 </div>
                 <div className="admin-field admin-field--full">
                   <label>Description *</label>
@@ -334,7 +334,7 @@ const Admin = () => {
                   <div className="admin-order-items">
                     {order.items.map((item, i) => (
                       <div key={i} className="admin-order-item">
-                        <img src={item.image || '/ring_product.png'} alt={item.name} className="admin-order-item-img" />
+                        <img src={item.image || '/ring_product.webp'} alt={item.name} className="admin-order-item-img" />
                         <div className="admin-order-item-info">
                           <span className="admin-order-item-name">{item.name}</span>
                           <span className="admin-order-item-meta">Qty: {item.quantity} × {formatted(item.price)}</span>

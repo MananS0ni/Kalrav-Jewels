@@ -117,7 +117,7 @@ const ProductDetail = () => {
               />
             ) : (
               <img 
-                src={product.images?.[activeMediaIndex] || '/ring_product.png'} 
+                src={product.images?.[activeMediaIndex] || '/ring_product.webp'} 
                 alt={product.name} 
                 className="product-detail__image" 
               />
@@ -252,7 +252,7 @@ const ProductDetail = () => {
                 id={`related-${p._id}`}
               >
                 <div className="product-card__image-wrap">
-                  <img src={p.images?.[0] || '/ring_product.png'} alt={p.name} className="product-card__image" loading="lazy" />
+                  <img src={p.images?.[0] || '/ring_product.webp'} alt={p.name} className="product-card__image" loading="lazy" />
                   {p.tags?.[0] && <span className="product-card__tag">{p.tags[0]}</span>}
                   <div className="product-card__hover-overlay">
                     <span className="product-card__hover-btn">View Details</span>

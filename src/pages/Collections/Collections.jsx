@@ -116,7 +116,7 @@ const Collections = () => {
                     >
                       <div className="product-card__image-wrap">
                         <img
-                          src={product.images[0] || '/ring_product.png'}
+                          src={product.images[0] || '/ring_product.webp'}
                           alt={product.name}
                           className="product-card__image"
                           loading="lazy"

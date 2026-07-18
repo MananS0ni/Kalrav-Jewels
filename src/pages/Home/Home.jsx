@@ -11,10 +11,10 @@ const stats = [
 ];
 
 const categories = [
-  { name: 'Rings', slug: 'rings', desc: 'Eternities & Solitaires', image: '/ring_product.png' },
-  { name: 'Necklaces', slug: 'necklaces', desc: 'Sets & Pendants', image: '/necklace_product.png' },
-  { name: 'Earrings', slug: 'earrings', desc: 'Drops & Studs', image: '/earring_product.png' },
-  { name: 'Bracelets', slug: 'bracelets', desc: 'Tennis & Bangles', image: '/bracelet_product.png' },
+  { name: 'Rings', slug: 'rings', desc: 'Eternities & Solitaires', image: '/ring_product.webp' },
+  { name: 'Necklaces', slug: 'necklaces', desc: 'Sets & Pendants', image: '/necklace_product.webp' },
+  { name: 'Earrings', slug: 'earrings', desc: 'Drops & Studs', image: '/earring_product.webp' },
+  { name: 'Bracelets', slug: 'bracelets', desc: 'Tennis & Bangles', image: '/bracelet_product.webp' },
   { name: 'Chains', slug: 'chains', desc: 'Link & Snake', image: '/silver-link-chain/hero-1.jpg' },
 ];
 
@@ -47,7 +47,7 @@ const Home = () => {
       {/* ─── Hero ─── */}
       <section className={`hero ${heroVisible ? 'hero--visible' : ''}`} id="hero-section">
         <div className="hero__bg">
-          <img src="/hero_jewelry.png" alt="NH Soni Jewellers luxury jewelry collection" className="hero__img" />
+          <img src="/hero_jewelry.webp" alt="NH Soni Jewellers luxury jewelry collection" className="hero__img" />
           <div className="hero__overlay"></div>
         </div>
         <div className="hero__content container">
@@ -145,7 +145,7 @@ const Home = () => {
                 >
                   <div className="product-card__image-wrap">
                     <img
-                      src={product.images?.[0] || '/ring_product.png'}
+                      src={product.images?.[0] || '/ring_product.webp'}
                       alt={product.name}
                       className="product-card__image"
                       loading="lazy"

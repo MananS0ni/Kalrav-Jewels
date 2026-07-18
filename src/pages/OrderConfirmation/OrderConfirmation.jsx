@@ -55,7 +55,7 @@ const OrderConfirmation = () => {
               {order.items.map((item, i) => (
                 <li key={i} className="oc-item">
                   <div className="oc-item__img-wrap">
-                    <img src={item.image || '/ring_product.png'} alt={item.name} className="oc-item__img" />
+                    <img src={item.image || '/ring_product.webp'} alt={item.name} className="oc-item__img" />
                   </div>
                   <div className="oc-item__info">
                     <p className="oc-item__name">{item.name}</p>

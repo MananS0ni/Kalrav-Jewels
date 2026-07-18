@@ -88,7 +88,7 @@ const MyOrders = () => {
                   {order.items.map((item, i) => (
                     <div key={i} className="mo-card__item">
                       <div className="mo-card__item-img-wrap">
-                        <img src={item.image || '/ring_product.png'} alt={item.name} className="mo-card__item-img" />
+                        <img src={item.image || '/ring_product.webp'} alt={item.name} className="mo-card__item-img" />
                       </div>
                       <div className="mo-card__item-info">
                         <p className="mo-card__item-name">{item.name}</p>

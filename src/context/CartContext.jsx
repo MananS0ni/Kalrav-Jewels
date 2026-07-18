@@ -67,7 +67,7 @@ export const CartProvider = ({ children }) => {
     const payload = {
       productId,
       name: product.name,
-      image: product.images?.[0] || product.image || '/ring_product.png',
+      image: product.images?.[0] || product.image || '/ring_product.webp',
       category: product.category || '',
       material: product.material || '',
       purity: product.purity || '',
