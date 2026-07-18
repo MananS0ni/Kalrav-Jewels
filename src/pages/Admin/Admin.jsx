@@ -317,7 +317,7 @@ const Admin = () => {
                     <div className="admin-order-customer-info">
                       <span className="admin-order-cust-label">Customer</span>
                       <span className="admin-order-cust-name">
-                        {order.user?.name || 'Unknown'} — {order.user?.email || ''}
+                        {order.customerName || order.user?.name || 'Unknown'} — {order.customerEmail || order.user?.email || 'No email'}
                       </span>
                     </div>
                     <div className="admin-order-customer-info">

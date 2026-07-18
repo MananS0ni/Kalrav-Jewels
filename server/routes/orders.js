@@ -59,9 +59,15 @@ router.post('/', protect, async (req, res) => {
       : paymentMethod === 'razorpay' ? 'paid'
       : 'pending'; // cod
 
+    // Extract customer contact details to bake into the order
+    const customerEmail = req.user.email;
+    const customerName = shippingAddress.fullName || req.user.name || 'Valued Customer';
+
     // Create the order
     const order = await Order.create({
       user: req.user._id,
+      customerName,
+      customerEmail,
       items: verifiedItems,
       shippingAddress,
       itemsTotal,
@@ -83,8 +89,6 @@ router.post('/', protect, async (req, res) => {
     }
 
     // Send order confirmation email (non-blocking)
-    const customerEmail = req.user.email;
-    const customerName = shippingAddress.fullName || req.user.name || 'Valued Customer';
     sendOrderConfirmation(order, customerEmail, customerName);
 
     res.status(201).json(order);

@@ -19,6 +19,10 @@ const orderSchema = new mongoose.Schema(
       ref: 'User',
       required: true,
     },
+    // Snapshot of customer details at time of order
+    customerName: { type: String, required: true },
+    customerEmail: { type: String, required: true },
+    
     items: [orderItemSchema],
 
     // Delivery address
