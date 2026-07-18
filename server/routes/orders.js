@@ -63,7 +63,34 @@ router.post('/', protect, async (req, res) => {
     const customerEmail = req.user.email;
     const customerName = shippingAddress.fullName || req.user.name || 'Valued Customer';
 
-    // Create the order
+    // Atomically reserve stock for all items BEFORE creating the order
+    const reservedItems = [];
+    let stockError = null;
+
+    for (const item of verifiedItems) {
+      // Find the product ONLY if it has enough stock, and atomically decrement it
+      const updatedProduct = await Product.findOneAndUpdate(
+        { _id: item.product, stock: { $gte: item.quantity } },
+        { $inc: { stock: -item.quantity } },
+        { new: true }
+      );
+      
+      if (!updatedProduct) {
+        stockError = `Sorry, ${item.name} just sold out or doesn't have enough stock left!`;
+        break;
+      }
+      reservedItems.push(item);
+    }
+
+    // If any item failed, we must rollback (refund the stock) for the items we already reserved
+    if (stockError) {
+      for (const item of reservedItems) {
+        await Product.findByIdAndUpdate(item.product, { $inc: { stock: item.quantity } });
+      }
+      return res.status(409).json({ message: stockError }); // 409 Conflict
+    }
+
+    // Create the order safely now that stock is secured
     const order = await Order.create({
       user: req.user._id,
       customerName,
@@ -80,13 +107,6 @@ router.post('/', protect, async (req, res) => {
       utrNumber: utrNumber.trim(),
       notes,
     });
-
-    // Decrease stock for each product
-    for (const item of verifiedItems) {
-      await Product.findByIdAndUpdate(item.product, {
-        $inc: { stock: -item.quantity },
-      });
-    }
 
     // Send order confirmation email (non-blocking)
     sendOrderConfirmation(order, customerEmail, customerName);
