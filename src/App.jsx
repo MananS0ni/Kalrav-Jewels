@@ -5,6 +5,7 @@ import Navbar from './components/Navbar/Navbar';
 import Footer from './components/Footer/Footer';
 import CartDrawer from './components/CartDrawer/CartDrawer';
 import ScrollToTop from './components/ScrollToTop/ScrollToTop';
+import PageTracking from './components/PageTracking/PageTracking';
 import Home from './pages/Home/Home';
 import Collections from './pages/Collections/Collections';
 import About from './pages/About/About';
@@ -24,6 +25,7 @@ const AppLayout = () => {
   return (
     <>
       <ScrollToTop />
+      <PageTracking />
       {!isAdmin && <Navbar />}
       {!isAdmin && <CartDrawer />}
       <main>

@@ -26,6 +26,7 @@ const Admin = () => {
   const [products, setProducts] = useState([]);
   const [orders, setOrders] = useState([]);
   const [enquiries, setEnquiries] = useState([]);
+  const [userStats, setUserStats] = useState(null);
   const [form, setForm] = useState(emptyForm);
   const [editId, setEditId] = useState(null);
   const [msg, setMsg] = useState('');
@@ -40,8 +41,9 @@ const Admin = () => {
   const fetchProducts = () => fetch(`${API}/products`).then(r => r.json()).then(setProducts);
   const fetchOrders = () => fetch(`${API}/orders`, { headers }).then(r => r.json()).then(setOrders);
   const fetchEnquiries = () => fetch(`${API}/contact`, { headers }).then(r => r.json()).then(setEnquiries);
+  const fetchUserStats = () => fetch(`${API}/users/stats`, { headers }).then(r => r.json()).then(setUserStats).catch(console.error);
 
-  useEffect(() => { fetchProducts(); fetchOrders(); fetchEnquiries(); }, []);
+  useEffect(() => { fetchProducts(); fetchOrders(); fetchEnquiries(); fetchUserStats(); }, []);
 
   const flash = (m) => { setMsg(m); setTimeout(() => setMsg(''), 3000); };
   const formatted = (n) => '₹' + n.toLocaleString('en-IN');
@@ -162,6 +164,12 @@ const Admin = () => {
           onClick={() => setTab('enquiries')}
         >
           Enquiries ({enquiries.filter(e => e.status !== 'resolved').length})
+        </button>
+        <button
+          className={`admin-tab ${tab === 'users' ? 'admin-tab--active' : ''}`}
+          onClick={() => setTab('users')}
+        >
+          Users
         </button>
       </div>
 
@@ -461,6 +469,32 @@ const Admin = () => {
                   )}
                 </div>
               ))}
+            </div>
+          )}
+        </div>
+      )}
+
+      {/* ═══════════════════ USERS TAB ═══════════════════ */}
+      {tab === 'users' && (
+        <div className="admin-section">
+          <h2 className="admin-section-title">Registered Users</h2>
+          
+          {!userStats ? (
+            <p style={{ color: '#888', textAlign: 'center', padding: '40px' }}>Loading user stats...</p>
+          ) : (
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: '20px', marginTop: '20px' }}>
+              <div className="admin-order-card" style={{ borderLeft: '4px solid #b8960c', padding: '24px', textAlign: 'center' }}>
+                <p style={{ color: '#666', fontSize: '0.9rem', textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '8px' }}>Total Registered Users</p>
+                <h3 style={{ fontSize: '2.5rem', margin: 0, color: '#333' }}>{userStats.totalUsers}</h3>
+              </div>
+              <div className="admin-order-card" style={{ borderLeft: '4px solid #5b8fb9', padding: '24px', textAlign: 'center' }}>
+                <p style={{ color: '#666', fontSize: '0.9rem', textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '8px' }}>New Users (Last 7 Days)</p>
+                <h3 style={{ fontSize: '2.5rem', margin: 0, color: '#333' }}>{userStats.newUsersLast7Days}</h3>
+              </div>
+              <div className="admin-order-card" style={{ borderLeft: '4px solid #4a9a4a', padding: '24px', textAlign: 'center' }}>
+                <p style={{ color: '#666', fontSize: '0.9rem', textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '8px' }}>New Users (Last 30 Days)</p>
+                <h3 style={{ fontSize: '2.5rem', margin: 0, color: '#333' }}>{userStats.newUsersLast30Days}</h3>
+              </div>
             </div>
           )}
         </div>

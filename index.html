@@ -14,6 +14,22 @@
     content="Discover our collection of handcrafted sterling silver jewellery. Trusted by families across India." />
   <meta property="og:type" content="website" />
   <title>Kalrav Jewels — Timeless Fine Jewellery</title>
+
+  <!-- Google Analytics 4 (Only load in production) -->
+  <script>
+    if (window.location.hostname !== 'localhost' && window.location.hostname !== '127.0.0.1') {
+      const gaScript = document.createElement('script');
+      gaScript.async = true;
+      gaScript.src = "https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX";
+      document.head.appendChild(gaScript);
+
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      // Prevent automatic pageview on load since it's an SPA and we have a custom hook
+      gtag('config', 'G-XXXXXXXXXX', { send_page_view: false });
+    }
+  </script>
 </head>
 
 <body>
