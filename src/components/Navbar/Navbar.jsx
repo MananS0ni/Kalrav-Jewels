@@ -25,7 +25,7 @@ const Navbar = () => {
     setUserMenuOpen(false);
   }, [location]);
 
-  const navClass = `navbar ${scrolled || !isHome ? 'navbar--solid' : 'navbar--transparent'} ${menuOpen ? 'navbar--open' : ''}`;
+  const navClass = `navbar ${scrolled ? 'navbar--transparent' : 'navbar--solid'} ${menuOpen ? 'navbar--open' : ''}`;
 
   return (
     <>
@@ -54,9 +54,7 @@ const Navbar = () => {
 
           {/* Logo */}
           <Link to="/" className="navbar__logo" aria-label="Kalrav Jewels Home">
-            <span className="logo-top">KALRAV</span>
-            <span className="logo-divider"></span>
-            <span className="logo-bottom">JEWELS</span>
+            <img src="/kalrav_vertical_v2.png" alt="Kalrav Jewels" className="navbar-logo" />
           </Link>
 
           {/* Right Nav */}

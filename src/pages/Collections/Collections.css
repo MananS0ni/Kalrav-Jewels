@@ -52,7 +52,7 @@
   background: var(--white);
   border-bottom: 1px solid var(--border);
   position: sticky;
-  top: 88px;
+  top: 110px;
   z-index: 100;
 }
 
