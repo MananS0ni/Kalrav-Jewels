@@ -205,13 +205,14 @@
 .categories__grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  gap: 1px;
-  background: var(--border);
-  border: 1px solid var(--border);
+  border-top: 1px solid var(--border);
+  border-left: 1px solid var(--border);
 }
 
 .category-card {
   background: var(--white);
+  border-right: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
   padding: 50px 36px;
   display: flex;
   align-items: center;
