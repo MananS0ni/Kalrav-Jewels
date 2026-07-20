@@ -214,37 +214,101 @@
   display: block;
   border-radius: 2px;
 }
+.upi-panel__id-copy-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 4px;
+}
 .upi-panel__upi-id {
   font-size: 11px;
   color: var(--gray-mid, #888);
-  text-align: center;
   letter-spacing: 0.3px;
+  margin: 0;
+}
+.upi-panel__copy-btn {
+  background: var(--gold, #c9a84c);
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  font-size: 10px;
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  padding: 4px 8px;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+.upi-panel__copy-btn:hover {
+  background: var(--charcoal, #1a1a1a);
 }
 .upi-panel__amount {
   font-size: 14px;
   color: var(--charcoal, #1a1a1a);
   font-weight: 600;
   text-align: center;
+  margin-top: 4px;
 }
 .upi-panel__mobile {
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: flex-start;
   gap: 12px;
+  flex: 1;
+  min-width: 250px;
 }
-.upi-open-btn {
-  display: inline-block;
-  text-align: center;
-  padding: 14px 24px !important;
-  font-size: 0.85rem !important;
-  letter-spacing: 2px;
-  white-space: nowrap;
+.upi-app-links {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 8px;
 }
-.upi-panel__note {
+.upi-app-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 600;
   font-size: 11px;
-  color: var(--gray-light, #aaa);
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  padding: 12px 8px;
+  border-radius: 4px;
   text-align: center;
+  transition: opacity 0.2s ease, transform 0.1s ease;
+  color: #fff;
 }
+.upi-app-btn:active {
+  transform: scale(0.98);
+}
+.upi-app-btn--gpay {
+  background: #4285f4;
+}
+.upi-app-btn--phonepe {
+  background: #5f259f;
+}
+.upi-app-btn--paytm {
+  background: #00baf2;
+}
+.upi-app-btn--generic {
+  background: var(--charcoal, #1a1a1a);
+}
+.upi-panel__warning {
+  background: rgba(201, 168, 76, 0.08);
+  border-left: 3px solid var(--gold, #c9a84c);
+  padding: 10px 12px;
+  border-radius: 0 4px 4px 0;
+  font-size: 11px;
+  line-height: 1.4;
+  color: var(--charcoal, #1a1a1a);
+}
+.upi-panel__warning em {
+  font-style: italic;
+}
+.upi-panel__warning strong {
+  font-weight: 700;
+}
+
 .upi-panel__step {
   font-size: 10px;
   font-weight: 700;

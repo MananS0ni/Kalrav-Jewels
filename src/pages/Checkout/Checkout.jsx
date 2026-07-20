@@ -2,7 +2,9 @@ import { useState, useEffect, useCallback } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useCart } from '../../context/CartContext';
 import { useAuth } from '../../context/AuthContext';
+import { QRCodeSVG } from 'qrcode.react';
 import './Checkout.css';
+
 
 const API = import.meta.env.VITE_API_URL || (window.location.hostname === 'localhost' ? 'http://localhost:5000/api' : '/api');
 
@@ -35,6 +37,14 @@ const Checkout = () => {
   const [paymentMethod, setPaymentMethod] = useState('upi'); // Default: UPI
   const [utrNumber, setUtrNumber] = useState('');            // Customer enters after paying
   const [upiStep, setUpiStep] = useState('select');          // 'select' | 'pay' | 'confirm'
+  const [copied, setCopied] = useState(false);
+
+  const handleCopyUpi = () => {
+    navigator.clipboard.writeText('manansoni2905@okhdfcbank');
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
+  };
+
 
   // ── Live Shipping Calculation ─────────────────────────────────────────────
   const [shipping, setShipping] = useState(null);       // { total, baseCost, codFee, zone, isFree, breakdown, ... }
@@ -317,37 +327,71 @@ const Checkout = () => {
                     <div className="upi-panel__qr-wrap">
                       <p className="upi-panel__step">Step 1 — Scan & Pay</p>
                       <div className="upi-panel__qr-box">
-                        {/* Dynamic QR generated with exact amount */}
+                        {/* Dynamic QR generated with exact amount (Offline local SVG rendering) */}
                         {grandTotal > 0 && (() => {
                           const upiLink = `upi://pay?pa=manansoni2905@okhdfcbank&pn=Kalrav+Jewels&am=${grandTotal.toFixed(2)}&tn=Kalrav+Jewels+Order&cu=INR`;
-                          const QRCode = window.__QRCode; // loaded below via import
                           return (
-                            <img
-                              src={`https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(upiLink)}&bgcolor=fff&color=1a1a1a&margin=2`}
-                              alt="UPI QR Code"
+                            <QRCodeSVG
+                              value={upiLink}
+                              size={200}
+                              bgColor="#ffffff"
+                              fgColor="#1a1a1a"
+                              level="M"
+                              includeMargin={true}
                               className="upi-panel__qr-img"
-                              width={200}
-                              height={200}
                             />
                           );
                         })()}
                       </div>
-                      <p className="upi-panel__upi-id">UPI ID: <strong>manansoni2905@okhdfcbank</strong></p>
+                      <div className="upi-panel__id-copy-row">
+                        <p className="upi-panel__upi-id">UPI ID: <strong>manansoni2905@okhdfcbank</strong></p>
+                        <button
+                          type="button"
+                          onClick={handleCopyUpi}
+                          className="upi-panel__copy-btn"
+                          title="Copy UPI ID"
+                        >
+                          {copied ? 'Copied! ✓' : 'Copy ID'}
+                        </button>
+                      </div>
                       <p className="upi-panel__amount">Amount: <strong>{formatted(grandTotal)}</strong></p>
                     </div>
                     <div className="upi-panel__mobile">
-                      <p className="upi-panel__step">On mobile?</p>
-                      <a
-                        href={`upi://pay?pa=manansoni2905@okhdfcbank&pn=Kalrav+Jewels&am=${grandTotal.toFixed(2)}&tn=Kalrav+Jewels+Order&cu=INR`}
-                        className="btn-primary upi-open-btn"
-                        target="_blank"
-                        rel="noreferrer"
-                      >
-                        <span>Open UPI App</span>
-                      </a>
-                      <p className="upi-panel__note">Opens GPay, PhonePe or Paytm automatically</p>
+                      <p className="upi-panel__step">On mobile? Pay via:</p>
+                      
+                      <div className="upi-app-links">
+                        <a
+                          href={`gpay://upi/pay?pa=manansoni2905@okhdfcbank&pn=Kalrav+Jewels&am=${grandTotal.toFixed(2)}&tn=Kalrav+Jewels+Order&cu=INR`}
+                          className="upi-app-btn upi-app-btn--gpay"
+                        >
+                          Google Pay
+                        </a>
+                        <a
+                          href={`phonepe://upi/pay?pa=manansoni2905@okhdfcbank&pn=Kalrav+Jewels&am=${grandTotal.toFixed(2)}&tn=Kalrav+Jewels+Order&cu=INR`}
+                          className="upi-app-btn upi-app-btn--phonepe"
+                        >
+                          PhonePe
+                        </a>
+                        <a
+                          href={`paytmmp://upi/pay?pa=manansoni2905@okhdfcbank&pn=Kalrav+Jewels&am=${grandTotal.toFixed(2)}&tn=Kalrav+Jewels+Order&cu=INR`}
+                          className="upi-app-btn upi-app-btn--paytm"
+                        >
+                          Paytm
+                        </a>
+                        <a
+                          href={`upi://pay?pa=manansoni2905@okhdfcbank&pn=Kalrav+Jewels&am=${grandTotal.toFixed(2)}&tn=Kalrav+Jewels+Order&cu=INR`}
+                          className="upi-app-btn upi-app-btn--generic"
+                        >
+                          Other UPI Apps
+                        </a>
+                      </div>
+
+                      <div className="upi-panel__warning">
+                        <p><strong>💡 Bank Limit Error?</strong> If your UPI app shows a <em>"limit exceeded / security risk"</em> warning, simply click the <strong>Copy ID</strong> button on the left, open your UPI app manually, paste <strong>manansoni2905@okhdfcbank</strong>, and pay.</p>
+                      </div>
                     </div>
                   </div>
+
 
                   <div className="upi-panel__utr">
                     <p className="upi-panel__step">Step 2 — Enter Your UPI ID or UTR</p>
