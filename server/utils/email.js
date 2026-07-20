@@ -118,7 +118,7 @@ const sendOrderConfirmation = async (order, customerEmail, customerName) => {
                   </td>
                   <td width="50%" style="vertical-align:top; padding-left:10px;">
                     <p style="margin:0 0 8px; font-size:10px; letter-spacing:2px; color:#9a9a9a; text-transform:uppercase;">Payment</p>
-                    <p style="margin:0; font-size:13px; color:#2c2c2c; line-height:1.7;">${paymentLabel}<br>Shipping: <span style="color:#2c2c2c; font-weight:600;">₹150</span></p>
+                    <p style="margin:0; font-size:13px; color:#2c2c2c; line-height:1.7;">${paymentLabel}<br>Shipping: <span style="color:#2c2c2c; font-weight:600;">₹${order.shippingCost}</span></p>
                   </td>
                 </tr>
               </table>
