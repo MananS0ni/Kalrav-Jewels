@@ -3,7 +3,7 @@ const Order = require('../models/Order');
 const Product = require('../models/Product');
 const { protect } = require('../middleware/auth');
 const { adminOnly } = require('../middleware/admin');
-const { sendOrderConfirmation } = require('../utils/email');
+const { sendOrderReceived, sendOrderStatusUpdate } = require('../utils/email');
 const { calculateShipping } = require('../utils/shipping');
 
 const router = express.Router();
@@ -108,7 +108,7 @@ router.post('/', protect, async (req, res) => {
     });
 
     // Send order confirmation email (non-blocking)
-    sendOrderConfirmation(order, customerEmail, customerName);
+    sendOrderReceived(order, customerEmail, customerName);
 
     res.status(201).json(order);
   } catch (err) {
@@ -168,12 +168,21 @@ router.get('/:id', protect, async (req, res) => {
 router.put('/:id/status', protect, adminOnly, async (req, res) => {
   try {
     const { orderStatus, paymentStatus } = req.body;
+    
+    const oldOrder = await Order.findById(req.params.id);
+    if (!oldOrder) return res.status(404).json({ message: 'Order not found.' });
+
     const order = await Order.findByIdAndUpdate(
       req.params.id,
       { ...(orderStatus && { orderStatus }), ...(paymentStatus && { paymentStatus }) },
       { new: true }
     );
-    if (!order) return res.status(404).json({ message: 'Order not found.' });
+    
+    // If order status actually changed, send an update email
+    if (orderStatus && orderStatus !== oldOrder.orderStatus) {
+      sendOrderStatusUpdate(order, order.customerEmail, order.customerName, orderStatus);
+    }
+
     res.json(order);
   } catch (err) {
     res.status(500).json({ message: 'Failed to update order.' });

@@ -2,12 +2,12 @@ const { Resend } = require('resend');
 const resend = new Resend(process.env.RESEND_API_KEY);
 
 /**
- * Send order confirmation email to the customer.
+ * Send order received email to the customer.
  * @param {Object} order - The saved order document
  * @param {string} customerEmail - Customer's email address
  * @param {string} customerName - Customer's name
  */
-const sendOrderConfirmation = async (order, customerEmail, customerName) => {
+const sendOrderReceived = async (order, customerEmail, customerName) => {
   try {
     // Build the items table rows
 
@@ -59,7 +59,7 @@ const sendOrderConfirmation = async (order, customerEmail, customerName) => {
           <!-- Gold strip -->
           <tr>
             <td style="background:#c9a84c; padding:12px 36px; text-align:center;">
-              <p style="margin:0; font-size:11px; letter-spacing:3px; color:#ffffff; text-transform:uppercase; font-weight:600;">Order Confirmed</p>
+              <p style="margin:0; font-size:11px; letter-spacing:3px; color:#ffffff; text-transform:uppercase; font-weight:600;">Order Received</p>
             </td>
           </tr>
 
@@ -68,8 +68,8 @@ const sendOrderConfirmation = async (order, customerEmail, customerName) => {
             <td style="padding:40px 36px 24px;">
               <p style="margin:0; font-size:22px; font-family:'Georgia',serif; color:#1a1a1a; font-weight:400;">Dear ${customerName},</p>
               <p style="margin:12px 0 0; font-size:14px; color:#6b6b6b; line-height:1.8;">
-                Thank you for your purchase. Your order has been confirmed and is being carefully prepared for dispatch. 
-                We take great pride in every piece we send, and yours is no exception.
+                Thank you for your purchase. We have received your order and it is currently pending confirmation. 
+                We take great pride in every piece we craft, and yours is no exception. We will notify you once it is confirmed.
               </p>
             </td>
           </tr>
@@ -177,15 +177,120 @@ const sendOrderConfirmation = async (order, customerEmail, customerName) => {
     await resend.emails.send({
       from: 'Kalrav Jewels <noreply@kalravjewels.com>',
       to: customerEmail,
-      subject: `Order Confirmed — #KJ-${orderId} | Kalrav Jewels`,
+      subject: `Order Received — #KJ-${orderId} | Kalrav Jewels`,
       html: htmlBody,
     });
 
-    console.log(`✓ Order confirmation email sent to ${customerEmail}`);
+    console.log(`✓ Order received email sent to ${customerEmail}`);
   } catch (err) {
     // Don't fail the order if email fails — just log it
     console.error('✗ Failed to send confirmation email:', err.message);
   }
 };
 
-module.exports = { sendOrderConfirmation };
+/**
+ * Send order status update email to the customer.
+ * @param {Object} order - The saved order document
+ * @param {string} customerEmail - Customer's email address
+ * @param {string} customerName - Customer's name
+ * @param {string} status - The new order status
+ */
+const sendOrderStatusUpdate = async (order, customerEmail, customerName, status) => {
+  try {
+    const orderId = order._id.toString().slice(-8).toUpperCase();
+    
+    // Status formatting
+    const statusMap = {
+      confirmed: { title: 'Order Confirmed', msg: 'Your order has been confirmed and is now being processed for dispatch.', color: '#c9a84c' },
+      processing: { title: 'Order Processing', msg: 'Your order is currently being handcrafted and prepared for you.', color: '#2c2c2c' },
+      shipped: { title: 'Order Shipped', msg: 'Great news! Your order has been shipped and is on its way to you.', color: '#2c2c2c' },
+      delivered: { title: 'Order Delivered', msg: 'Your order has been delivered. We hope you love your new jewellery!', color: '#2c2c2c' },
+      cancelled: { title: 'Order Cancelled', msg: 'Your order has been cancelled. If you have any questions, please contact us.', color: '#d9534f' }
+    };
+
+    const statusInfo = statusMap[status];
+    if (!statusInfo) return; // Don't send for unknown or 'pending' status here
+
+    const htmlBody = `
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body style="margin:0; padding:0; background:#faf8f4; font-family:'Helvetica Neue', Arial, sans-serif;">
+  <table width="100%" cellpadding="0" cellspacing="0" style="background:#faf8f4; padding:40px 20px;">
+    <tr>
+      <td align="center">
+        <table width="600" cellpadding="0" cellspacing="0" style="max-width:600px; width:100%; background:#ffffff; border:1px solid #e8dfc8;">
+          
+          <!-- Header -->
+          <tr>
+            <td style="background:#1a1a1a; padding:36px; text-align:center;">
+              <p style="margin:0; font-size:10px; letter-spacing:4px; color:#c9a84c; text-transform:uppercase; font-family:'Helvetica Neue',Arial,sans-serif;">Since 1952</p>
+              <h1 style="margin:8px 0 0; font-family:'Georgia',serif; font-size:32px; font-weight:400; color:#ffffff; letter-spacing:2px;">KALRAV JEWELS</h1>
+            </td>
+          </tr>
+
+          <!-- Status strip -->
+          <tr>
+            <td style="background:${statusInfo.color}; padding:12px 36px; text-align:center;">
+              <p style="margin:0; font-size:11px; letter-spacing:3px; color:#ffffff; text-transform:uppercase; font-weight:600;">${statusInfo.title}</p>
+            </td>
+          </tr>
+
+          <!-- Greeting -->
+          <tr>
+            <td style="padding:40px 36px 24px;">
+              <p style="margin:0; font-size:22px; font-family:'Georgia',serif; color:#1a1a1a; font-weight:400;">Dear ${customerName},</p>
+              <p style="margin:12px 0 0; font-size:14px; color:#6b6b6b; line-height:1.8;">
+                ${statusInfo.msg}
+              </p>
+            </td>
+          </tr>
+
+          <!-- Order ID -->
+          <tr>
+            <td style="padding:0 36px 24px;">
+              <table width="100%" cellpadding="0" cellspacing="0" style="background:#faf8f4; border:1px solid #e8dfc8; border-left:3px solid #c9a84c;">
+                <tr>
+                  <td style="padding:16px 20px;">
+                    <p style="margin:0; font-size:10px; letter-spacing:2px; color:#c9a84c; text-transform:uppercase;">Order Reference</p>
+                    <p style="margin:4px 0 0; font-size:20px; font-family:'Georgia',serif; color:#1a1a1a; font-weight:600;">#KJ-${orderId}</p>
+                  </td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+
+          <!-- Contact -->
+          <tr>
+            <td style="padding:0 36px 40px; text-align:center;">
+              <p style="margin:0; font-size:13px; color:#6b6b6b; line-height:1.8;">
+                Questions about your order? We're here to help.<br>
+                <a href="tel:+919537068100" style="color:#c9a84c; text-decoration:none; font-weight:600;">+91 95370 68100</a>
+              </p>
+            </td>
+          </tr>
+
+        </table>
+      </td>
+    </tr>
+  </table>
+</body>
+</html>`;
+
+    await resend.emails.send({
+      from: 'Kalrav Jewels <noreply@kalravjewels.com>',
+      to: customerEmail,
+      subject: `${statusInfo.title} — #KJ-${orderId} | Kalrav Jewels`,
+      html: htmlBody,
+    });
+
+    console.log(`✓ Order status email (${status}) sent to ${customerEmail}`);
+  } catch (err) {
+    console.error('✗ Failed to send status email:', err.message);
+  }
+};
+
+module.exports = { sendOrderReceived, sendOrderStatusUpdate };
