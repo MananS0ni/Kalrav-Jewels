@@ -324,7 +324,7 @@ const Checkout = () => {
               {paymentMethod === 'upi' && (
                 <div className="upi-panel">
                   <div className="upi-panel__top">
-                    <div className="upi-panel__qr-wrap">
+                    <div className="upi-panel__qr-wrap" style={{ width: '100%' }}>
                       <p className="upi-panel__step">Step 1 — Scan & Pay</p>
                       <div className="upi-panel__qr-box">
                         {/* Dynamic QR generated with exact amount (Offline local SVG rendering) */}
@@ -355,40 +355,9 @@ const Checkout = () => {
                         </button>
                       </div>
                       <p className="upi-panel__amount">Amount: <strong>{formatted(grandTotal)}</strong></p>
-                    </div>
-                    <div className="upi-panel__mobile">
-                      <p className="upi-panel__step">On mobile? Pay via:</p>
-                      
-                      <div className="upi-app-links">
-                        <a
-                          href={`gpay://upi/pay?pa=manansoni2905@okhdfcbank&pn=Kalrav+Jewels&am=${grandTotal.toFixed(2)}&tn=Kalrav+Jewels+Order&cu=INR`}
-                          className="upi-app-btn upi-app-btn--gpay"
-                        >
-                          Google Pay
-                        </a>
-                        <a
-                          href={`phonepe://upi/pay?pa=manansoni2905@okhdfcbank&pn=Kalrav+Jewels&am=${grandTotal.toFixed(2)}&tn=Kalrav+Jewels+Order&cu=INR`}
-                          className="upi-app-btn upi-app-btn--phonepe"
-                        >
-                          PhonePe
-                        </a>
-                        <a
-                          href={`paytmmp://upi/pay?pa=manansoni2905@okhdfcbank&pn=Kalrav+Jewels&am=${grandTotal.toFixed(2)}&tn=Kalrav+Jewels+Order&cu=INR`}
-                          className="upi-app-btn upi-app-btn--paytm"
-                        >
-                          Paytm
-                        </a>
-                        <a
-                          href={`upi://pay?pa=manansoni2905@okhdfcbank&pn=Kalrav+Jewels&am=${grandTotal.toFixed(2)}&tn=Kalrav+Jewels+Order&cu=INR`}
-                          className="upi-app-btn upi-app-btn--generic"
-                        >
-                          Other UPI Apps
-                        </a>
-                      </div>
-
-                      <div className="upi-panel__warning">
-                        <p><strong>💡 Bank Limit Error?</strong> If your UPI app shows a <em>"limit exceeded / security risk"</em> warning, simply click the <strong>Copy ID</strong> button on the left, open your UPI app manually, paste <strong>manansoni2905@okhdfcbank</strong>, and pay.</p>
-                      </div>
+                      <p style={{ fontSize: '11px', color: '#888', marginTop: '8px', textAlign: 'center', maxWidth: '300px' }}>
+                        If you are on mobile, click "Copy ID" and paste it into your UPI app to complete the payment.
+                      </p>
                     </div>
                   </div>
 
