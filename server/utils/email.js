@@ -269,7 +269,16 @@ const sendOrderStatusUpdate = async (order, customerEmail, customerName, status)
               <p style="margin:0; font-size:13px; color:#6b6b6b; line-height:1.8;">
                 Questions about your order? We're here to help.<br>
                 <a href="tel:+919537068100" style="color:#c9a84c; text-decoration:none; font-weight:600;">+91 95370 68100</a>
+                &nbsp;·&nbsp;
+                <a href="mailto:info@kalravjewels.com" style="color:#c9a84c; text-decoration:none; font-weight:600;">info@kalravjewels.com</a>
               </p>
+            </td>
+          </tr>
+
+          <!-- Footer -->
+          <tr>
+            <td style="background:#faf8f4; border-top:1px solid #e8dfc8; padding:20px 36px; text-align:center;">
+              <p style="margin:0; font-size:11px; color:#b0b0b0; letter-spacing:1px;">© ${new Date().getFullYear()} Kalrav Jewels · Handcrafted with love</p>
             </td>
           </tr>
 
