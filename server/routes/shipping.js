@@ -23,8 +23,8 @@ router.post('/calculate', (req, res) => {
   if (!itemsTotal || itemsTotal <= 0) {
     return res.status(400).json({ message: 'itemsTotal must be a positive number.' });
   }
-  if (!['cod', 'razorpay'].includes(paymentMethod)) {
-    return res.status(400).json({ message: 'paymentMethod must be "cod" or "razorpay".' });
+  if (!['cod', 'razorpay', 'upi'].includes(paymentMethod)) {
+    return res.status(400).json({ message: 'paymentMethod must be "cod", "upi", or "razorpay".' });
   }
   if (!/^\d{6}$/.test(String(pincode).trim())) {
     return res.status(400).json({ message: 'pincode must be a 6-digit number.' });
