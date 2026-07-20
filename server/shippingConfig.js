@@ -12,9 +12,9 @@
 
 const SHIPPING_CONFIG = {
   // ── Free Shipping Threshold ─────────────────────────────────────────────────
-  // Orders above this amount get free shipping (prepaid only).
+  // Orders above this amount get free shipping (both prepaid and COD).
   // Set to Infinity to disable free shipping entirely.
-  freeShippingAbove: 5000, // ₹5,000+  → free shipping for prepaid
+  freeShippingAbove: 10000, // ₹10,000+  → free shipping
 
   // ── Base Rates (prepaid) ────────────────────────────────────────────────────
   // These are the base courier costs for prepaid orders.

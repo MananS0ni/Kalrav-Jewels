@@ -40,8 +40,8 @@ const calculateShipping = ({ itemsTotal, paymentMethod, pincode }) => {
   const zone = getZone(pincode);
   const isPrepaid = paymentMethod !== 'cod';
 
-  // ── Free shipping check (prepaid only) ────────────────────────────────────
-  if (isPrepaid && itemsTotal >= config.freeShippingAbove) {
+  // ── Free shipping check (applies to all payment methods) ──────────────────
+  if (itemsTotal >= config.freeShippingAbove) {
     return {
       zone,
       baseCost: 0,
@@ -73,9 +73,7 @@ const calculateShipping = ({ itemsTotal, paymentMethod, pincode }) => {
     total,
     isFree: false,
     freeShippingThreshold: config.freeShippingAbove,
-    amountForFreeShipping: isPrepaid
-      ? Math.max(0, config.freeShippingAbove - itemsTotal)
-      : null, // COD orders never qualify for free shipping
+    amountForFreeShipping: Math.max(0, config.freeShippingAbove - itemsTotal),
     breakdown: isPrepaid
       ? `Standard delivery (${zone} zone)`
       : `Cash on Delivery — includes ₹${codFee} COD handling fee`,
