@@ -50,7 +50,7 @@ const sendOrderReceived = async (order, customerEmail, customerName) => {
           <!-- Header -->
           <tr>
             <td style="background:#1a1a1a; padding:36px; text-align:center;">
-              <p style="margin:0; font-size:10px; letter-spacing:4px; color:#c9a84c; text-transform:uppercase; font-family:'Helvetica Neue',Arial,sans-serif;">Since 1952</p>
+              <img src="https://kalravjewels.com/kalrav_icon.png" alt="Kalrav Jewels Logo" style="height:45px; margin-bottom:12px; object-fit:contain;" />
               <h1 style="margin:8px 0 0; font-family:'Georgia',serif; font-size:32px; font-weight:400; color:#ffffff; letter-spacing:2px;">KALRAV JEWELS</h1>
               <div style="width:40px; height:1px; background:#c9a84c; margin:12px auto 0;"></div>
             </td>
@@ -227,7 +227,7 @@ const sendOrderStatusUpdate = async (order, customerEmail, customerName, status)
           <!-- Header -->
           <tr>
             <td style="background:#1a1a1a; padding:36px; text-align:center;">
-              <p style="margin:0; font-size:10px; letter-spacing:4px; color:#c9a84c; text-transform:uppercase; font-family:'Helvetica Neue',Arial,sans-serif;">Since 1952</p>
+              <img src="https://kalravjewels.com/kalrav_icon.png" alt="Kalrav Jewels Logo" style="height:45px; margin-bottom:12px; object-fit:contain;" />
               <h1 style="margin:8px 0 0; font-family:'Georgia',serif; font-size:32px; font-weight:400; color:#ffffff; letter-spacing:2px;">KALRAV JEWELS</h1>
             </td>
           </tr>
