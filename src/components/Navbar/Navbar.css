@@ -200,12 +200,28 @@
 
   .navbar__mobile {
     display: block;
+    top: 88px; /* match smaller mobile navbar height */
   }
 
   .navbar__inner {
     justify-content: space-between;
+    height: 88px; /* smaller on mobile */
+  }
+
+  /* Smaller logo on mobile */
+  .navbar-logo {
+    height: 70px;
+  }
+
+  /* Force solid opaque background on mobile — no see-through effect */
+  .navbar--solid,
+  .navbar--transparent {
+    background: var(--off-white);
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
   }
 }
+
 
 /* ── Navbar Icon Buttons ── */
 .navbar__icon-wrap {
