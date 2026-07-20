@@ -342,11 +342,7 @@ const Checkout = () => {
 
             {/* Shipping Breakdown */}
             <div className="summary-row">
-              <span>Shipping
-                {shipping && (
-                  <span className="summary-shipping-zone"> — {shipping.zone}</span>
-                )}
-              </span>
+              <span>Shipping</span>
               <span>
                 {shippingLoading && <span className="summary-shipping-loading">Calculating...</span>}
                 {!shippingLoading && !shipping && (
@@ -371,7 +367,7 @@ const Checkout = () => {
             {/* Free shipping nudge */}
             {!shippingLoading && shipping && !shipping.isFree && shipping.amountForFreeShipping > 0 && (
               <div className="summary-free-nudge">
-                Add {formatted(shipping.amountForFreeShipping)} more for FREE shipping (prepaid)
+                Add {formatted(shipping.amountForFreeShipping)} more for FREE shipping
               </div>
             )}
 

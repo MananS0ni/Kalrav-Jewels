@@ -75,7 +75,7 @@ const calculateShipping = ({ itemsTotal, paymentMethod, pincode }) => {
     freeShippingThreshold: config.freeShippingAbove,
     amountForFreeShipping: Math.max(0, config.freeShippingAbove - itemsTotal),
     breakdown: isPrepaid
-      ? `Standard delivery (${zone} zone)`
+      ? `Standard delivery`
       : `Cash on Delivery — includes ₹${codFee} COD handling fee`,
   };
 };
