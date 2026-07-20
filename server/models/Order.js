@@ -55,16 +55,14 @@ const orderSchema = new mongoose.Schema(
     },
     paymentMethod: {
       type: String,
-      enum: ['cod', 'razorpay', 'upi'],
+      enum: ['cod', 'upi'],
       default: 'cod',
     },
 
     // UPI payment reference (customer submits after paying)
     utrNumber: { type: String, default: '' },
 
-    // Razorpay (will use later)
-    razorpayOrderId: { type: String, default: '' },
-    razorpayPaymentId: { type: String, default: '' },
+
 
     notes: { type: String, default: '' },
   },

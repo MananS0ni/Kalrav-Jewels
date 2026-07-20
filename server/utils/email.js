@@ -31,7 +31,7 @@ const sendOrderConfirmation = async (order, customerEmail, customerName) => {
 
     const { shippingAddress: addr } = order;
     const addressStr = `${addr.addressLine}, ${addr.city}, ${addr.state} - ${addr.pincode}`;
-    const paymentLabel = order.paymentMethod === 'cod' ? 'Cash on Delivery' : 'Paid Online (Razorpay)';
+    const paymentLabel = order.paymentMethod === 'cod' ? 'Cash on Delivery' : 'Paid via UPI';
     const orderId = order._id.toString().slice(-8).toUpperCase();
 
     const htmlBody = `

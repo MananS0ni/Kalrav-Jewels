@@ -8,16 +8,7 @@ import './Checkout.css';
 
 const API = import.meta.env.VITE_API_URL || (window.location.hostname === 'localhost' ? 'http://localhost:5000/api' : '/api');
 
-// Dynamically load the Razorpay script
-const loadRazorpayScript = () =>
-  new Promise((resolve) => {
-    if (window.Razorpay) return resolve(true);
-    const script = document.createElement('script');
-    script.src = 'https://checkout.razorpay.com/v1/checkout.js';
-    script.onload = () => resolve(true);
-    script.onerror = () => resolve(false);
-    document.body.appendChild(script);
-  });
+
 
 const Checkout = () => {
   const { items, totalPrice, clearCart } = useCart();
@@ -137,78 +128,7 @@ const Checkout = () => {
         navigate(`/order-confirmation/${data._id}`);
 
       } else {
-        // Razorpay payment flow
-        const scriptLoaded = await loadRazorpayScript();
-        if (!scriptLoaded) throw new Error('Failed to load payment gateway. Check your internet connection.');
-
-        // Create a Razorpay order on the backend
-        const rzRes = await fetch(`${API}/payments/create-order`, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
-          body: JSON.stringify({ amount: grandTotal }),
-        });
-        const rzData = await rzRes.json();
-        if (!rzRes.ok) throw new Error(rzData.message || 'Could not initiate payment');
-
-        // Open Razorpay checkout popup
-        const options = {
-          key: rzData.key,
-          amount: grandTotal * 100,
-          currency: 'INR',
-          name: 'Kalrav Jewels',
-          description: `Order for ${items.length} item(s)`,
-          order_id: rzData.orderId,
-          prefill: {
-            name: form.fullName,
-            contact: form.phone,
-            email: user?.email || '',
-          },
-          theme: { color: '#c9a84c' },
-
-          handler: async (response) => {
-
-            // Payment succeeded — verify signature then save order in DB
-            const verifyRes = await fetch(`${API}/payments/verify`, {
-              method: 'POST',
-              headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
-              body: JSON.stringify(response),
-            });
-            const verifyData = await verifyRes.json();
-            if (!verifyData.success) throw new Error('Payment verification failed');
-
-            // Create order record in our DB with paymentId
-            const orderRes = await fetch(`${API}/orders`, {
-              method: 'POST',
-              headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
-              body: JSON.stringify({
-                items: items.map((i) => ({ productId: i.productId, quantity: i.qty })),
-                shippingAddress: form,
-                paymentMethod: 'razorpay',
-                paymentId: verifyData.paymentId,
-                paymentStatus: 'paid',
-              }),
-            });
-            const orderData = await orderRes.json();
-            if (!orderRes.ok) throw new Error(orderData.message || 'Order save failed');
-
-            clearCart();
-            navigate(`/order-confirmation/${orderData._id}`);
-          },
-          modal: {
-            ondismiss: () => {
-              setLoading(false);
-              setError('Payment was cancelled. You can try again.');
-            },
-          },
-        };
-
-        const rzpInstance = new window.Razorpay(options);
-        rzpInstance.on('payment.failed', (resp) => {
-          setError(`Payment failed: ${resp.error.description}`);
-          setLoading(false);
-        });
-        rzpInstance.open();
-        return; // Don't setLoading(false) here — modal is still open
+        throw new Error('Invalid payment method selected.');
       }
     } catch (err) {
       setError(err.message);
@@ -314,10 +234,7 @@ const Checkout = () => {
                   </div>
                 </label>
 
-                {/* Razorpay — HIDDEN from UI, code kept for future use */}
-                {/* <label className={`payment-option ${paymentMethod === 'razorpay' ? 'payment-option--active' : ''}`}>
-                  ... Razorpay option ...
-                </label> */}
+
               </div>
 
               {/* UPI payment panel — shown when UPI is selected */}

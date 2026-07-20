@@ -22,7 +22,7 @@ const Legal = () => {
           <p>All prices are shown in INR (₹). We reserve the right to modify prices without prior notice. Every effort is made to accurately display the colors and details of our 925 sterling silver jewelry, though variations may occur based on your monitor.</p>
           
           <h3>3. Payments</h3>
-          <p>We use Razorpay as our secure payment gateway. By proceeding with a purchase, you agree to their terms of processing. We do not store any credit card information on our servers.</p>
+          <p>We use secure UPI protocols as our secure payment gateway. By proceeding with a purchase, you agree to their terms of processing. We do not store any credit card information on our servers.</p>
           
           <h3>4. User Accounts</h3>
           <p>To place an order, you may need to register an account. You are responsible for maintaining the confidentiality of your account password.</p>
@@ -47,7 +47,7 @@ const Legal = () => {
           <p>Your privacy is important to us. We implement a variety of security measures to maintain the safety of your personal information when you place an order.</p>
 
           <h3>4. Third-Party Services</h3>
-          <p>We do not sell or trade your personal identifiable information to outside parties. This does not include trusted third parties who assist us in operating our website or conducting our business, such as Razorpay for payment processing, so long as those parties agree to keep this information confidential.</p>
+          <p>We do not sell or trade your personal identifiable information to outside parties. This does not include trusted third parties who assist us in operating our website or conducting our business, such as secure payment processors, so long as those parties agree to keep this information confidential.</p>
         </>
       )
     },
@@ -63,7 +63,7 @@ const Legal = () => {
           <p>We accept returns within 7 days of delivery only if the product is defective, damaged during transit, or incorrect. To be eligible for a return, your item must be unused and in the same condition that you received it, including original packaging and tags.</p>
           
           <h3>3. Processing Refunds</h3>
-          <p>Once your return is received and inspected, we will notify you of the approval or rejection of your refund. If approved, the refund will be processed and credited back to your original method of payment (via Razorpay) within 5-7 business days.</p>
+          <p>Once your return is received and inspected, we will notify you of the approval or rejection of your refund. If approved, the refund will be processed and credited back to your original method of payment (via UPI or bank transfer) within 5-7 business days.</p>
         </>
       )
     },

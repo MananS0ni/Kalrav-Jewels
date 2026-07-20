@@ -56,7 +56,6 @@ router.post('/', protect, async (req, res) => {
     // Set payment status based on method
     const initialPaymentStatus =
       paymentMethod === 'upi' ? 'awaitingVerification'
-      : paymentMethod === 'razorpay' ? 'paid'
       : 'pending'; // cod
 
     // Extract customer contact details to bake into the order

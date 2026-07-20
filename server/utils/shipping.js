@@ -32,7 +32,7 @@ const getZone = (pincode) => {
  *
  * @param {object} params
  * @param {number} params.itemsTotal   - Sum of all product prices × quantities
- * @param {string} params.paymentMethod - 'cod' | 'razorpay'
+ * @param {string} params.paymentMethod - 'cod' | 'upi'
  * @param {string} params.pincode      - Delivery pincode (6 digits)
  * @returns {object} Full shipping breakdown
  */
