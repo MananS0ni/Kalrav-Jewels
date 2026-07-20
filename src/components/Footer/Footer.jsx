@@ -49,6 +49,7 @@ const Footer = () => {
               <li><Link to="/collections?category=necklaces">Necklaces</Link></li>
               <li><Link to="/collections?category=earrings">Earrings</Link></li>
               <li><Link to="/collections?category=bracelets">Bracelets</Link></li>
+              <li><Link to="/collections?category=chains">Chains</Link></li>
             </ul>
           </div>
 

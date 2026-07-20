@@ -192,6 +192,7 @@ const Admin = () => {
                     <option value="necklaces">Necklaces</option>
                     <option value="earrings">Earrings</option>
                     <option value="bracelets">Bracelets</option>
+                    <option value="chains">Chains</option>
                   </select>
                 </div>
                 <div className="admin-field">
