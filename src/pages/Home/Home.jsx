@@ -12,7 +12,7 @@ const stats = [
 
 const categories = [
   { name: 'Rings', slug: 'rings', desc: 'Eternities & Solitaires', image: '/ring_product.webp' },
-  { name: 'Necklaces', slug: 'necklaces', desc: 'Sets & Pendants', image: '/necklace_product.webp' },
+  { name: 'Necklaces', slug: 'necklaces', desc: 'Sets & Pendants', image: '/Necklace/Delicate multi-strand layered necklace.webp' },
   { name: 'Chains', slug: 'chains', desc: 'Link & Snake', image: '/silver-link-chain/hero-1.jpg' },
   { name: 'Bracelets', slug: 'bracelets', desc: 'Tennis & Bangles', image: '/tennis-bracelet/hero-1.jpg' },
   { name: 'Earrings', slug: 'earrings', desc: 'Drops & Studs', image: '/earrings/Elegant diamond earrings with starburst design.webp' },
