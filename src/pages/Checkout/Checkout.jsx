@@ -31,7 +31,11 @@ const Checkout = () => {
   const [copied, setCopied] = useState(false);
 
   const UPI_ID = 'gpay-12203077109@okbizaxis';
+  const UPI_NAME = 'Kalrav Jewels';
   const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+
+  // Unique transaction ref per session — avoids NPCI fraud-pattern detection
+  const [txnRef] = useState(() => 'KJ' + Date.now().toString(36).toUpperCase().slice(-6));
 
   const handleCopyUpi = () => {
     navigator.clipboard.writeText(UPI_ID);
@@ -39,9 +43,16 @@ const Checkout = () => {
     setTimeout(() => setCopied(false), 2000);
   };
 
+  const buildUpiUrl = (scheme = 'upi') => {
+    const params = `pa=${UPI_ID}&pn=${encodeURIComponent(UPI_NAME)}&am=${grandTotal.toFixed(2)}&tn=Order+${txnRef}&cu=INR`;
+    if (scheme === 'gpay') return `gpay://upi/pay?${params}`;
+    if (scheme === 'phonepe') return `phonepe://pay?${params}`;
+    if (scheme === 'paytmmp') return `paytmmp://pay?${params}`;
+    return `upi://pay?${params}`;
+  };
+
   const handleUpiRedirect = () => {
-    const upiLink = `upi://pay?pa=${UPI_ID}&pn=Kalrav+Jewels&am=${grandTotal.toFixed(2)}&tn=Kalrav+Jewels+Order&cu=INR`;
-    window.location.href = upiLink;
+    window.location.href = buildUpiUrl('upi');
   };
 
 
@@ -254,10 +265,9 @@ const Checkout = () => {
                       <div className="upi-panel__qr-box">
                         {/* Dynamic QR generated with exact amount (Offline local SVG rendering) */}
                       {grandTotal > 0 && (() => {
-                          const upiLink = `upi://pay?pa=${UPI_ID}&pn=Kalrav+Jewels&am=${grandTotal.toFixed(2)}&tn=Kalrav+Jewels+Order&cu=INR`;
                           return (
                             <QRCodeSVG
-                              value={upiLink}
+                              value={buildUpiUrl('upi')}
                               size={200}
                               bgColor="#ffffff"
                               fgColor="#1a1a1a"
@@ -287,21 +297,21 @@ const Checkout = () => {
                           <div style={{ display: 'flex', gap: '8px', justifyContent: 'center' }}>
                             <button type="button" onClick={() => {
                               handleCopyUpi();
-                              window.location.href = `gpay://upi/pay?pa=${UPI_ID}&pn=Kalrav+Jewels&am=${grandTotal.toFixed(2)}&tn=Kalrav+Jewels+Order&cu=INR`;
+                              window.location.href = buildUpiUrl('gpay');
                             }}
                               style={{ flex: 1, padding: '12px 6px', background: '#fff', border: '1px solid #e0d6c2', borderRadius: '8px', cursor: 'pointer', fontSize: '12px', fontWeight: 600, color: '#1a1a1a', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '4px' }}>
                               <span style={{ fontSize: '20px' }}>💳</span> GPay
                             </button>
                             <button type="button" onClick={() => {
                               handleCopyUpi();
-                              window.location.href = `phonepe://pay?pa=${UPI_ID}&pn=Kalrav+Jewels&am=${grandTotal.toFixed(2)}&tn=Kalrav+Jewels+Order&cu=INR`;
+                              window.location.href = buildUpiUrl('phonepe');
                             }}
                               style={{ flex: 1, padding: '12px 6px', background: '#fff', border: '1px solid #e0d6c2', borderRadius: '8px', cursor: 'pointer', fontSize: '12px', fontWeight: 600, color: '#1a1a1a', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '4px' }}>
                               <span style={{ fontSize: '20px' }}>📱</span> PhonePe
                             </button>
                             <button type="button" onClick={() => {
                               handleCopyUpi();
-                              window.location.href = `paytmmp://pay?pa=${UPI_ID}&pn=Kalrav+Jewels&am=${grandTotal.toFixed(2)}&tn=Kalrav+Jewels+Order&cu=INR`;
+                              window.location.href = buildUpiUrl('paytmmp');
                             }}
                               style={{ flex: 1, padding: '12px 6px', background: '#fff', border: '1px solid #e0d6c2', borderRadius: '8px', cursor: 'pointer', fontSize: '12px', fontWeight: 600, color: '#1a1a1a', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '4px' }}>
                               <span style={{ fontSize: '20px' }}>💰</span> Paytm
