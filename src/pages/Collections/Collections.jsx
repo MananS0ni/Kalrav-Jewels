@@ -5,10 +5,10 @@ import './Collections.css';
 const API = import.meta.env.VITE_API_URL || (window.location.hostname === 'localhost' ? 'http://localhost:5000/api' : '/api');
 const categories = [
   { slug: 'all', label: 'All', image: '/hero_jewelry.png' },
-  { slug: 'rings', label: 'Rings', image: '/ring_product.png' },
-  { slug: 'necklaces', label: 'Necklaces', image: '/necklace_product.png' },
-  { slug: 'earrings', label: 'Earrings', image: '/earring_product.png' },
-  { slug: 'bracelets', label: 'Bracelets', image: '/bracelet_product.png' },
+  { slug: 'rings', label: 'Rings', image: '/ring_product.webp' },
+  { slug: 'necklaces', label: 'Necklaces', image: '/necklace_product.webp' },
+  { slug: 'earrings', label: 'Earrings', image: '/earrings/Elegant diamond earrings with starburst design.webp' },
+  { slug: 'bracelets', label: 'Bracelets', image: '/bracelet_product.webp' },
   { slug: 'chains', label: 'Chains', image: '/silver-link-chain/hero-1.jpg' },
 ];
 

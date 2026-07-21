@@ -203,82 +203,70 @@
 }
 
 .categories__grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  border-top: 1px solid var(--border);
-  border-left: 1px solid var(--border);
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 48px;
+  padding: 0 20px;
 }
 
 .category-card {
-  background: var(--white);
-  border-right: 1px solid var(--border);
-  border-bottom: 1px solid var(--border);
-  padding: 50px 36px;
   display: flex;
+  flex-direction: column;
   align-items: center;
-  justify-content: center;
+  gap: 16px;
+  background: none;
+  border: none;
+  padding: 0;
   text-decoration: none;
-  transition: var(--transition);
-  position: relative;
-  overflow: hidden;
+  transition: opacity var(--transition);
 }
 
-.category-card--visual {
-  flex-direction: column;
-  padding: 0;
-  aspect-ratio: 1 / 1;
+.category-card:hover {
+  opacity: 0.8;
 }
 
 .category-card__photo-container {
-  position: absolute;
-  inset: 0;
+  width: 140px;
+  height: 140px;
+  border-radius: 50%;
+  overflow: hidden;
+  background: var(--cream);
+  border: 1px solid var(--border);
+  transition: border-color var(--transition);
   display: flex;
   align-items: center;
   justify-content: center;
-  margin: 0;
-  height: 100%;
-  width: 100%;
-  transition: transform var(--transition);
-  z-index: 0;
 }
 
 .category-card:hover .category-card__photo-container {
-  transform: scale(1.05);
+  border-color: var(--gold);
 }
 
 .category-card__photo {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  opacity: 0.2; /* Faded out to look like a watermark */
-  transition: opacity var(--transition);
-}
-
-.category-card:hover .category-card__photo {
-  opacity: 0.35; /* Slightly more visible on hover */
 }
 
 .category-card__pill {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  z-index: 2;
   font-family: 'Montserrat', sans-serif;
-  font-size: 16px;
+  font-size: 11px;
   font-weight: 500;
-  letter-spacing: 3px;
+  letter-spacing: 1.5px;
   text-transform: uppercase;
   color: var(--charcoal);
-  padding: 0;
-  background: transparent;
-  border: none;
+  background: var(--white);
+  padding: 8px 24px;
+  border-radius: 20px;
+  border: 1px solid var(--border);
   transition: all var(--transition);
-  white-space: nowrap;
 }
 
 .category-card:hover .category-card__pill {
-  color: var(--gold);
+  background: var(--charcoal);
+  color: var(--white);
+  border-color: var(--charcoal);
 }
 
 /* ─── Featured Products ─── */
