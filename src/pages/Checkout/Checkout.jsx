@@ -30,10 +30,18 @@ const Checkout = () => {
   const [upiStep, setUpiStep] = useState('select');          // 'select' | 'pay' | 'confirm'
   const [copied, setCopied] = useState(false);
 
+  const UPI_ID = 'gpay-12203077109@okbizaxis';
+  const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+
   const handleCopyUpi = () => {
-    navigator.clipboard.writeText('manansoni2905@okhdfcbank');
+    navigator.clipboard.writeText(UPI_ID);
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
+  };
+
+  const handleUpiRedirect = () => {
+    const upiLink = `upi://pay?pa=${UPI_ID}&pn=Kalrav+Jewels&am=${grandTotal.toFixed(2)}&tn=Kalrav+Jewels+Order&cu=INR`;
+    window.location.href = upiLink;
   };
 
 
@@ -245,8 +253,8 @@ const Checkout = () => {
                       <p className="upi-panel__step">Step 1 — Scan & Pay</p>
                       <div className="upi-panel__qr-box">
                         {/* Dynamic QR generated with exact amount (Offline local SVG rendering) */}
-                        {grandTotal > 0 && (() => {
-                          const upiLink = `upi://pay?pa=manansoni2905@okhdfcbank&pn=Kalrav+Jewels&am=${grandTotal.toFixed(2)}&tn=Kalrav+Jewels+Order&cu=INR`;
+                      {grandTotal > 0 && (() => {
+                          const upiLink = `upi://pay?pa=${UPI_ID}&pn=Kalrav+Jewels&am=${grandTotal.toFixed(2)}&tn=Kalrav+Jewels+Order&cu=INR`;
                           return (
                             <QRCodeSVG
                               value={upiLink}
@@ -260,8 +268,24 @@ const Checkout = () => {
                           );
                         })()}
                       </div>
-                      <div className="upi-panel__id-copy-row">
-                        <p className="upi-panel__upi-id">UPI ID: <strong>manansoni2905@okhdfcbank</strong></p>
+
+                      {/* Pay Now button — Android opens UPI app, iPhone sees fallback */}
+                      {!isIOS ? (
+                        <button
+                          type="button"
+                          onClick={handleUpiRedirect}
+                          className="upi-panel__pay-btn"
+                          style={{ marginTop: '12px', width: '100%', background: '#1a1a1a', color: '#fff', border: 'none', padding: '12px', fontFamily: "'Georgia', serif", fontSize: '14px', letterSpacing: '1px', cursor: 'pointer' }}
+                        >
+                          Open UPI App & Pay {formatted(grandTotal)}
+                        </button>
+                      ) : (
+                        <p style={{ marginTop: '12px', fontSize: '12px', color: '#888', textAlign: 'center', maxWidth: '260px', lineHeight: '1.6' }}>
+                          On iPhone, please open GPay / PhonePe / Paytm manually and pay to the UPI ID below.
+                        </p>
+                      )}
+                      <div className="upi-panel__id-copy-row" style={{ marginTop: '14px' }}>
+                        <p className="upi-panel__upi-id">UPI ID: <strong>{UPI_ID}</strong></p>
                         <button
                           type="button"
                           onClick={handleCopyUpi}
@@ -271,10 +295,7 @@ const Checkout = () => {
                           {copied ? 'Copied! ✓' : 'Copy ID'}
                         </button>
                       </div>
-                      <p className="upi-panel__amount">Amount: <strong>{formatted(grandTotal)}</strong></p>
-                      <p style={{ fontSize: '11px', color: '#888', marginTop: '8px', textAlign: 'center', maxWidth: '300px' }}>
-                        If you are on mobile, click "Copy ID" and paste it into your UPI app to complete the payment.
-                      </p>
+                      <p className="upi-panel__amount" style={{ marginTop: '8px' }}>Amount: <strong>{formatted(grandTotal)}</strong></p>
                     </div>
                   </div>
 
