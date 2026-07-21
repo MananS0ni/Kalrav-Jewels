@@ -23,8 +23,8 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  height: 110px;
-  /* Increased to fit 92px logo */
+  height: 116px;
+  /* Increased from 110px to give more vertical breathing space */
   position: relative;
 }
 
@@ -46,8 +46,8 @@
 }
 
 .navbar-logo {
-  height: 92px;
-  /* Increased ~28% from 72px */
+  height: 89px;
+  /* Reduced from 92px by 3 pixels */
   width: auto;
   object-fit: contain;
   display: block;
