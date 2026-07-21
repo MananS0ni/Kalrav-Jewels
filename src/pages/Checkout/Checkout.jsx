@@ -280,9 +280,28 @@ const Checkout = () => {
                           Open UPI App & Pay {formatted(grandTotal)}
                         </button>
                       ) : (
-                        <p style={{ marginTop: '12px', fontSize: '12px', color: '#888', textAlign: 'center', maxWidth: '260px', lineHeight: '1.6' }}>
-                          On iPhone, please open GPay / PhonePe / Paytm manually and pay to the UPI ID below.
-                        </p>
+                        <div style={{ marginTop: '14px', width: '100%' }}>
+                          <p style={{ fontSize: '12px', color: '#888', textAlign: 'center', marginBottom: '10px', lineHeight: '1.5' }}>
+                            Tap to open your UPI app, then pay to the ID below
+                          </p>
+                          <div style={{ display: 'flex', gap: '8px', justifyContent: 'center' }}>
+                            <button type="button" onClick={() => { handleCopyUpi(); window.location.href = 'gpay://'; }}
+                              style={{ flex: 1, padding: '10px 6px', background: '#fff', border: '1px solid #e0d6c2', borderRadius: '6px', cursor: 'pointer', fontSize: '12px', fontWeight: 600, color: '#1a1a1a', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '4px' }}>
+                              <span style={{ fontSize: '18px' }}>💳</span> GPay
+                            </button>
+                            <button type="button" onClick={() => { handleCopyUpi(); window.location.href = 'phonepe://'; }}
+                              style={{ flex: 1, padding: '10px 6px', background: '#fff', border: '1px solid #e0d6c2', borderRadius: '6px', cursor: 'pointer', fontSize: '12px', fontWeight: 600, color: '#1a1a1a', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '4px' }}>
+                              <span style={{ fontSize: '18px' }}>📱</span> PhonePe
+                            </button>
+                            <button type="button" onClick={() => { handleCopyUpi(); window.location.href = 'paytm://'; }}
+                              style={{ flex: 1, padding: '10px 6px', background: '#fff', border: '1px solid #e0d6c2', borderRadius: '6px', cursor: 'pointer', fontSize: '12px', fontWeight: 600, color: '#1a1a1a', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '4px' }}>
+                              <span style={{ fontSize: '18px' }}>💰</span> Paytm
+                            </button>
+                          </div>
+                          <p style={{ fontSize: '10px', color: '#aaa', textAlign: 'center', marginTop: '8px' }}>
+                            UPI ID copied automatically · Paste it in the app to pay
+                          </p>
+                        </div>
                       )}
                       <div className="upi-panel__id-copy-row" style={{ marginTop: '14px' }}>
                         <p className="upi-panel__upi-id">UPI ID: <strong>{UPI_ID}</strong></p>
