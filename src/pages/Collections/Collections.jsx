@@ -4,12 +4,12 @@ import './Collections.css';
 
 const API = import.meta.env.VITE_API_URL || (window.location.hostname === 'localhost' ? 'http://localhost:5000/api' : '/api');
 const categories = [
-  { slug: 'all', label: 'All Pieces' },
-  { slug: 'rings', label: 'Rings' },
-  { slug: 'necklaces', label: 'Necklaces' },
-  { slug: 'earrings', label: 'Earrings' },
-  { slug: 'bracelets', label: 'Bracelets' },
-  { slug: 'chains', label: 'Chains' },
+  { slug: 'all', label: 'All', image: '/hero_jewelry.png' },
+  { slug: 'rings', label: 'Rings', image: '/ring_product.png' },
+  { slug: 'necklaces', label: 'Necklaces', image: '/necklace_product.png' },
+  { slug: 'earrings', label: 'Earrings', image: '/earring_product.png' },
+  { slug: 'bracelets', label: 'Bracelets', image: '/bracelet_product.png' },
+  { slug: 'chains', label: 'Chains', image: '/silver-link-chain/hero-1.jpg' },
 ];
 
 const Collections = () => {
@@ -68,7 +68,10 @@ const Collections = () => {
                 onClick={() => setActiveCategory(cat.slug)}
                 id={`filter-${cat.slug}`}
               >
-                {cat.label}
+                <div className="filter-btn__photo-container">
+                  <img src={cat.image} alt={cat.label} className="filter-btn__photo" loading="lazy" />
+                </div>
+                <span className="filter-btn__pill">{cat.label}</span>
               </button>
             ))}
           </div>

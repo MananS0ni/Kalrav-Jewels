@@ -11,11 +11,11 @@ const stats = [
 ];
 
 const categories = [
-  { name: 'Rings', slug: 'rings', desc: 'Eternities & Solitaires', image: '/ring_product.webp' },
-  { name: 'Necklaces', slug: 'necklaces', desc: 'Sets & Pendants', image: '/necklace_product.webp' },
+  { name: 'Rings', slug: 'rings', desc: 'Eternities & Solitaires', image: '/ring_product.png' },
+  { name: 'Necklaces', slug: 'necklaces', desc: 'Sets & Pendants', image: '/necklace_product.png' },
   { name: 'Chains', slug: 'chains', desc: 'Link & Snake', image: '/silver-link-chain/hero-1.jpg' },
-  { name: 'Bracelets', slug: 'bracelets', desc: 'Tennis & Bangles', image: '/bracelet_product.webp' },
-  { name: 'Earrings', slug: 'earrings', desc: 'Drops & Studs', image: '/earrings/Elegant diamond earrings with starburst design.webp' },
+  { name: 'Bracelets', slug: 'bracelets', desc: 'Tennis & Bangles', image: '/bracelet_product.png' },
+  { name: 'Earrings', slug: 'earrings', desc: 'Drops & Studs', image: '/earring_product.png' },
 ];
 
 const Home = () => {
