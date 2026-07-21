@@ -13,9 +13,9 @@ const stats = [
 const categories = [
   { name: 'Rings', slug: 'rings', desc: 'Eternities & Solitaires', image: '/ring_product.webp' },
   { name: 'Necklaces', slug: 'necklaces', desc: 'Sets & Pendants', image: '/necklace_product.webp' },
-  { name: 'Earrings', slug: 'earrings', desc: 'Drops & Studs', image: '/earring_product.webp' },
-  { name: 'Bracelets', slug: 'bracelets', desc: 'Tennis & Bangles', image: '/bracelet_product.webp' },
   { name: 'Chains', slug: 'chains', desc: 'Link & Snake', image: '/silver-link-chain/hero-1.jpg' },
+  { name: 'Bracelets', slug: 'bracelets', desc: 'Tennis & Bangles', image: '/bracelet_product.webp' },
+  { name: 'Earrings', slug: 'earrings', desc: 'Drops & Studs', image: '/earrings/Elegant diamond earrings with starburst design.webp' },
 ];
 
 const Home = () => {
@@ -107,16 +107,15 @@ const Home = () => {
                 className="category-card"
                 id={`category-${cat.slug}`}
               >
-                <img
-                  src={cat.image}
-                  alt={cat.name}
-                  className="category-card__hover-img"
-                  loading="lazy"
-                />
-                <div className="category-card__inner">
-                  <h3 className="category-card__name">{cat.name}</h3>
-                  <span className="category-card__cta">View All</span>
+                <div className="category-card__img-wrap">
+                  <img
+                    src={cat.image}
+                    alt={cat.name}
+                    className="category-card__img"
+                    loading="lazy"
+                  />
                 </div>
+                <span className="category-card__pill">{cat.name}</span>
               </Link>
             ))}
           </div>
