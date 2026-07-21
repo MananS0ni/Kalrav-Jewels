@@ -229,6 +229,21 @@
   aspect-ratio: 1 / 1;
 }
 
+.category-card--visual::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.6) 0%, rgba(0, 0, 0, 0) 40%);
+  z-index: 1;
+  pointer-events: none;
+  opacity: 0.8;
+  transition: opacity var(--transition);
+}
+
+.category-card:hover::after {
+  opacity: 1;
+}
+
 .category-card__photo-container {
   position: absolute;
   inset: 0;
@@ -257,23 +272,20 @@
   bottom: 24px;
   z-index: 2;
   font-family: 'Montserrat', sans-serif;
-  font-size: 10px;
+  font-size: 13px;
   font-weight: 500;
-  letter-spacing: 1px;
+  letter-spacing: 2px;
   text-transform: uppercase;
-  color: var(--charcoal);
-  background: var(--off-white);
-  padding: 6px 16px;
-  border-radius: 20px;
-  border: 1px solid var(--border);
+  color: var(--white);
+  padding: 0;
+  background: transparent;
+  border: none;
   transition: all var(--transition);
   white-space: nowrap;
 }
 
 .category-card:hover .category-card__pill {
-  background: var(--charcoal);
-  color: var(--white);
-  border-color: var(--charcoal);
+  color: var(--gold-light);
 }
 
 /* ─── Featured Products ─── */
