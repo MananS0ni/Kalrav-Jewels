@@ -16,7 +16,7 @@ const sendOrderReceived = async (order, customerEmail, customerName) => {
       .map(
         (item) => `
         <tr>
-          <td style="padding:12px 16px; border-bottom:1px solid #f0e8d5; font-family:'Georgia',serif; color:#2c2c2c; font-size:14px;">
+          <td style="padding:12px 16px; border-bottom:1px solid #f0e8d5; font-family:'Helvetica Neue', Arial, sans-serif; color:#2c2c2c; font-size:14px;">
             ${item.name}
           </td>
           <td style="padding:12px 16px; border-bottom:1px solid #f0e8d5; text-align:center; color:#6b6b6b; font-size:14px;">
@@ -65,7 +65,7 @@ const sendOrderReceived = async (order, customerEmail, customerName) => {
           <!-- Greeting -->
           <tr>
             <td style="padding:40px 36px 24px;">
-              <p style="margin:0; font-size:22px; font-family:'Georgia',serif; color:#1a1a1a; font-weight:400;">Dear ${customerName},</p>
+              <p style="margin:0; font-size:22px; font-family:'Helvetica Neue', Arial, sans-serif; color:#1a1a1a; font-weight:400;">Dear ${customerName},</p>
               <p style="margin:12px 0 0; font-size:14px; color:#6b6b6b; line-height:1.8;">
                 Thank you for your purchase. We have received your order and it is currently pending confirmation. 
                 We take great pride in every piece we craft, and yours is no exception. We will notify you once it is confirmed.
@@ -80,7 +80,7 @@ const sendOrderReceived = async (order, customerEmail, customerName) => {
                 <tr>
                   <td style="padding:16px 20px;">
                     <p style="margin:0; font-size:10px; letter-spacing:2px; color:#c9a84c; text-transform:uppercase;">Order Reference</p>
-                    <p style="margin:4px 0 0; font-size:20px; font-family:'Georgia',serif; color:#1a1a1a; font-weight:600;">#KJ-${orderId}</p>
+                    <p style="margin:4px 0 0; font-size:20px; font-family:'Helvetica Neue', Arial, sans-serif; color:#1a1a1a; font-weight:600;">#KJ-${orderId}</p>
                   </td>
                 </tr>
               </table>
@@ -100,7 +100,7 @@ const sendOrderReceived = async (order, customerEmail, customerName) => {
                 ${itemRows}
                 <tr style="background:#faf8f4;">
                   <td colspan="2" style="padding:14px 16px; font-size:12px; letter-spacing:1px; color:#9a9a9a; text-transform:uppercase; font-weight:600;">Total</td>
-                  <td style="padding:14px 16px; text-align:right; font-size:18px; font-family:'Georgia',serif; color:#1a1a1a; font-weight:600;">₹${order.totalAmount.toLocaleString('en-IN')}</td>
+                  <td style="padding:14px 16px; text-align:right; font-size:18px; font-family:'Helvetica Neue', Arial, sans-serif; color:#1a1a1a; font-weight:600;">₹${order.totalAmount.toLocaleString('en-IN')}</td>
                 </tr>
               </table>
             </td>
@@ -241,7 +241,7 @@ const sendOrderStatusUpdate = async (order, customerEmail, customerName, status)
           <!-- Greeting -->
           <tr>
             <td style="padding:40px 36px 24px;">
-              <p style="margin:0; font-size:22px; font-family:'Georgia',serif; color:#1a1a1a; font-weight:400;">Dear ${customerName},</p>
+              <p style="margin:0; font-size:22px; font-family:'Helvetica Neue', Arial, sans-serif; color:#1a1a1a; font-weight:400;">Dear ${customerName},</p>
               <p style="margin:12px 0 0; font-size:14px; color:#6b6b6b; line-height:1.8;">
                 ${statusInfo.msg}
               </p>
@@ -255,7 +255,7 @@ const sendOrderStatusUpdate = async (order, customerEmail, customerName, status)
                 <tr>
                   <td style="padding:16px 20px;">
                     <p style="margin:0; font-size:10px; letter-spacing:2px; color:#c9a84c; text-transform:uppercase;">Order Reference</p>
-                    <p style="margin:4px 0 0; font-size:20px; font-family:'Georgia',serif; color:#1a1a1a; font-weight:600;">#KJ-${orderId}</p>
+                    <p style="margin:4px 0 0; font-size:20px; font-family:'Helvetica Neue', Arial, sans-serif; color:#1a1a1a; font-weight:600;">#KJ-${orderId}</p>
                   </td>
                 </tr>
               </table>

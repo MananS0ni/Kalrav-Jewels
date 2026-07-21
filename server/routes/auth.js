@@ -26,7 +26,7 @@ const sendWelcomeEmail = async (name, email) => {
       to: email,
       subject: 'Welcome to Kalrav — Your Account is Ready',
       html: `
-        <div style="font-family: Georgia, serif; max-width: 560px; margin: 0 auto; padding: 40px 32px; background: #fafafa; border: 1px solid #e8e0d0;">
+        <div style="font-family: 'Helvetica Neue', Arial, sans-serif; max-width: 560px; margin: 0 auto; padding: 40px 32px; background: #fafafa; border: 1px solid #e8e0d0;">
           <h2 style="color: #b8960c; letter-spacing: 2px; margin: 0 0 8px;">KALRAV</h2>
           <p style="color: #999; font-size: 12px; letter-spacing: 1px; margin: 0 0 32px;">JEWELS</p>
           <h3 style="color: #222;">Welcome, ${name}! 🎉</h3>
@@ -154,7 +154,7 @@ router.post('/forgot-password', authLimiter, async (req, res) => {
       to: user.email,
       subject: 'Password Reset Request',
       html: `
-        <div style="font-family: Georgia, serif; max-width: 560px; margin: 0 auto; padding: 40px 32px; background: #fafafa; border: 1px solid #e8e0d0;">
+        <div style="font-family: 'Helvetica Neue', Arial, sans-serif; max-width: 560px; margin: 0 auto; padding: 40px 32px; background: #fafafa; border: 1px solid #e8e0d0;">
           <h2 style="color: #b8960c; letter-spacing: 2px; margin: 0 0 8px;">KALRAV</h2>
           <p style="color: #999; font-size: 12px; letter-spacing: 1px; margin: 0 0 32px;">JEWELS</p>
           <h3 style="color: #222;">Password Reset Request</h3>

@@ -142,8 +142,8 @@
 }
 
 .product-detail__price {
-  font-family: 'Cormorant Garamond', serif;
-  font-size: 28px;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 26px;
   font-weight: 500;
   color: var(--gold-dark);
   margin-top: 12px;
