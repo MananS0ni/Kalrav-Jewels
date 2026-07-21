@@ -225,29 +225,37 @@
 
 .category-card--visual {
   flex-direction: column;
-  padding: 32px 20px;
+  padding: 0;
+  aspect-ratio: 1 / 1;
 }
 
 .category-card__photo-container {
+  position: absolute;
+  inset: 0;
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-bottom: 16px;
-  height: 80px; /* Keep a consistent height for alignment */
+  margin: 0;
+  height: 100%;
+  width: 100%;
   transition: transform var(--transition);
+  z-index: 0;
 }
 
 .category-card:hover .category-card__photo-container {
-  transform: translateY(-5px) scale(1.05);
+  transform: scale(1.05);
 }
 
 .category-card__photo {
-  max-width: 100px;
-  max-height: 80px;
-  object-fit: contain;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
 
 .category-card__pill {
+  position: absolute;
+  bottom: 24px;
+  z-index: 2;
   font-family: 'Montserrat', sans-serif;
   font-size: 10px;
   font-weight: 500;
