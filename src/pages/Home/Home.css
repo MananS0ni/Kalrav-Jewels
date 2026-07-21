@@ -203,47 +203,50 @@
 }
 
 .categories__grid {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 48px;
-  padding: 0 20px;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  border-top: 1px solid var(--border);
+  border-left: 1px solid var(--border);
 }
 
 .category-card {
+  background: var(--white);
+  border-right: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+  padding: 50px 36px;
   display: flex;
-  flex-direction: column;
   align-items: center;
-  gap: 16px;
-  background: none;
-  border: none;
-  padding: 0;
+  justify-content: center;
   text-decoration: none;
-  transition: opacity var(--transition);
+  transition: var(--transition);
+  position: relative;
+  overflow: hidden;
 }
 
-.category-card:hover {
-  opacity: 0.8;
+.category-card--visual {
+  flex-direction: column;
+  padding: 32px 20px;
 }
 
-.category-card__img-wrap {
-  width: 140px;
-  height: 140px;
+.category-card__photo-container {
+  width: 64px;
+  height: 64px;
   border-radius: 50%;
   overflow: hidden;
   background: var(--cream);
-  border: 2px solid transparent;
+  border: 1px solid var(--border);
   transition: border-color var(--transition);
   display: flex;
   align-items: center;
   justify-content: center;
+  margin-bottom: 16px;
 }
 
-.category-card:hover .category-card__img-wrap {
+.category-card:hover .category-card__photo-container {
   border-color: var(--gold);
 }
 
-.category-card__img {
+.category-card__photo {
   width: 100%;
   height: 100%;
   object-fit: cover;
@@ -251,16 +254,17 @@
 
 .category-card__pill {
   font-family: 'Montserrat', sans-serif;
-  font-size: 11px;
+  font-size: 10px;
   font-weight: 500;
-  letter-spacing: 1.5px;
+  letter-spacing: 1px;
   text-transform: uppercase;
   color: var(--charcoal);
   background: var(--off-white);
-  padding: 8px 24px;
+  padding: 6px 16px;
   border-radius: 20px;
   border: 1px solid var(--border);
   transition: all var(--transition);
+  white-space: nowrap;
 }
 
 .category-card:hover .category-card__pill {

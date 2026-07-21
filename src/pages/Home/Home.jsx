@@ -104,14 +104,14 @@ const Home = () => {
               <Link
                 to={`/collections?category=${cat.slug}`}
                 key={cat.slug}
-                className="category-card"
+                className="category-card category-card--visual"
                 id={`category-${cat.slug}`}
               >
-                <div className="category-card__img-wrap">
+                <div className="category-card__photo-container">
                   <img
                     src={cat.image}
                     alt={cat.name}
-                    className="category-card__img"
+                    className="category-card__photo"
                     loading="lazy"
                   />
                 </div>
