@@ -5,17 +5,60 @@
   <meta charset="UTF-8" />
   <link rel="icon" type="image/jpeg" href="/favicon.webp" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
-  <meta name="description"
-    content="Kalrav Jewels — Handcrafted 925 sterling silver jewellery. Hallmarked silver, gemstone designs, and bespoke creations. Shop online." />
-  <meta name="keywords"
-    content="925 sterling silver jewellery, silver jewellery, hallmarked silver, Kalrav Jewels, handcrafted silver jewellery, silver rings, silver necklaces, bespoke silver jewellery" />
-  <meta property="og:title" content="Kalrav Jewels — Timeless Fine Jewellery" />
-  <meta property="og:description"
-    content="Discover our collection of handcrafted sterling silver jewellery. Trusted by families across India." />
-  <meta property="og:type" content="website" />
-  <title>Kalrav Jewels — Timeless Fine Jewellery</title>
 
-  <!-- Google Analytics 4 (Only load in production) -->
+  <!-- Primary SEO Meta Tags -->
+  <title>Kalrav Jewels — Timeless Fine 925 Sterling Silver Jewellery</title>
+  <meta name="title" content="Kalrav Jewels — Timeless Fine 925 Sterling Silver Jewellery" />
+  <meta name="description"
+    content="Discover Kalrav Jewels — Handcrafted 925 hallmarked sterling silver jewellery, natural gemstone necklaces, rings, earrings, and bespoke creations. Shop fine jewellery online across India." />
+  <meta name="keywords"
+    content="925 sterling silver jewellery, silver jewellery India, hallmarked silver, Kalrav Jewels, handcrafted silver jewellery, silver rings, silver necklaces, silver earrings, luxury silver jewellery, online jewellery store" />
+  <meta name="author" content="Kalrav Jewels" />
+  <meta name="robots" content="index, follow" />
+  <link rel="canonical" href="https://kalravjewels.com/" />
+
+  <!-- Open Graph / Facebook -->
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://kalravjewels.com/" />
+  <meta property="og:site_name" content="Kalrav Jewels" />
+  <meta property="og:title" content="Kalrav Jewels — Timeless Fine 925 Sterling Silver Jewellery" />
+  <meta property="og:description"
+    content="Handcrafted 925 hallmarked sterling silver jewellery & gemstone designs. Trusted by thousands of families across India." />
+  <meta property="og:image" content="https://kalravjewels.com/public/hero_jewelry.png" />
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:url" content="https://kalravjewels.com/" />
+  <meta name="twitter:title" content="Kalrav Jewels — Timeless Fine 925 Sterling Silver Jewellery" />
+  <meta name="twitter:description"
+    content="Handcrafted 925 hallmarked sterling silver jewellery & gemstone designs. Shop online across India." />
+  <meta name="twitter:image" content="https://kalravjewels.com/public/hero_jewelry.png" />
+
+  <!-- Google Schema.org Structured Data (JSON-LD) for JewelryStore -->
+  <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "JewelryStore",
+      "name": "Kalrav Jewels",
+      "image": "https://kalravjewels.com/public/hero_jewelry.png",
+      "@id": "https://kalravjewels.com/#store",
+      "url": "https://kalravjewels.com/",
+      "telephone": "+919876543210",
+      "priceRange": "₹₹",
+      "currenciesAccepted": "INR",
+      "paymentAccepted": "UPI, Credit Card, Debit Card, Net Banking, Cash on Delivery",
+      "address": {
+        "@type": "PostalAddress",
+        "addressCountry": "IN"
+      },
+      "sameAs": [
+        "https://kalravjewels.com"
+      ],
+      "description": "Premium handcrafted 925 sterling silver jewellery, hallmarked silver rings, necklaces, bracelets, and gemstone creations."
+    }
+  </script>
+
+  <!-- Google Analytics 4 (Production Only) -->
   <script>
     if (window.location.hostname !== 'localhost' && window.location.hostname !== '127.0.0.1') {
       const gaScript = document.createElement('script');
@@ -26,7 +69,6 @@
       window.dataLayer = window.dataLayer || [];
       function gtag() { dataLayer.push(arguments); }
       gtag('js', new Date());
-      // Prevent automatic pageview on load since it's an SPA and we have a custom hook
       gtag('config', 'G-1FP3Z9BGBV', { send_page_view: false });
     }
   </script>

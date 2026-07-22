@@ -1,5 +1,6 @@
 import { useState, useMemo, useEffect } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
+import SEO from '../../components/SEO/SEO';
 import './Collections.css';
 
 const API = import.meta.env.VITE_API_URL || (window.location.hostname === 'localhost' ? 'http://localhost:5000/api' : '/api');
@@ -44,6 +45,10 @@ const Collections = () => {
 
   return (
     <div className="collections-page">
+      <SEO
+        title={activeCategory !== 'all' ? `${activeCategory.charAt(0).toUpperCase() + activeCategory.slice(1)} Collection` : 'Silver Jewellery Collections'}
+        description="Browse Kalrav Jewels 925 sterling silver rings, gemstone necklaces, bracelets, chains, and earrings. Certified hallmarked silver."
+      />
       {/* Page Header */}
       <div className="page-header">
         <div className="page-header__overlay"></div>

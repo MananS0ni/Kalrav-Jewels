@@ -1,6 +1,7 @@
 import { useParams, Link } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import { useCart } from '../../context/CartContext';
+import SEO from '../../components/SEO/SEO';
 import './ProductDetail.css';
 
 const API = import.meta.env.VITE_API_URL || (window.location.hostname === 'localhost' ? 'http://localhost:5000/api' : '/api');
@@ -93,6 +94,11 @@ const ProductDetail = () => {
 
   return (
     <div className="product-detail">
+      <SEO
+        title={product.name}
+        description={`Buy ${product.name} at Kalrav Jewels. ${product.description || 'Handcrafted 925 hallmarked sterling silver jewellery.'} Price: ₹${product.price?.toLocaleString('en-IN')}`}
+        image={product.image || product.images?.[0]}
+      />
       {/* Breadcrumb */}
       <div className="breadcrumb" id="breadcrumb">
         <div className="container breadcrumb__inner">

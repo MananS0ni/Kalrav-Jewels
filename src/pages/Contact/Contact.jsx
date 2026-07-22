@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import SEO from '../../components/SEO/SEO';
 import './Contact.css';
 
 const Contact = () => {
@@ -56,6 +57,10 @@ const Contact = () => {
 
   return (
     <div className="contact-page">
+      <SEO
+        title="Contact Us & Customer Support"
+        description="Get in touch with Kalrav Jewels for custom 925 sterling silver inquiries, order support, and store locations."
+      />
       {/* Page Header */}
       <div className="page-header">
         <div className="page-header__overlay"></div>

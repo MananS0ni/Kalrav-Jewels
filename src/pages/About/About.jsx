@@ -1,5 +1,6 @@
 import './About.css';
 import { Link } from 'react-router-dom';
+import SEO from '../../components/SEO/SEO';
 
 const milestones = [
   { year: 'Generation 1', title: 'The Foundation', desc: 'My grandfather established our family\'s first jewellery shop with a vision for exquisite handcrafted pieces.' },
@@ -18,6 +19,10 @@ const values = [
 const About = () => {
   return (
     <div className="about-page">
+      <SEO
+        title="Our Story & Heritage"
+        description="Learn about the 3-generation heritage behind Kalrav Jewels. From our family tradition to handcrafted 925 sterling silver jewellery."
+      />
       {/* Page Header */}
       <div className="page-header">
         <div className="page-header__overlay"></div>

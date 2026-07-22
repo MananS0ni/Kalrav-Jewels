@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import SEO from '../../components/SEO/SEO';
 import './Home.css';
 
 
@@ -12,7 +13,7 @@ const stats = [
 
 const categories = [
   { name: 'Rings', slug: 'rings', desc: 'Eternities & Solitaires', image: '/ring_product.webp' },
-  { name: 'Necklaces', slug: 'necklaces', desc: 'Sets & Pendants', image: '/Necklace/Elegant silver necklace with purple gemstone.png' },
+  { name: 'Necklaces', slug: 'necklaces', desc: 'Sets & Pendants', image: '/necklace_product.webp' },
   { name: 'Chains', slug: 'chains', desc: 'Link & Snake', image: '/silver-link-chain/hero-1.jpg' },
   { name: 'Bracelets', slug: 'bracelets', desc: 'Tennis & Bangles', image: '/tennis-bracelet/hero-1.jpg' },
   { name: 'Earrings', slug: 'earrings', desc: 'Drops & Studs', image: '/earrings/Elegant diamond earrings with starburst design.webp' },
@@ -44,6 +45,10 @@ const Home = () => {
 
   return (
     <div className="home">
+      <SEO
+        title="Fine Handcrafted 925 Sterling Silver Jewellery"
+        description="Explore Kalrav Jewels — Handcrafted 925 hallmarked sterling silver rings, gemstone necklaces, bracelets & earrings. Trusted online jewellery store in India."
+      />
       {/* ─── Hero ─── */}
       <section className={`hero ${heroVisible ? 'hero--visible' : ''}`} id="hero-section">
         <div className="hero__bg">
