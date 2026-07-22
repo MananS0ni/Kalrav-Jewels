@@ -736,12 +736,13 @@
 
 @media (max-width: 600px) {
   .categories__grid {
-    grid-template-columns: 1fr;
-    gap: 28px;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 24px 16px;
   }
 
-  .category-card:nth-child(odd):last-child {
-    grid-column: auto;
+  .category-card:nth-child(5) {
+    grid-column: 1 / -1;
+    justify-self: center;
   }
 
   .featured__grid {
@@ -784,7 +785,18 @@
 
 @media (max-width: 480px) {
   .categories__grid {
-    grid-template-columns: 1fr;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 24px 12px;
+  }
+
+  .category-card:nth-child(5) {
+    grid-column: 1 / -1;
+    justify-self: center;
+  }
+
+  .category-card__photo-container {
+    width: 125px;
+    height: 125px;
   }
 
   .category-card {
