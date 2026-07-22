@@ -50,7 +50,7 @@ const sendOrderReceived = async (order, customerEmail, customerName) => {
           <!-- Header -->
           <tr>
             <td style="background:#1a1a1a; padding:36px; text-align:center;">
-              <img src="https://kalravjewels.com/kalrav_vertical_v2.png" alt="Kalrav Jewels Logo" style="height:90px; object-fit:contain;" />
+              <img src="https://kalravjewels.com/kalrav-jewels-logo.png" alt="Kalrav Jewels Logo" style="height:90px; object-fit:contain;" />
               <p style="margin:16px 0 0; font-size:10px; letter-spacing:3px; color:#c9a84c; text-transform:uppercase; font-family:'Helvetica Neue',Arial,sans-serif;">Timeless Fine Jewellery</p>
             </td>
           </tr>
@@ -226,7 +226,7 @@ const sendOrderStatusUpdate = async (order, customerEmail, customerName, status)
           <!-- Header -->
           <tr>
             <td style="background:#1a1a1a; padding:36px; text-align:center;">
-              <img src="https://kalravjewels.com/kalrav_vertical_v2.png" alt="Kalrav Jewels Logo" style="height:90px; object-fit:contain;" />
+              <img src="https://kalravjewels.com/kalrav-jewels-logo.png" alt="Kalrav Jewels Logo" style="height:90px; object-fit:contain;" />
               <p style="margin:16px 0 0; font-size:10px; letter-spacing:3px; color:#c9a84c; text-transform:uppercase; font-family:'Helvetica Neue',Arial,sans-serif;">Timeless Fine Jewellery</p>
             </td>
           </tr>
