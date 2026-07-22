@@ -9,9 +9,7 @@ const Footer = () => {
           {/* Brand */}
           <div className="footer__brand">
             <div className="footer__logo">
-              <span className="footer-logo-top">KALRAV</span>
-              <span className="footer-logo-line"></span>
-              <span className="footer-logo-bottom">JEWELS</span>
+              <img src="/11.png" alt="Kalrav Jewels" style={{ height: '75px', objectFit: 'contain' }} />
             </div>
             <p className="footer__tagline">
               Crafting timeless 925 sterling silver jewellery.<br />
