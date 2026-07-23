@@ -43,6 +43,33 @@ const Checkout = () => {
     setTimeout(() => setCopied(false), 2000);
   };
 
+  const handleDownloadQr = () => {
+    const svgElement = document.getElementById('checkout-qr-svg');
+    if (!svgElement) return;
+
+    const xml = new XMLSerializer().serializeToString(svgElement);
+    const svg64 = btoa(xml);
+    const image64 = `data:image/svg+xml;base64,${svg64}`;
+
+    const img = new Image();
+    img.onload = () => {
+      const canvas = document.createElement('canvas');
+      canvas.width = 400;
+      canvas.height = 400;
+      const ctx = canvas.getContext('2d');
+
+      ctx.fillStyle = '#ffffff';
+      ctx.fillRect(0, 0, 400, 400);
+      ctx.drawImage(img, 0, 0, 400, 400);
+
+      const a = document.createElement('a');
+      a.download = `Kalrav-Payment-QR-${txnRef}.png`;
+      a.href = canvas.toDataURL('image/png');
+      a.click();
+    };
+    img.src = image64;
+  };
+
   const buildUpiUrl = (scheme = 'upi') => {
     const params = `pa=${UPI_ID}&pn=${encodeURIComponent(UPI_NAME)}&am=${grandTotal.toFixed(2)}&tn=${encodeURIComponent(txnRef)}&cu=INR`;
     if (scheme === 'gpay') return `gpay://upi/pay?${params}`;
@@ -278,6 +305,7 @@ const Checkout = () => {
                       {grandTotal > 0 && (() => {
                           return (
                             <QRCodeSVG
+                              id="checkout-qr-svg"
                               value={buildUpiUrl('upi')}
                               size={200}
                               bgColor="#ffffff"
@@ -289,6 +317,15 @@ const Checkout = () => {
                           );
                         })()}
                       </div>
+
+                      <button
+                        type="button"
+                        onClick={handleDownloadQr}
+                        className="upi-panel__download-qr-btn"
+                        title="Download QR to scan in GPay / PhonePe / Paytm gallery"
+                      >
+                        📥 Save QR Image (Scan in App)
+                      </button>
 
                       {/* Direct UPI App Buttons — Works for iPhone & Android users */}
                       <div style={{ marginTop: '16px', width: '100%' }}>

@@ -214,6 +214,24 @@
   display: block;
   border-radius: 2px;
 }
+.upi-panel__download-qr-btn {
+  margin-top: 10px;
+  background: #ffffff;
+  border: 1px dashed var(--gold, #c9a84c);
+  color: var(--charcoal, #1a1a1a);
+  padding: 8px 14px;
+  border-radius: 4px;
+  font-size: 11px;
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+.upi-panel__download-qr-btn:hover {
+  background: var(--gold, #c9a84c);
+  color: #ffffff;
+  border-style: solid;
+}
 .upi-panel__id-copy-row {
   display: flex;
   align-items: center;
