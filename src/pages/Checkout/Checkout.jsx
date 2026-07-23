@@ -44,7 +44,7 @@ const Checkout = () => {
   };
 
   const buildUpiUrl = (scheme = 'upi') => {
-    const params = `pa=${UPI_ID}&pn=${encodeURIComponent(UPI_NAME)}&am=${grandTotal.toFixed(2)}&tn=Order+${txnRef}&cu=INR`;
+    const params = `pa=${UPI_ID}&pn=${encodeURIComponent(UPI_NAME)}&am=${grandTotal.toFixed(2)}&tn=${encodeURIComponent(txnRef)}&cu=INR`;
     if (scheme === 'gpay') return `gpay://upi/pay?${params}`;
     if (scheme === 'phonepe') return `phonepe://pay?${params}`;
     if (scheme === 'paytm' || scheme === 'paytmmp') return `paytmmp://pay?${params}`;
@@ -130,6 +130,7 @@ const Checkout = () => {
             shippingAddress: form,
             paymentMethod: 'upi',
             utrNumber,
+            txnRef,
           }),
         });
         const data = await res.json();
