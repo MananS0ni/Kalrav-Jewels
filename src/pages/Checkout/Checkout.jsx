@@ -47,12 +47,22 @@ const Checkout = () => {
     const params = `pa=${UPI_ID}&pn=${encodeURIComponent(UPI_NAME)}&am=${grandTotal.toFixed(2)}&tn=Order+${txnRef}&cu=INR`;
     if (scheme === 'gpay') return `gpay://upi/pay?${params}`;
     if (scheme === 'phonepe') return `phonepe://pay?${params}`;
-    if (scheme === 'paytmmp') return `paytmmp://pay?${params}`;
+    if (scheme === 'paytm' || scheme === 'paytmmp') return `paytmmp://pay?${params}`;
+    if (scheme === 'bhim') return `bhim://pay?${params}`;
     return `upi://pay?${params}`;
   };
 
-  const handleUpiRedirect = () => {
-    window.location.href = buildUpiUrl('upi');
+  const handleAppLaunch = (scheme = 'upi') => {
+    handleCopyUpi();
+    const specificUrl = buildUpiUrl(scheme);
+    const genericUrl = buildUpiUrl('upi');
+
+    window.location.href = specificUrl;
+
+    setTimeout(() => {
+      if (document.hidden || document.webkitHidden) return;
+      window.location.href = genericUrl;
+    }, 600);
   };
 
 
@@ -279,49 +289,29 @@ const Checkout = () => {
                         })()}
                       </div>
 
-                      {/* Pay Now button — Android opens UPI app, iPhone sees fallback */}
-                      {!isIOS ? (
-                        <button
-                          type="button"
-                          onClick={handleUpiRedirect}
-                          className="upi-panel__pay-btn"
-                          style={{ marginTop: '12px', width: '100%', background: '#1a1a1a', color: '#fff', border: 'none', padding: '12px', fontFamily: "'Georgia', serif", fontSize: '14px', letterSpacing: '1px', cursor: 'pointer' }}
-                        >
-                          Open UPI App & Pay {formatted(grandTotal)}
-                        </button>
-                      ) : (
-                        <div style={{ marginTop: '14px', width: '100%' }}>
-                          <p style={{ fontSize: '12px', color: '#6b6b6b', textAlign: 'center', marginBottom: '12px', lineHeight: '1.5' }}>
-                            Tap your preferred UPI app to pay
-                          </p>
-                          <div style={{ display: 'flex', gap: '8px', justifyContent: 'center' }}>
-                            <button type="button" onClick={() => {
-                              handleCopyUpi();
-                              window.location.href = buildUpiUrl('gpay');
-                            }}
-                              style={{ flex: 1, padding: '12px 6px', background: '#fff', border: '1px solid #e0d6c2', borderRadius: '8px', cursor: 'pointer', fontSize: '12px', fontWeight: 600, color: '#1a1a1a', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '4px' }}>
-                              <span style={{ fontSize: '20px' }}>💳</span> GPay
-                            </button>
-                            <button type="button" onClick={() => {
-                              handleCopyUpi();
-                              window.location.href = buildUpiUrl('phonepe');
-                            }}
-                              style={{ flex: 1, padding: '12px 6px', background: '#fff', border: '1px solid #e0d6c2', borderRadius: '8px', cursor: 'pointer', fontSize: '12px', fontWeight: 600, color: '#1a1a1a', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '4px' }}>
-                              <span style={{ fontSize: '20px' }}>📱</span> PhonePe
-                            </button>
-                            <button type="button" onClick={() => {
-                              handleCopyUpi();
-                              window.location.href = buildUpiUrl('paytmmp');
-                            }}
-                              style={{ flex: 1, padding: '12px 6px', background: '#fff', border: '1px solid #e0d6c2', borderRadius: '8px', cursor: 'pointer', fontSize: '12px', fontWeight: 600, color: '#1a1a1a', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '4px' }}>
-                              <span style={{ fontSize: '20px' }}>💰</span> Paytm
-                            </button>
-                          </div>
-                          <p style={{ fontSize: '10px', color: '#aaa', textAlign: 'center', marginTop: '8px' }}>
-                            Amount {formatted(grandTotal)} pre-filled · UPI ID also copied to clipboard
-                          </p>
+                      {/* Direct UPI App Buttons — Works for iPhone & Android users */}
+                      <div style={{ marginTop: '16px', width: '100%' }}>
+                        <p style={{ fontSize: '11px', color: '#888', textAlign: 'center', marginBottom: '10px', textTransform: 'uppercase', letterSpacing: '1px', fontWeight: 600 }}>
+                          Tap to Open & Pay {formatted(grandTotal)}:
+                        </p>
+                        <div className="upi-app-links">
+                          <button type="button" onClick={() => handleAppLaunch('gpay')} className="upi-app-btn upi-app-btn--gpay">
+                            Google Pay
+                          </button>
+                          <button type="button" onClick={() => handleAppLaunch('phonepe')} className="upi-app-btn upi-app-btn--phonepe">
+                            PhonePe
+                          </button>
+                          <button type="button" onClick={() => handleAppLaunch('paytm')} className="upi-app-btn upi-app-btn--paytm">
+                            Paytm
+                          </button>
+                          <button type="button" onClick={() => handleAppLaunch('upi')} className="upi-app-btn upi-app-btn--generic">
+                            BHIM / Any UPI
+                          </button>
                         </div>
-                      )}
+                        <p style={{ fontSize: '10px', color: '#999', textAlign: 'center', marginTop: '10px' }}>
+                          Amount pre-filled · UPI ID copied automatically
+                        </p>
+                      </div>
                       <div className="upi-panel__id-copy-row" style={{ marginTop: '14px' }}>
                         <p className="upi-panel__upi-id">UPI ID: <strong>{UPI_ID}</strong></p>
                         <button
