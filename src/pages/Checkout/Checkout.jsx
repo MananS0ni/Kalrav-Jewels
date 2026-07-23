@@ -37,13 +37,35 @@ const Checkout = () => {
   // Unique transaction ref per session — avoids NPCI fraud-pattern detection
   const [txnRef] = useState(() => 'KJ' + Date.now().toString(36).toUpperCase().slice(-6));
 
+  const formatted = (n) => '₹' + n.toLocaleString('en-IN');
+
+  // Shipping form completeness check
+  const isPhoneValid = /^[0-9]{10}$/.test(form.phone.trim());
+  const isPincodeValid = /^[0-9]{6}$/.test(form.pincode.trim());
+  const isShippingComplete = Boolean(
+    form.fullName.trim() &&
+    isPhoneValid &&
+    form.addressLine.trim() &&
+    form.city.trim() &&
+    form.state.trim() &&
+    isPincodeValid
+  );
+
   const handleCopyUpi = () => {
+    if (!isShippingComplete) {
+      setError('Please fill in all shipping details first.');
+      return;
+    }
     navigator.clipboard.writeText(UPI_ID);
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
   };
 
   const handleDownloadQr = () => {
+    if (!isShippingComplete) {
+      setError('Please fill in all shipping details first.');
+      return;
+    }
     const svgElement = document.getElementById('checkout-qr-svg');
     if (!svgElement) return;
 
@@ -80,6 +102,10 @@ const Checkout = () => {
   };
 
   const handleAppLaunch = (scheme = 'upi') => {
+    if (!isShippingComplete) {
+      setError('Please fill in all shipping details first.');
+      return;
+    }
     handleCopyUpi();
     const specificUrl = buildUpiUrl(scheme);
     const genericUrl = buildUpiUrl('upi');
@@ -119,8 +145,6 @@ const Checkout = () => {
 
   const shippingCost = shipping ? shipping.total : 0;
   const grandTotal = totalPrice + shippingCost;
-
-  const formatted = (n) => '₹' + n.toLocaleString('en-IN');
 
   const handleChange = (e) => {
     setForm((f) => ({ ...f, [e.target.name]: e.target.value }));
@@ -258,141 +282,156 @@ const Checkout = () => {
             {/* Payment Method Selection */}
             <div className="checkout-payment-info">
               <p className="checkout-payment-label">Payment Method</p>
-              <div className="payment-options">
 
-                {/* UPI — Primary option */}
-                <label className={`payment-option ${paymentMethod === 'upi' ? 'payment-option--active' : ''}`}>
-                  <input
-                    type="radio"
-                    name="paymentMethod"
-                    value="upi"
-                    checked={paymentMethod === 'upi'}
-                    onChange={() => { setPaymentMethod('upi'); setUpiStep('select'); }}
-                  />
-                  <div className="payment-option__content">
-                    <p className="payment-option__title">Pay via UPI</p>
-                    <p className="payment-option__sub">GPay · PhonePe · Paytm · Any UPI App</p>
-                  </div>
-                  <span className="payment-option__badge">Recommended</span>
-                </label>
-
-                {/* COD */}
-                <label className={`payment-option ${paymentMethod === 'cod' ? 'payment-option--active' : ''}`}>
-                  <input
-                    type="radio"
-                    name="paymentMethod"
-                    value="cod"
-                    checked={paymentMethod === 'cod'}
-                    onChange={() => setPaymentMethod('cod')}
-                  />
-                  <div className="payment-option__content">
-                    <p className="payment-option__title">Cash on Delivery</p>
-                    <p className="payment-option__sub">Pay when your order arrives</p>
-                  </div>
-                </label>
-
-
-              </div>
-
-              {/* UPI payment panel — shown when UPI is selected */}
-              {paymentMethod === 'upi' && (
-                <div className="upi-panel">
-                  <div className="upi-panel__top">
-                    <div className="upi-panel__qr-wrap" style={{ width: '100%' }}>
-                      <p className="upi-panel__step">Step 1 — Scan & Pay</p>
-                      <div className="upi-panel__qr-box">
-                        {/* Dynamic QR generated with exact amount (Offline local SVG rendering) */}
-                      {grandTotal > 0 && (() => {
-                          return (
-                            <QRCodeSVG
-                              id="checkout-qr-svg"
-                              value={buildUpiUrl('upi')}
-                              size={200}
-                              bgColor="#ffffff"
-                              fgColor="#1a1a1a"
-                              level="M"
-                              includeMargin={true}
-                              className="upi-panel__qr-img"
-                            />
-                          );
-                        })()}
-                      </div>
-
-                      <button
-                        type="button"
-                        onClick={handleDownloadQr}
-                        className="upi-panel__download-qr-btn"
-                        title="Download QR to scan in GPay / PhonePe / Paytm gallery"
-                      >
-                        📥 Save QR Image (Scan in App)
-                      </button>
-
-                      {/* Direct UPI App Buttons — Works for iPhone & Android users */}
-                      <div style={{ marginTop: '16px', width: '100%' }}>
-                        <p style={{ fontSize: '11px', color: '#888', textAlign: 'center', marginBottom: '10px', textTransform: 'uppercase', letterSpacing: '1px', fontWeight: 600 }}>
-                          Tap to Open & Pay {formatted(grandTotal)}:
-                        </p>
-                        <div className="upi-app-links">
-                          <button type="button" onClick={() => handleAppLaunch('gpay')} className="upi-app-btn upi-app-btn--gpay">
-                            Google Pay
-                          </button>
-                          <button type="button" onClick={() => handleAppLaunch('phonepe')} className="upi-app-btn upi-app-btn--phonepe">
-                            PhonePe
-                          </button>
-                          <button type="button" onClick={() => handleAppLaunch('paytm')} className="upi-app-btn upi-app-btn--paytm">
-                            Paytm
-                          </button>
-                          <button type="button" onClick={() => handleAppLaunch('upi')} className="upi-app-btn upi-app-btn--generic">
-                            BHIM / Any UPI
-                          </button>
-                        </div>
-                        <p style={{ fontSize: '10px', color: '#999', textAlign: 'center', marginTop: '10px' }}>
-                          Amount pre-filled · UPI ID copied automatically
-                        </p>
-                      </div>
-                      <div className="upi-panel__id-copy-row" style={{ marginTop: '14px' }}>
-                        <p className="upi-panel__upi-id">UPI ID: <strong>{UPI_ID}</strong></p>
-                        <button
-                          type="button"
-                          onClick={handleCopyUpi}
-                          className="upi-panel__copy-btn"
-                          title="Copy UPI ID"
-                        >
-                          {copied ? 'Copied! ✓' : 'Copy ID'}
-                        </button>
-                      </div>
-                      <p className="upi-panel__amount" style={{ marginTop: '8px' }}>Amount: <strong>{formatted(grandTotal)}</strong></p>
-                    </div>
-                  </div>
-
-
-                  <div className="upi-panel__utr">
-                    <p className="upi-panel__step">Step 2 — Enter Your UPI ID or UTR</p>
-                    <p className="upi-panel__utr-hint">After paying, please enter your UPI ID (e.g. yourname@bank) or the 12-digit transaction UTR so we can verify your payment.</p>
-                    <input
-                      type="text"
-                      className="form-input upi-utr-input"
-                      placeholder="e.g. rahul@okhdfcbank or 4269..."
-                      value={utrNumber}
-                      onChange={(e) => setUtrNumber(e.target.value.trim())}
-                      maxLength={50}
-                    />
+              {!isShippingComplete ? (
+                <div className="checkout-shipping-gate">
+                  <div className="checkout-gate-icon">🔒</div>
+                  <div className="checkout-gate-text">
+                    <h4>Fill Shipping Information First</h4>
+                    <p>
+                      Please complete your <strong>Full Name</strong>, <strong>10-digit Phone</strong>, <strong>Address</strong>, <strong>City</strong>, <strong>State</strong>, and <strong>6-digit Pincode</strong> above to unlock payment options.
+                    </p>
                   </div>
                 </div>
+              ) : (
+                <>
+                  <div className="payment-options">
+
+                    {/* UPI — Primary option */}
+                    <label className={`payment-option ${paymentMethod === 'upi' ? 'payment-option--active' : ''}`}>
+                      <input
+                        type="radio"
+                        name="paymentMethod"
+                        value="upi"
+                        checked={paymentMethod === 'upi'}
+                        onChange={() => { setPaymentMethod('upi'); setUpiStep('select'); }}
+                      />
+                      <div className="payment-option__content">
+                        <p className="payment-option__title">Pay via UPI</p>
+                        <p className="payment-option__sub">GPay · PhonePe · Paytm · Any UPI App</p>
+                      </div>
+                      <span className="payment-option__badge">Recommended</span>
+                    </label>
+
+                    {/* COD */}
+                    <label className={`payment-option ${paymentMethod === 'cod' ? 'payment-option--active' : ''}`}>
+                      <input
+                        type="radio"
+                        name="paymentMethod"
+                        value="cod"
+                        checked={paymentMethod === 'cod'}
+                        onChange={() => setPaymentMethod('cod')}
+                      />
+                      <div className="payment-option__content">
+                        <p className="payment-option__title">Cash on Delivery</p>
+                        <p className="payment-option__sub">Pay when your order arrives</p>
+                      </div>
+                    </label>
+
+                  </div>
+
+                  {/* UPI payment panel — shown when UPI is selected */}
+                  {paymentMethod === 'upi' && (
+                    <div className="upi-panel">
+                      <div className="upi-panel__top">
+                        <div className="upi-panel__qr-wrap" style={{ width: '100%' }}>
+                          <p className="upi-panel__step">Step 1 — Scan & Pay</p>
+                          <div className="upi-panel__qr-box">
+                            {/* Dynamic QR generated with exact amount (Offline local SVG rendering) */}
+                            {grandTotal > 0 && (() => {
+                              return (
+                                <QRCodeSVG
+                                  id="checkout-qr-svg"
+                                  value={buildUpiUrl('upi')}
+                                  size={200}
+                                  bgColor="#ffffff"
+                                  fgColor="#1a1a1a"
+                                  level="M"
+                                  includeMargin={true}
+                                  className="upi-panel__qr-img"
+                                />
+                              );
+                            })()}
+                          </div>
+
+                          <button
+                            type="button"
+                            onClick={handleDownloadQr}
+                            className="upi-panel__download-qr-btn"
+                            title="Download QR to scan in GPay / PhonePe / Paytm gallery"
+                          >
+                            📥 Save QR Image (Scan in App)
+                          </button>
+
+                          {/* Direct UPI App Buttons — Works for iPhone & Android users */}
+                          <div style={{ marginTop: '16px', width: '100%' }}>
+                            <p style={{ fontSize: '11px', color: '#888', textAlign: 'center', marginBottom: '10px', textTransform: 'uppercase', letterSpacing: '1px', fontWeight: 600 }}>
+                              Tap to Open & Pay {formatted(grandTotal)}:
+                            </p>
+                            <div className="upi-app-links">
+                              <button type="button" onClick={() => handleAppLaunch('gpay')} className="upi-app-btn upi-app-btn--gpay">
+                                Google Pay
+                              </button>
+                              <button type="button" onClick={() => handleAppLaunch('phonepe')} className="upi-app-btn upi-app-btn--phonepe">
+                                PhonePe
+                              </button>
+                              <button type="button" onClick={() => handleAppLaunch('paytm')} className="upi-app-btn upi-app-btn--paytm">
+                                Paytm
+                              </button>
+                              <button type="button" onClick={() => handleAppLaunch('upi')} className="upi-app-btn upi-app-btn--generic">
+                                BHIM / Any UPI
+                              </button>
+                            </div>
+                            <p style={{ fontSize: '10px', color: '#999', textAlign: 'center', marginTop: '10px' }}>
+                              Amount pre-filled · UPI ID copied automatically
+                            </p>
+                          </div>
+                          <div className="upi-panel__id-copy-row" style={{ marginTop: '14px' }}>
+                            <p className="upi-panel__upi-id">UPI ID: <strong>{UPI_ID}</strong></p>
+                            <button
+                              type="button"
+                              onClick={handleCopyUpi}
+                              className="upi-panel__copy-btn"
+                              title="Copy UPI ID"
+                            >
+                              {copied ? 'Copied! ✓' : 'Copy ID'}
+                            </button>
+                          </div>
+                          <p className="upi-panel__amount" style={{ marginTop: '8px' }}>Amount: <strong>{formatted(grandTotal)}</strong></p>
+                        </div>
+                      </div>
+
+                      <div className="upi-panel__utr">
+                        <p className="upi-panel__step">Step 2 — Enter Your UPI ID or UTR</p>
+                        <p className="upi-panel__utr-hint">After paying, please enter your UPI ID (e.g. yourname@bank) or the 12-digit transaction UTR so we can verify your payment.</p>
+                        <input
+                          type="text"
+                          className="form-input upi-utr-input"
+                          placeholder="e.g. rahul@okhdfcbank or 4269..."
+                          value={utrNumber}
+                          onChange={(e) => setUtrNumber(e.target.value.trim())}
+                          maxLength={50}
+                        />
+                      </div>
+                    </div>
+                  )}
+                </>
               )}
             </div>
 
             <button
               type="submit"
               className="btn-primary checkout-btn"
-              disabled={loading || (paymentMethod === 'upi' && !utrNumber)}
+              disabled={loading || !isShippingComplete || (paymentMethod === 'upi' && !utrNumber)}
             >
               <span>
                 {loading
                   ? 'Processing...'
-                  : paymentMethod === 'upi'
-                    ? utrNumber ? `Confirm UPI Order — ${formatted(grandTotal)}` : 'Pay first, then enter UPI ID below'
-                    : `Place Order — ${formatted(grandTotal)}`}
+                  : !isShippingComplete
+                    ? 'Fill all shipping details above to proceed'
+                    : paymentMethod === 'upi'
+                      ? utrNumber ? `Confirm UPI Order — ${formatted(grandTotal)}` : 'Pay first, then enter UPI ID below'
+                      : `Place Order — ${formatted(grandTotal)}`}
               </span>
             </button>
           </form>
