@@ -30,7 +30,7 @@ const Checkout = () => {
   const [upiStep, setUpiStep] = useState('select');          // 'select' | 'pay' | 'confirm'
   const [copied, setCopied] = useState(false);
 
-  const UPI_ID = 'gpay-12203077109@okbizaxis';
+  const UPI_ID = '9537068100@okbizaxis';
   const UPI_NAME = 'Kalrav Jewels';
   const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
 
