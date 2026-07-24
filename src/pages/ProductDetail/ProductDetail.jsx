@@ -158,21 +158,29 @@ const ProductDetail = () => {
           <h1 className="product-detail__name">{product.name}</h1>
           <p className="product-detail__price">₹{product.price?.toLocaleString('en-IN')}</p>
 
-          <p className="product-detail__desc">{product.description}</p>
+          {product.description && product.description.trim().length > 3 && (
+            <p className="product-detail__desc">{product.description}</p>
+          )}
 
           <div className="product-detail__specs">
-            <div className="spec-row">
-              <span className="spec-key">Material</span>
-              <span className="spec-val">{product.material}</span>
-            </div>
-            <div className="spec-row">
-              <span className="spec-key">Weight</span>
-              <span className="spec-val">{product.weight}</span>
-            </div>
-            <div className="spec-row">
-              <span className="spec-key">Purity / Stone</span>
-              <span className="spec-val">{product.purity}</span>
-            </div>
+            {product.material && (
+              <div className="spec-row">
+                <span className="spec-key">Material</span>
+                <span className="spec-val">{product.material}</span>
+              </div>
+            )}
+            {product.weight && (
+              <div className="spec-row">
+                <span className="spec-key">Weight</span>
+                <span className="spec-val">{product.weight}</span>
+              </div>
+            )}
+            {product.purity && (
+              <div className="spec-row">
+                <span className="spec-key">Purity / Stone</span>
+                <span className="spec-val">{product.purity}</span>
+              </div>
+            )}
             <div className="spec-row">
               <span className="spec-key">Certification</span>
               <span className="spec-val">BIS Hallmarked</span>
