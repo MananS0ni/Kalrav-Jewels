@@ -33,6 +33,7 @@ const Checkout = () => {
   const UPI_ID = '9537068100@okbizaxis';
   const UPI_NAME = 'Kalrav Jewels';
   const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+  const SHOW_DIRECT_APP_BUTTONS = false; // Toggle flag: set to true to show direct app buttons
 
   // Unique transaction ref per session — avoids NPCI fraud-pattern detection
   const [txnRef] = useState(() => 'KJ' + Date.now().toString(36).toUpperCase().slice(-6));
@@ -362,6 +363,32 @@ const Checkout = () => {
                           >
                             📥 Save QR Image (Scan in App)
                           </button>
+
+                          {/* Direct UPI App Buttons — Hidden by default (Set SHOW_DIRECT_APP_BUTTONS = true to enable) */}
+                          {SHOW_DIRECT_APP_BUTTONS && (
+                            <div style={{ marginTop: '16px', width: '100%' }}>
+                              <p style={{ fontSize: '11px', color: '#888', textAlign: 'center', marginBottom: '10px', textTransform: 'uppercase', letterSpacing: '1px', fontWeight: 600 }}>
+                                Tap to Open & Pay {formatted(grandTotal)}:
+                              </p>
+                              <div className="upi-app-links">
+                                <button type="button" onClick={() => handleAppLaunch('gpay')} className="upi-app-btn upi-app-btn--gpay">
+                                  Google Pay
+                                </button>
+                                <button type="button" onClick={() => handleAppLaunch('phonepe')} className="upi-app-btn upi-app-btn--phonepe">
+                                  PhonePe
+                                </button>
+                                <button type="button" onClick={() => handleAppLaunch('paytm')} className="upi-app-btn upi-app-btn--paytm">
+                                  Paytm
+                                </button>
+                                <button type="button" onClick={() => handleAppLaunch('upi')} className="upi-app-btn upi-app-btn--generic">
+                                  BHIM / Any UPI
+                                </button>
+                              </div>
+                              <p style={{ fontSize: '10px', color: '#999', textAlign: 'center', marginTop: '10px' }}>
+                                Amount pre-filled · UPI ID copied automatically
+                              </p>
+                            </div>
+                          )}
 
                           <div className="upi-panel__id-copy-row" style={{ marginTop: '14px' }}>
                             <p className="upi-panel__upi-id">UPI ID: <strong>{UPI_ID}</strong></p>
