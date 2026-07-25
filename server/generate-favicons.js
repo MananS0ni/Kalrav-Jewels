@@ -13,6 +13,8 @@ async function generateFavicons() {
     { size: 192, name: 'favicon-192x192.png' },
     { size: 192, name: 'favicon.png' },
     { size: 512, name: 'favicon-512x512.png' },
+    { size: 512, name: 'logo-512.png' },
+    { size: 512, name: 'logo.png' },
   ];
 
   for (const item of sizes) {

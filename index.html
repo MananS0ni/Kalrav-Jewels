@@ -41,15 +41,27 @@
     content="Handcrafted 925 hallmarked sterling silver jewellery & gemstone designs. Shop online across India." />
   <meta name="twitter:image" content="https://kalravjewels.com/hero_jewelry.png" />
 
-  <!-- Google Schema.org Structured Data (JSON-LD) for Organization & JewelryStore -->
+  <!-- Google Schema.org Structured Data (JSON-LD) for WebSite, Organization & JewelryStore -->
   <script type="application/ld+json">
     [
+      {
+        "@context": "https://schema.org",
+        "@type": "WebSite",
+        "name": "Kalrav Jewels",
+        "url": "https://kalravjewels.com/",
+        "description": "Fine Handcrafted 925 Sterling Silver Jewellery"
+      },
       {
         "@context": "https://schema.org",
         "@type": "Organization",
         "name": "Kalrav Jewels",
         "url": "https://kalravjewels.com/",
-        "logo": "https://kalravjewels.com/favicon-512x512.png",
+        "logo": {
+          "@type": "ImageObject",
+          "url": "https://kalravjewels.com/logo-512.png",
+          "width": 512,
+          "height": 512
+        },
         "sameAs": [
           "https://kalravjewels.com",
           "https://www.instagram.com/kalravjewels/"
@@ -60,7 +72,12 @@
         "@type": "JewelryStore",
         "name": "Kalrav Jewels",
         "image": "https://kalravjewels.com/hero_jewelry.png",
-        "logo": "https://kalravjewels.com/favicon-512x512.png",
+        "logo": {
+          "@type": "ImageObject",
+          "url": "https://kalravjewels.com/logo-512.png",
+          "width": 512,
+          "height": 512
+        },
         "@id": "https://kalravjewels.com/#store",
         "url": "https://kalravjewels.com/",
         "telephone": "+919537068100",
