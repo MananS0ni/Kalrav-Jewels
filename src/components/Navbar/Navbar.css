@@ -46,7 +46,7 @@
 }
 
 .navbar-logo {
-  height: 155px;
+  height: 89px;
   width: auto;
   object-fit: contain;
   display: block;
@@ -209,7 +209,7 @@
 
   /* Mobile logo */
   .navbar-logo {
-    height: 120px;
+    height: 70px;
   }
 
   /* Force solid opaque background on mobile — no see-through effect */
