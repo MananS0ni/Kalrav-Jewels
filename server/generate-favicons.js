@@ -38,16 +38,16 @@ async function generateFavicons() {
       }
     })
       .composite([{ input: resizedIcon, gravity: 'center' }])
-      .png()
+      .png({ compressionLevel: 9, quality: 100 })
       .toFile(outputPath);
 
     console.log(`Generated ${item.name} (${item.size}x${item.size})`);
   }
 
-  // Also create root favicon.ico (48x48 png content saved as favicon.ico)
+  // Also create high-res root favicon.ico (copy 512x512 PNG to favicon.ico so browser tab inspection is HD sharp)
   const icoPath = path.join(publicDir, 'favicon.ico');
-  fs.copyFileSync(path.join(publicDir, 'favicon-48x48.png'), icoPath);
-  console.log('Copied favicon-48x48.png to favicon.ico');
+  fs.copyFileSync(path.join(publicDir, 'favicon-512x512.png'), icoPath);
+  console.log('Copied favicon-512x512.png to favicon.ico');
 }
 
 generateFavicons().catch(console.error);
