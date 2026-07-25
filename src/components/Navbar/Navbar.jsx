@@ -54,7 +54,7 @@ const Navbar = () => {
 
           {/* Logo */}
           <Link to="/" className="navbar__logo" aria-label="Kalrav Jewels Home">
-            <img src="/KALRAV_LOGO.svg" alt="Kalrav Jewels" className="navbar-logo" />
+            <img src="/Kalrav_logo.png" alt="Kalrav Jewels" className="navbar-logo" />
           </Link>
 
           {/* Right Nav */}
