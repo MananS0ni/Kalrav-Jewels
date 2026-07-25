@@ -54,7 +54,7 @@ const Navbar = () => {
 
           {/* Logo */}
           <Link to="/" className="navbar__logo" aria-label="Kalrav Jewels Home">
-            <img src="/kalrav_vertical_v2.png" alt="Kalrav Jewels" className="navbar-logo" />
+            <img src="/KALRAV_LOGO.SVG" alt="Kalrav Jewels" className="navbar-logo" />
           </Link>
 
           {/* Right Nav */}
@@ -72,8 +72,8 @@ const Navbar = () => {
                     id="user-menu-btn"
                   >
                     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
-                      <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
-                      <circle cx="12" cy="7" r="4"/>
+                      <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+                      <circle cx="12" cy="7" r="4" />
                     </svg>
                     <span className="navbar__user-name">{user.name.split(' ')[0]}</span>
                   </button>
@@ -95,8 +95,8 @@ const Navbar = () => {
               ) : (
                 <button className="navbar__icon-btn" onClick={() => setAuthOpen(true)} aria-label="Sign in" id="signin-btn">
                   <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
-                    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
-                    <circle cx="12" cy="7" r="4"/>
+                    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+                    <circle cx="12" cy="7" r="4" />
                   </svg>
                 </button>
               )}
@@ -110,9 +110,9 @@ const Navbar = () => {
               id="cart-btn"
             >
               <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
-                <path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/>
-                <line x1="3" y1="6" x2="21" y2="6"/>
-                <path d="M16 10a4 4 0 0 1-8 0"/>
+                <path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z" />
+                <line x1="3" y1="6" x2="21" y2="6" />
+                <path d="M16 10a4 4 0 0 1-8 0" />
               </svg>
               {totalItems > 0 && (
                 <span className="cart-badge" id="cart-badge">{totalItems}</span>
@@ -124,9 +124,9 @@ const Navbar = () => {
           <div className="navbar__mobile-right">
             <button className="navbar__icon-btn navbar__cart-btn" onClick={() => setCartOpen(true)} aria-label="Open cart">
               <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
-                <path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/>
-                <line x1="3" y1="6" x2="21" y2="6"/>
-                <path d="M16 10a4 4 0 0 1-8 0"/>
+                <path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z" />
+                <line x1="3" y1="6" x2="21" y2="6" />
+                <path d="M16 10a4 4 0 0 1-8 0" />
               </svg>
               {totalItems > 0 && <span className="cart-badge">{totalItems}</span>}
             </button>
