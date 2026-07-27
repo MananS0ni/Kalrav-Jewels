@@ -37,6 +37,7 @@ router.post('/', protect, async (req, res) => {
         name: product.name,
         price: product.price,
         image: product.images[0] || '',
+        size: item.size || '',
         quantity: item.quantity,
       });
 

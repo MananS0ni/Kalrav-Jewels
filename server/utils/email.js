@@ -10,14 +10,13 @@ const resend = new Resend(process.env.RESEND_API_KEY);
 const sendOrderReceived = async (order, customerEmail, customerName) => {
   try {
     // Build the items table rows
-
-    // Build the items table rows
     const itemRows = order.items
       .map(
         (item) => `
         <tr>
           <td style="padding:12px 16px; border-bottom:1px solid #f0e8d5; font-family:'Helvetica Neue', Arial, sans-serif; color:#2c2c2c; font-size:14px;">
             ${item.name}
+            ${item.size ? `<br/><span style="font-size:12px; color:#c9a84c; font-weight:600;">Size: ${item.size}</span>` : ''}
           </td>
           <td style="padding:12px 16px; border-bottom:1px solid #f0e8d5; text-align:center; color:#6b6b6b; font-size:14px;">
             ${item.quantity}

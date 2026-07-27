@@ -92,7 +92,9 @@ const MyOrders = () => {
                       </div>
                       <div className="mo-card__item-info">
                         <p className="mo-card__item-name">{item.name}</p>
-                        <p className="mo-card__item-meta">Qty: {item.quantity} · {formatted(item.price)}</p>
+                        <p className="mo-card__item-meta">
+                          Qty: {item.quantity} {item.size ? `· ${item.size}` : ''} · {formatted(item.price)}
+                        </p>
                       </div>
                     </div>
                   ))}

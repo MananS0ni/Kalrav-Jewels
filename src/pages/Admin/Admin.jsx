@@ -337,7 +337,14 @@ const Admin = () => {
                       <div key={i} className="admin-order-item">
                         <img src={item.image || '/ring_product.webp'} alt={item.name} className="admin-order-item-img" />
                         <div className="admin-order-item-info">
-                          <span className="admin-order-item-name">{item.name}</span>
+                          <span className="admin-order-item-name">
+                            {item.name}
+                            {item.size && (
+                              <span style={{ display: 'inline-block', marginLeft: '10px', background: '#f5ebd5', color: '#a88432', padding: '2px 8px', borderRadius: '3px', fontSize: '0.8rem', fontWeight: 600, border: '1px solid rgba(201,168,76,0.3)' }}>
+                                {item.size}
+                              </span>
+                            )}
+                          </span>
                           <span className="admin-order-item-meta">Qty: {item.quantity} × {formatted(item.price)}</span>
                         </div>
                       </div>

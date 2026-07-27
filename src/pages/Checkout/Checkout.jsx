@@ -178,7 +178,7 @@ const Checkout = () => {
           method: 'POST',
           headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
           body: JSON.stringify({
-            items: items.map((i) => ({ productId: i.productId, quantity: i.qty })),
+            items: items.map((i) => ({ productId: i.productId, quantity: i.qty, size: i.size || '' })),
             shippingAddress: form,
             paymentMethod: 'upi',
             utrNumber,
@@ -199,7 +199,7 @@ const Checkout = () => {
             Authorization: `Bearer ${token}`,
           },
           body: JSON.stringify({
-            items: items.map((i) => ({ productId: i.productId, quantity: i.qty })),
+            items: items.map((i) => ({ productId: i.productId, quantity: i.qty, size: i.size || '' })),
             shippingAddress: form,
             paymentMethod: 'cod',
           }),
@@ -448,15 +448,17 @@ const Checkout = () => {
             <div className="summary-divider"></div>
 
             <ul className="summary-items">
-              {items.map((item) => (
-                <li key={item.productId} className="summary-item">
+              {items.map((item, idx) => (
+                <li key={`${item.productId}-${item.size || idx}`} className="summary-item">
                   <div className="summary-item__img-wrap">
                     <img src={item.image} alt={item.name} className="summary-item__img" />
                     <span className="summary-item__qty-badge">{item.qty}</span>
                   </div>
                   <div className="summary-item__info">
                     <p className="summary-item__name">{item.name}</p>
-                    <p className="summary-item__meta">{item.material} · {item.purity}</p>
+                    <p className="summary-item__meta">
+                      {[item.material, item.purity, item.size ? `Size: ${item.size}` : null].filter(Boolean).join(' · ')}
+                    </p>
                   </div>
                   <p className="summary-item__price">{formatted(item.price * item.qty)}</p>
                 </li>
