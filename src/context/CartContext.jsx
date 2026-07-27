@@ -58,11 +58,12 @@ export const CartProvider = ({ children }) => {
     }
   }, [token]);
 
-  const addToCart = async (product) => {
+  const addToCart = async (product, selectedSize = '') => {
     const productId = product._id || product.id;
     const price = typeof product.price === 'number'
       ? product.price
       : parseInt(String(product.price).replace(/[^0-9]/g, ''));
+    const size = selectedSize || product.selectedSize || product.size || '';
 
     const payload = {
       productId,
@@ -71,6 +72,7 @@ export const CartProvider = ({ children }) => {
       category: product.category || '',
       material: product.material || '',
       purity: product.purity || '',
+      size,
       price,
     };
 
@@ -86,39 +88,42 @@ export const CartProvider = ({ children }) => {
     } else {
       // Not logged in — update locally only
       setItems((prev) => {
-        const existing = prev.find((i) => i.productId === productId);
-        if (existing) return prev.map((i) => i.productId === productId ? { ...i, qty: i.qty + 1 } : i);
+        const existing = prev.find((i) => i.productId === productId && (i.size || '') === size);
+        if (existing) {
+          return prev.map((i) => (i.productId === productId && (i.size || '') === size) ? { ...i, qty: i.qty + 1 } : i);
+        }
         return [...prev, { ...payload, qty: 1 }];
       });
     }
     setCartOpen(true);
   };
 
-  const removeFromCart = async (productId) => {
+  const removeFromCart = async (productId, size = '') => {
     if (token) {
-      const res = await fetch(`${API}/cart/remove/${productId}`, {
+      const url = size ? `${API}/cart/remove/${productId}?size=${encodeURIComponent(size)}` : `${API}/cart/remove/${productId}`;
+      const res = await fetch(url, {
         method: 'DELETE',
         headers: { Authorization: `Bearer ${token}` },
       });
       const data = await res.json();
       if (res.ok) setItems(data.items);
     } else {
-      setItems((prev) => prev.filter((i) => i.productId !== productId));
+      setItems((prev) => prev.filter((i) => !(i.productId === productId && (!size || (i.size || '') === size))));
     }
   };
 
-  const updateQty = async (productId, qty) => {
-    if (qty < 1) { removeFromCart(productId); return; }
+  const updateQty = async (productId, qty, size = '') => {
+    if (qty < 1) { removeFromCart(productId, size); return; }
     if (token) {
       const res = await fetch(`${API}/cart/update`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
-        body: JSON.stringify({ productId, qty }),
+        body: JSON.stringify({ productId, size, qty }),
       });
       const data = await res.json();
       if (res.ok) setItems(data.items);
     } else {
-      setItems((prev) => prev.map((i) => i.productId === productId ? { ...i, qty } : i));
+      setItems((prev) => prev.map((i) => (i.productId === productId && (i.size || '') === size) ? { ...i, qty } : i));
     }
   };
 

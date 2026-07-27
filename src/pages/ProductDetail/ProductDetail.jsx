@@ -6,6 +6,44 @@ import './ProductDetail.css';
 
 const API = import.meta.env.VITE_API_URL || (window.location.hostname === 'localhost' ? 'http://localhost:5000/api' : '/api');
 
+const INDIAN_RING_SIZES = [
+  { size: '6',  diameter: 14.5, circ: 45.5, us: '3.5' },
+  { size: '7',  diameter: 14.9, circ: 46.8, us: '4.0' },
+  { size: '8',  diameter: 15.3, circ: 48.0, us: '4.5' },
+  { size: '9',  diameter: 15.7, circ: 49.3, us: '5.0' },
+  { size: '10', diameter: 16.1, circ: 50.6, us: '5.5' },
+  { size: '11', diameter: 16.5, circ: 51.8, us: '6.0' },
+  { size: '12', diameter: 16.9, circ: 53.1, us: '6.5' },
+  { size: '13', diameter: 17.3, circ: 54.4, us: '7.0' },
+  { size: '14', diameter: 17.7, circ: 55.6, us: '7.5' },
+  { size: '15', diameter: 18.1, circ: 56.9, us: '8.0' },
+  { size: '16', diameter: 18.5, circ: 58.2, us: '8.5' },
+  { size: '17', diameter: 19.0, circ: 59.5, us: '9.0' },
+  { size: '18', diameter: 19.3, circ: 60.7, us: '9.5' },
+  { size: '19', diameter: 19.7, circ: 62.0, us: '10.0' },
+  { size: '20', diameter: 20.1, circ: 63.3, us: '10.5' },
+  { size: '21', diameter: 20.5, circ: 64.5, us: '11.0' },
+  { size: '22', diameter: 20.9, circ: 65.8, us: '11.5' },
+  { size: '23', diameter: 21.3, circ: 67.1, us: '12.0' },
+  { size: '24', diameter: 21.7, circ: 68.3, us: '12.5' },
+  { size: '25', diameter: 22.1, circ: 69.6, us: '13.0' },
+];
+
+const getIndianRingSizeFromMm = (mm) => {
+  if (!mm || isNaN(mm)) return null;
+  const val = parseFloat(mm);
+  let closest = INDIAN_RING_SIZES[0];
+  let minDiff = Math.abs(val - INDIAN_RING_SIZES[0].circ);
+  for (const item of INDIAN_RING_SIZES) {
+    const diff = Math.abs(val - item.circ);
+    if (diff < minDiff) {
+      minDiff = diff;
+      closest = item;
+    }
+  }
+  return closest;
+};
+
 const ProductDetail = () => {
   const { id } = useParams();
   const [product, setProduct] = useState(null);
@@ -16,7 +54,9 @@ const ProductDetail = () => {
   const [added, setAdded] = useState(false);
   const { addToCart } = useCart();
   const [sizerOpen, setSizerOpen] = useState(false);
+  const [sizerTab, setSizerTab] = useState('calculator'); // 'calculator' | 'chart'
   const [circumference, setCircumference] = useState('');
+  const [selectedRingSize, setSelectedRingSize] = useState('12'); // Default Indian Size 12
   const [activeMediaIndex, setActiveMediaIndex] = useState(0);
 
   useEffect(() => {
@@ -25,8 +65,7 @@ const ProductDetail = () => {
       .then((res) => res.json())
       .then((data) => {
         setProduct(data);
-        setActiveMediaIndex(0); // Reset gallery on product change
-        // fetch related (same category)
+        setActiveMediaIndex(0);
         return fetch(`${API}/products?category=${data.category}`);
       })
       .then((res) => res.json())
@@ -35,26 +74,13 @@ const ProductDetail = () => {
       .finally(() => setLoading(false));
   }, [id]);
 
-  const getRingSize = (mm) => {
-    const sizes = [
-      { max: 44, size: '6', label: 'XS — Petite' },
-      { max: 46, size: '7', label: 'S — Slender' },
-      { max: 48, size: '8', label: 'S-M — Fine' },
-      { max: 50, size: '9', label: 'M — Classic' },
-      { max: 52, size: '10', label: 'M — Elegant' },
-      { max: 54, size: '11', label: 'M-L — Graceful' },
-      { max: 56, size: '12', label: 'L — Regal' },
-      { max: 58, size: '13', label: 'L — Bold' },
-      { max: 60, size: '14', label: 'XL — Grand' },
-      { max: Infinity, size: '15+', label: 'XL — Majestic' },
-    ];
-    return sizes.find((s) => mm <= s.max);
-  };
-
-  const result = circumference ? getRingSize(parseFloat(circumference)) : null;
+  const calcResult = circumference ? getIndianRingSizeFromMm(circumference) : null;
+  const isRing = product?.category === 'rings' || product?.name?.toLowerCase().includes('ring');
+  const activeRingObj = INDIAN_RING_SIZES.find((s) => s.size === selectedRingSize) || INDIAN_RING_SIZES[6];
 
   const handleAddToCart = () => {
-    addToCart(product);
+    const sizeLabel = isRing ? `Indian Size ${selectedRingSize}` : '';
+    addToCart(product, sizeLabel);
     setAdded(true);
     setTimeout(() => setAdded(false), 2000);
   };
@@ -77,7 +103,11 @@ const ProductDetail = () => {
       const res = await fetch(`${API}/contact/enquire`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ name, phone, productName: product.name }),
+        body: JSON.stringify({
+          name,
+          phone,
+          productName: isRing ? `${product.name} (Indian Size ${selectedRingSize})` : product.name
+        }),
       });
       if (res.ok) {
         setEnquirySent(true);
@@ -183,21 +213,45 @@ const ProductDetail = () => {
             )}
             <div className="spec-row">
               <span className="spec-key">Certification</span>
-              <span className="spec-val">BIS Hallmarked</span>
+              <span className="spec-val">BIS Hallmarked 925 Silver</span>
             </div>
           </div>
 
-          {/* Ring Size Trigger — only for rings */}
-          {product.category === 'rings' && (
-            <button
-              className="ring-sizer-trigger"
-              onClick={() => setSizerOpen(true)}
-              id="ring-sizer-trigger"
-            >
-              <span className="ring-sizer-trigger__icon">◈</span>
-              <span className="ring-sizer-trigger__text">Discover Your Perfect Size</span>
-              <span className="ring-sizer-trigger__arrow">→</span>
-            </button>
+          {/* Indian Ring Size Selector — only for rings */}
+          {isRing && (
+            <div className="ring-size-section">
+              <div className="ring-size-header">
+                <div className="ring-size-header__left">
+                  <span className="ring-size-title">Select Indian Ring Size</span>
+                  <span className="ring-size-badge">Indian Standard</span>
+                </div>
+                <button
+                  type="button"
+                  className="ring-sizer-trigger"
+                  onClick={() => setSizerOpen(true)}
+                  id="ring-sizer-trigger"
+                >
+                  <span>📏 Indian Size Guide</span>
+                </button>
+              </div>
+
+              <div className="ring-size-grid">
+                {INDIAN_RING_SIZES.map((item) => (
+                  <button
+                    key={item.size}
+                    type="button"
+                    className={`ring-size-pill ${selectedRingSize === item.size ? 'ring-size-pill--active' : ''}`}
+                    onClick={() => setSelectedRingSize(item.size)}
+                  >
+                    <span>{item.size}</span>
+                  </button>
+                ))}
+              </div>
+
+              <p className="ring-size-info">
+                Selected: <strong>Indian Size {activeRingObj.size}</strong> ({activeRingObj.diameter} inner diameter · {activeRingObj.us} US equivalent)
+              </p>
+            </div>
           )}
 
           {/* Add to Cart */}
@@ -206,7 +260,7 @@ const ProductDetail = () => {
             onClick={handleAddToCart}
             id="add-to-cart-btn"
           >
-            <span>{added ? '✓ Added to Bag' : 'Add to Bag'}</span>
+            <span>{added ? '✓ Added to Bag' : `Add to Bag ${isRing ? `(Indian Size ${selectedRingSize})` : ''}`}</span>
           </button>
 
           {/* Enquiry Form */}
@@ -236,7 +290,7 @@ const ProductDetail = () => {
           ) : (
             <div className="enquiry-success" id="enquiry-success">
               <p className="enquiry-success__msg">
-                Thank you. Our team will reach out to you shortly regarding <strong>{product.name}</strong>.
+                Thank you. Our team will reach out to you shortly regarding <strong>{product.name}</strong> {isRing ? `(Indian Size ${selectedRingSize})` : ''}.
               </p>
             </div>
           )}
@@ -282,49 +336,126 @@ const ProductDetail = () => {
           </div>
         </div>
       </div>
-      {/* Ring Size Calculator Modal */}
+
+      {/* Comprehensive Indian Ring Size Calculator & Chart Modal */}
       {sizerOpen && (
         <div className="sizer-overlay" id="sizer-overlay" onClick={() => setSizerOpen(false)}>
-          <div className="sizer-modal" onClick={(e) => e.stopPropagation()}>
+          <div className="sizer-modal sizer-modal--wide" onClick={(e) => e.stopPropagation()}>
             <button className="sizer-modal__close" onClick={() => setSizerOpen(false)} aria-label="Close">✕</button>
 
-            <p className="sizer-modal__label">Ring Size Guide</p>
-            <div className="gold-line" style={{ marginTop: '10px', marginBottom: '20px' }}></div>
-            <h2 className="sizer-modal__title">Find Your Perfect Fit</h2>
+            <p className="sizer-modal__label">Indian Jewellery Standards</p>
+            <div className="gold-line" style={{ marginTop: '8px', marginBottom: '16px' }}></div>
+            <h2 className="sizer-modal__title">Indian Ring Size Guide</h2>
             <p className="sizer-modal__subtitle">
-              Wrap a thin strip of paper around your finger. Mark where it meets and measure the length in millimetres.
+              Kalrav Jewels uses standard Indian ring sizes (Sizes 6 to 25). Use our calculator or conversion chart below.
             </p>
 
-            <div className="sizer-input-wrap">
-              <label className="sizer-label" htmlFor="sizer-input">Finger Circumference (mm)</label>
-              <input
-                id="sizer-input"
-                type="number"
-                min="40"
-                max="76"
-                placeholder="e.g. 52"
-                className="sizer-input"
-                value={circumference}
-                onChange={(e) => setCircumference(e.target.value)}
-              />
+            {/* Navigation Tabs */}
+            <div className="sizer-modal-tabs">
+              <button
+                type="button"
+                className={`sizer-tab ${sizerTab === 'calculator' ? 'sizer-tab--active' : ''}`}
+                onClick={() => setSizerTab('calculator')}
+              >
+                🧮 Finger mm Calculator
+              </button>
+              <button
+                type="button"
+                className={`sizer-tab ${sizerTab === 'chart' ? 'sizer-tab--active' : ''}`}
+                onClick={() => setSizerTab('chart')}
+              >
+                📊 Indian Size Chart (6 - 25)
+              </button>
             </div>
 
-            {result && (
-              <div className="sizer-result">
-                <span className="sizer-result__size">{result.size}</span>
-                <span className="sizer-result__label">{result.label}</span>
-                <p className="sizer-result__hint">Indian Ring Size · {circumference} mm circumference</p>
+            {sizerTab === 'calculator' && (
+              <div className="sizer-calculator-body">
+                <div className="sizer-input-wrap">
+                  <label className="sizer-label" htmlFor="sizer-input">Finger Circumference (mm)</label>
+                  <input
+                    id="sizer-input"
+                    type="number"
+                    min="40"
+                    max="76"
+                    placeholder="e.g. 53"
+                    className="sizer-input"
+                    value={circumference}
+                    onChange={(e) => setCircumference(e.target.value)}
+                  />
+                </div>
+
+                {calcResult && (
+                  <div className="sizer-result">
+                    <div className="sizer-result__num">
+                      <span className="sizer-result__size">{calcResult.size}</span>
+                      <span className="sizer-result__sub">Indian Ring Size</span>
+                    </div>
+                    <div className="sizer-result__details">
+                      <p><strong>Inner Diameter:</strong> {calcResult.diameter}</p>
+                      <p><strong>Circumference:</strong> {calcResult.circ}</p>
+                      <p><strong>US Size Equivalent:</strong> {calcResult.us}</p>
+                    </div>
+                    <button
+                      type="button"
+                      className="sizer-result__select-btn"
+                      onClick={() => {
+                        setSelectedRingSize(calcResult.size);
+                        setSizerOpen(false);
+                      }}
+                    >
+                      Select Size {calcResult.size}
+                    </button>
+                  </div>
+                )}
+
+                <div className="sizer-steps">
+                  <div className="sizer-step"><span className="sizer-step__num">01</span><span>Cut a strip of paper or non-stretching string</span></div>
+                  <div className="sizer-step"><span className="sizer-step__num">02</span><span>Wrap it snugly around the base of your ring finger</span></div>
+                  <div className="sizer-step"><span className="sizer-step__num">03</span><span>Mark where the paper overlaps and measure with a ruler in mm</span></div>
+                  <div className="sizer-step"><span className="sizer-step__num">04</span><span>Enter the mm measurement above to get your exact Indian Ring Size</span></div>
+                </div>
               </div>
             )}
 
-            <div className="sizer-steps">
-              <div className="sizer-step"><span className="sizer-step__num">01</span><span>Cut a thin strip of paper or thread</span></div>
-              <div className="sizer-step"><span className="sizer-step__num">02</span><span>Wrap snugly around your ring finger</span></div>
-              <div className="sizer-step"><span className="sizer-step__num">03</span><span>Mark the overlap point & measure in mm</span></div>
-              <div className="sizer-step"><span className="sizer-step__num">04</span><span>Enter the measurement above</span></div>
-            </div>
+            {sizerTab === 'chart' && (
+              <div className="sizer-chart-wrap">
+                <table className="sizer-table">
+                  <thead>
+                    <tr>
+                      <th>Indian Size</th>
+                      <th>Inner Diameter (mm)</th>
+                      <th>Circumference (mm)</th>
+                      <th>US Size</th>
+                      <th>Action</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {INDIAN_RING_SIZES.map((row) => (
+                      <tr key={row.size} className={selectedRingSize === row.size ? 'sizer-table-row--selected' : ''}>
+                        <td><strong>Size {row.size}</strong></td>
+                        <td>{row.diameter}</td>
+                        <td>{row.circ}</td>
+                        <td>US {row.us}</td>
+                        <td>
+                          <button
+                            type="button"
+                            className="sizer-table-btn"
+                            onClick={() => {
+                              setSelectedRingSize(row.size);
+                              setSizerOpen(false);
+                            }}
+                          >
+                            {selectedRingSize === row.size ? 'Selected ✓' : 'Select'}
+                          </button>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            )}
 
-            <p className="sizer-note">Not sure? Our team can help you over a call — <a href="tel:+919537068100" className="sizer-note__link">+91 95370 68100</a></p>
+            <p className="sizer-note">Need expert assistance? Call or WhatsApp our jewellery team — <a href="https://wa.me/919537068100" target="_blank" rel="noreferrer" className="sizer-note__link">+91 95370 68100</a></p>
           </div>
         </div>
       )}

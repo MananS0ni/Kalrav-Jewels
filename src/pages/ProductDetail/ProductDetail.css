@@ -734,3 +734,269 @@
   color: var(--gold-dark);
 }
 
+/* ── Indian Ring Size Selection ── */
+.ring-size-section {
+  background: var(--cream, #faf8f4);
+  border: 1px solid var(--border, #e8e2d5);
+  border-radius: 6px;
+  padding: 20px;
+  margin-bottom: 24px;
+}
+
+.ring-size-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 14px;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.ring-size-header__left {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.ring-size-title {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: var(--charcoal);
+}
+
+.ring-size-badge {
+  font-size: 9px;
+  font-weight: 600;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  background: var(--gold-pale, #f5ebd5);
+  color: var(--gold-dark, #a88432);
+  padding: 3px 8px;
+  border-radius: 3px;
+  border: 1px solid rgba(201, 168, 76, 0.3);
+}
+
+.ring-sizer-trigger {
+  background: none;
+  border: none;
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--gold-dark);
+  cursor: pointer;
+  padding: 0;
+  transition: color var(--transition);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.ring-sizer-trigger:hover {
+  color: var(--gold);
+}
+
+.ring-size-grid {
+  display: grid;
+  grid-template-columns: repeat(10, 1fr);
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+@media (max-width: 600px) {
+  .ring-size-grid {
+    grid-template-columns: repeat(5, 1fr);
+  }
+}
+
+.ring-size-pill {
+  aspect-ratio: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #ffffff;
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--charcoal);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  padding: 0;
+}
+
+.ring-size-pill:hover {
+  border-color: var(--gold);
+  color: var(--gold-dark);
+}
+
+.ring-size-pill--active {
+  background: var(--charcoal) !important;
+  color: var(--gold-light, #f0e6cd) !important;
+  border-color: var(--charcoal) !important;
+  font-weight: 600;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+}
+
+.ring-size-info {
+  font-size: 11px;
+  color: var(--gray-mid);
+  margin: 0;
+  letter-spacing: 0.3px;
+  line-height: 1.5;
+}
+
+.ring-size-info strong {
+  color: var(--gold-dark);
+}
+
+/* ── Sizer Modal Enhancements ── */
+.sizer-modal--wide {
+  max-width: 680px;
+  width: 100%;
+}
+
+.sizer-modal-tabs {
+  display: flex;
+  gap: 8px;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 24px;
+}
+
+.sizer-tab {
+  padding: 12px 18px;
+  background: none;
+  border: none;
+  border-bottom: 2px solid transparent;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 1px;
+  color: var(--gray-mid);
+  cursor: pointer;
+  transition: all var(--transition);
+}
+
+.sizer-tab--active {
+  color: var(--gold-dark);
+  border-bottom-color: var(--gold);
+}
+
+.sizer-result {
+  background: var(--charcoal);
+  padding: 20px 24px;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 24px;
+  flex-wrap: wrap;
+}
+
+.sizer-result__num {
+  display: flex;
+  flex-direction: column;
+}
+
+.sizer-result__size {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 44px;
+  font-weight: 400;
+  color: var(--gold-light);
+  line-height: 1;
+}
+
+.sizer-result__sub {
+  font-size: 9px;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.6);
+  margin-top: 4px;
+}
+
+.sizer-result__details {
+  font-size: 11px;
+  color: rgba(255,255,255,0.85);
+  line-height: 1.6;
+}
+
+.sizer-result__details strong {
+  color: var(--gold-light);
+}
+
+.sizer-result__select-btn {
+  background: var(--gold);
+  color: var(--white);
+  border: none;
+  padding: 10px 16px;
+  border-radius: 4px;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: background var(--transition);
+}
+
+.sizer-result__select-btn:hover {
+  background: var(--gold-dark);
+}
+
+/* ── Sizer Chart Table ── */
+.sizer-chart-wrap {
+  max-height: 340px;
+  overflow-y: auto;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  margin-bottom: 24px;
+}
+
+.sizer-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 12px;
+  text-align: left;
+}
+
+.sizer-table th {
+  background: var(--cream);
+  padding: 12px 14px;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: var(--gray-light);
+  border-bottom: 1px solid var(--border);
+  position: sticky;
+  top: 0;
+}
+
+.sizer-table td {
+  padding: 10px 14px;
+  border-bottom: 1px solid var(--border);
+  color: var(--charcoal);
+}
+
+.sizer-table-row--selected td {
+  background: var(--gold-pale, #fdf8eb);
+}
+
+.sizer-table-btn {
+  background: var(--white);
+  border: 1px solid var(--border);
+  padding: 6px 12px;
+  border-radius: 3px;
+  font-size: 10px;
+  font-weight: 600;
+  color: var(--charcoal);
+  cursor: pointer;
+  transition: all var(--transition);
+}
+
+.sizer-table-btn:hover {
+  border-color: var(--gold);
+  color: var(--gold-dark);
+}
+

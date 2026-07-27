@@ -7,6 +7,7 @@ const cartItemSchema = new mongoose.Schema({
   category: { type: String, default: '' },
   material: { type: String, default: '' },
   purity: { type: String, default: '' },
+  size: { type: String, default: '' },
   price: { type: Number, required: true },
   qty: { type: Number, default: 1, min: 1 },
 }, { _id: false });

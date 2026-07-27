@@ -52,25 +52,27 @@ const CartDrawer = () => {
             </div>
           ) : (
             <ul className="cart-items">
-              {items.map((item) => (
-                <li key={item.productId} className="cart-item">
+              {items.map((item, idx) => (
+                <li key={`${item.productId}-${item.size || idx}`} className="cart-item">
                   <div className="cart-item__img-wrap">
                     <img src={item.image} alt={item.name} className="cart-item__img" />
                   </div>
                   <div className="cart-item__info">
                     <p className="cart-item__category">{item.category}</p>
                     <p className="cart-item__name">{item.name}</p>
-                    <p className="cart-item__meta">{item.material} · {item.purity}</p>
+                    <p className="cart-item__meta">
+                      {[item.material, item.purity, item.size ? `Size: ${item.size}` : null].filter(Boolean).join(' · ')}
+                    </p>
                     <div className="cart-item__bottom">
                       <div className="cart-item__qty">
-                        <button onClick={() => updateQty(item.productId, item.qty - 1)} className="qty-btn" aria-label="Decrease">−</button>
+                        <button onClick={() => updateQty(item.productId, item.qty - 1, item.size)} className="qty-btn" aria-label="Decrease">−</button>
                         <span className="qty-val">{item.qty}</span>
-                        <button onClick={() => updateQty(item.productId, item.qty + 1)} className="qty-btn" aria-label="Increase">+</button>
+                        <button onClick={() => updateQty(item.productId, item.qty + 1, item.size)} className="qty-btn" aria-label="Increase">+</button>
                       </div>
                       <p className="cart-item__price">{formatted(item.price)}</p>
                     </div>
                   </div>
-                  <button className="cart-item__remove" onClick={() => removeFromCart(item.productId)} aria-label="Remove">✕</button>
+                  <button className="cart-item__remove" onClick={() => removeFromCart(item.productId, item.size)} aria-label="Remove">✕</button>
                 </li>
               ))}
             </ul>

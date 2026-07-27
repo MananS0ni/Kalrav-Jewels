@@ -9,6 +9,7 @@ const orderItemSchema = new mongoose.Schema({
   name: { type: String, required: true },      // snapshot at time of order
   price: { type: Number, required: true },     // snapshot at time of order
   image: { type: String, default: '' },        // snapshot at time of order
+  size: { type: String, default: '' },         // Indian ring size or general size
   quantity: { type: Number, required: true, min: 1, default: 1 },
 });
 

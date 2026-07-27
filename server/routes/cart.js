@@ -17,7 +17,7 @@ router.get('/', auth, async (req, res) => {
 // POST /api/cart/add — add or increment an item
 router.post('/add', auth, async (req, res) => {
   try {
-    const { productId, name, image, category, material, purity, price } = req.body;
+    const { productId, name, image, category, material, purity, size, price } = req.body;
     if (!productId || !price) return res.status(400).json({ message: 'productId and price are required' });
 
     let cart = await Cart.findOne({ user: req.user._id });
@@ -25,11 +25,11 @@ router.post('/add', auth, async (req, res) => {
       cart = new Cart({ user: req.user._id, items: [] });
     }
 
-    const existing = cart.items.find((i) => i.productId.toString() === productId);
+    const existing = cart.items.find((i) => i.productId.toString() === productId && (i.size || '') === (size || ''));
     if (existing) {
       existing.qty += 1;
     } else {
-      cart.items.push({ productId, name, image, category, material, purity, price, qty: 1 });
+      cart.items.push({ productId, name, image, category, material, purity, size: size || '', price, qty: 1 });
     }
 
     await cart.save();
@@ -53,9 +53,11 @@ router.post('/sync', auth, async (req, res) => {
     }
 
     for (const localItem of localItems) {
-      const existing = cart.items.find((i) => i.productId.toString() === localItem.productId.toString());
+      const existing = cart.items.find(
+        (i) => i.productId.toString() === localItem.productId.toString() && (i.size || '') === (localItem.size || '')
+      );
       if (existing) {
-        existing.qty += localItem.qty; // Add quantities together
+        existing.qty += localItem.qty;
       } else {
         cart.items.push(localItem);
       }
@@ -71,16 +73,20 @@ router.post('/sync', auth, async (req, res) => {
 // PUT /api/cart/update — update quantity of an item
 router.put('/update', auth, async (req, res) => {
   try {
-    const { productId, qty } = req.body;
+    const { productId, size, qty } = req.body;
     if (!productId || qty == null) return res.status(400).json({ message: 'productId and qty are required' });
 
     const cart = await Cart.findOne({ user: req.user._id });
     if (!cart) return res.status(404).json({ message: 'Cart not found' });
 
     if (qty < 1) {
-      cart.items = cart.items.filter((i) => i.productId.toString() !== productId);
+      cart.items = cart.items.filter(
+        (i) => !(i.productId.toString() === productId && (i.size || '') === (size || ''))
+      );
     } else {
-      const item = cart.items.find((i) => i.productId.toString() === productId);
+      const item = cart.items.find(
+        (i) => i.productId.toString() === productId && (i.size || '') === (size || '')
+      );
       if (item) item.qty = qty;
     }
 
@@ -94,10 +100,13 @@ router.put('/update', auth, async (req, res) => {
 // DELETE /api/cart/remove/:productId — remove specific item
 router.delete('/remove/:productId', auth, async (req, res) => {
   try {
+    const { size } = req.query;
     const cart = await Cart.findOne({ user: req.user._id });
     if (!cart) return res.status(404).json({ message: 'Cart not found' });
 
-    cart.items = cart.items.filter((i) => i.productId.toString() !== req.params.productId);
+    cart.items = cart.items.filter(
+      (i) => !(i.productId.toString() === req.params.productId && (!size || (i.size || '') === size))
+    );
     await cart.save();
     res.json({ items: cart.items });
   } catch (err) {
