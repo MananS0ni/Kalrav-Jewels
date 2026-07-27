@@ -457,7 +457,7 @@ const Checkout = () => {
                   <div className="summary-item__info">
                     <p className="summary-item__name">{item.name}</p>
                     <p className="summary-item__meta">
-                      {[item.material, item.purity, item.size ? `Size: ${item.size}` : null].filter(Boolean).join(' · ')}
+                      {[item.material, item.purity, item.size ? (item.size.toLowerCase().includes('size') ? item.size.replace(/^Indian\s+/i, '') : `Size: ${item.size}`) : null].filter(Boolean).join(' · ')}
                     </p>
                   </div>
                   <p className="summary-item__price">{formatted(item.price * item.qty)}</p>

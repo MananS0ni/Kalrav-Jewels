@@ -341,7 +341,7 @@ const Admin = () => {
                             {item.name}
                             {item.size && (
                               <span style={{ display: 'inline-block', marginLeft: '10px', background: '#f5ebd5', color: '#a88432', padding: '2px 8px', borderRadius: '3px', fontSize: '0.8rem', fontWeight: 600, border: '1px solid rgba(201,168,76,0.3)' }}>
-                                {item.size}
+                                {item.size.replace(/^Indian\s+/i, '')}
                               </span>
                             )}
                           </span>

@@ -16,7 +16,7 @@ const sendOrderReceived = async (order, customerEmail, customerName) => {
         <tr>
           <td style="padding:12px 16px; border-bottom:1px solid #f0e8d5; font-family:'Helvetica Neue', Arial, sans-serif; color:#2c2c2c; font-size:14px;">
             ${item.name}
-            ${item.size ? `<br/><span style="font-size:12px; color:#c9a84c; font-weight:600;">Size: ${item.size}</span>` : ''}
+            ${item.size ? `<br/><span style="font-size:12px; color:#c9a84c; font-weight:600;">Size: ${item.size.replace(/^Indian\s+/i, '')}</span>` : ''}
           </td>
           <td style="padding:12px 16px; border-bottom:1px solid #f0e8d5; text-align:center; color:#6b6b6b; font-size:14px;">
             ${item.quantity}

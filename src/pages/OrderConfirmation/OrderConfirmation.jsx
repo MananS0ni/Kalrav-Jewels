@@ -62,7 +62,7 @@ const OrderConfirmation = () => {
                     <p className="oc-item__qty">Qty: {item.quantity}</p>
                     {item.size && (
                       <span className="oc-item__size-badge">
-                        {item.size}
+                        {item.size.replace(/^Indian\s+/i, '')}
                       </span>
                     )}
                   </div>

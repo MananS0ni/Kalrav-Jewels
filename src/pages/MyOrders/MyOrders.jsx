@@ -93,7 +93,7 @@ const MyOrders = () => {
                       <div className="mo-card__item-info">
                         <p className="mo-card__item-name">{item.name}</p>
                         <p className="mo-card__item-meta">
-                          Qty: {item.quantity} {item.size ? `· ${item.size}` : ''} · {formatted(item.price)}
+                          Qty: {item.quantity} {item.size ? `· ${item.size.replace(/^Indian\s+/i, '')}` : ''} · {formatted(item.price)}
                         </p>
                       </div>
                     </div>

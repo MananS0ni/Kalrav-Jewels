@@ -61,7 +61,7 @@ const CartDrawer = () => {
                     <p className="cart-item__category">{item.category}</p>
                     <p className="cart-item__name">{item.name}</p>
                     <p className="cart-item__meta">
-                      {[item.material, item.purity, item.size ? `Size: ${item.size}` : null].filter(Boolean).join(' · ')}
+                      {[item.material, item.purity, item.size ? (item.size.toLowerCase().startsWith('size') ? item.size.replace(/^Indian\s+/i, '') : `Size: ${item.size}`) : null].filter(Boolean).join(' · ')}
                     </p>
                     <div className="cart-item__bottom">
                       <div className="cart-item__qty">

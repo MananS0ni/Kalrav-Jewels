@@ -79,7 +79,7 @@ const ProductDetail = () => {
   const activeRingObj = INDIAN_RING_SIZES.find((s) => s.size === selectedRingSize) || INDIAN_RING_SIZES[6];
 
   const handleAddToCart = () => {
-    const sizeLabel = isRing ? `Indian Size ${selectedRingSize}` : '';
+    const sizeLabel = isRing ? `Size ${selectedRingSize}` : '';
     addToCart(product, sizeLabel);
     setAdded(true);
     setTimeout(() => setAdded(false), 2000);
@@ -106,7 +106,7 @@ const ProductDetail = () => {
         body: JSON.stringify({
           name,
           phone,
-          productName: isRing ? `${product.name} (Indian Size ${selectedRingSize})` : product.name
+          productName: isRing ? `${product.name} (Size ${selectedRingSize})` : product.name
         }),
       });
       if (res.ok) {
@@ -217,13 +217,13 @@ const ProductDetail = () => {
             </div>
           </div>
 
-          {/* Indian Ring Size Selector — only for rings */}
+          {/* Ring Size Selector — only for rings */}
           {isRing && (
             <div className="ring-size-section">
               <div className="ring-size-header">
                 <div className="ring-size-header__left">
-                  <span className="ring-size-title">Select Indian Ring Size</span>
-                  <span className="ring-size-badge">Indian Standard</span>
+                  <span className="ring-size-title">Select Ring Size</span>
+                  <span className="ring-size-badge">Standard Size</span>
                 </div>
                 <button
                   type="button"
@@ -231,7 +231,7 @@ const ProductDetail = () => {
                   onClick={() => setSizerOpen(true)}
                   id="ring-sizer-trigger"
                 >
-                  <span>📏 Indian Size Guide</span>
+                  <span>📏 Size Guide</span>
                 </button>
               </div>
 
@@ -249,7 +249,7 @@ const ProductDetail = () => {
               </div>
 
               <p className="ring-size-info">
-                Selected: <strong>Indian Size {activeRingObj.size}</strong> ({activeRingObj.diameter} inner diameter · {activeRingObj.us} US equivalent)
+                Selected: <strong>Size {activeRingObj.size}</strong> ({activeRingObj.diameter} inner diameter · {activeRingObj.us} US equivalent)
               </p>
             </div>
           )}
@@ -260,7 +260,7 @@ const ProductDetail = () => {
             onClick={handleAddToCart}
             id="add-to-cart-btn"
           >
-            <span>{added ? '✓ Added to Bag' : `Add to Bag ${isRing ? `(Indian Size ${selectedRingSize})` : ''}`}</span>
+            <span>{added ? '✓ Added to Bag' : `Add to Bag ${isRing ? `(Size ${selectedRingSize})` : ''}`}</span>
           </button>
 
           {/* Enquiry Form */}
@@ -290,7 +290,7 @@ const ProductDetail = () => {
           ) : (
             <div className="enquiry-success" id="enquiry-success">
               <p className="enquiry-success__msg">
-                Thank you. Our team will reach out to you shortly regarding <strong>{product.name}</strong> {isRing ? `(Indian Size ${selectedRingSize})` : ''}.
+                Thank you. Our team will reach out to you shortly regarding <strong>{product.name}</strong> {isRing ? `(Size ${selectedRingSize})` : ''}.
               </p>
             </div>
           )}
@@ -337,17 +337,17 @@ const ProductDetail = () => {
         </div>
       </div>
 
-      {/* Comprehensive Indian Ring Size Calculator & Chart Modal */}
+      {/* Comprehensive Ring Size Calculator & Chart Modal */}
       {sizerOpen && (
         <div className="sizer-overlay" id="sizer-overlay" onClick={() => setSizerOpen(false)}>
           <div className="sizer-modal sizer-modal--wide" onClick={(e) => e.stopPropagation()}>
             <button className="sizer-modal__close" onClick={() => setSizerOpen(false)} aria-label="Close">✕</button>
 
-            <p className="sizer-modal__label">Indian Jewellery Standards</p>
+            <p className="sizer-modal__label">Size Guide</p>
             <div className="gold-line" style={{ marginTop: '8px', marginBottom: '16px' }}></div>
-            <h2 className="sizer-modal__title">Indian Ring Size Guide</h2>
+            <h2 className="sizer-modal__title">Ring Size Guide</h2>
             <p className="sizer-modal__subtitle">
-              Kalrav Jewels uses standard Indian ring sizes (Sizes 6 to 25). Use our calculator or conversion chart below.
+              Kalrav Jewels uses standard ring sizes (Sizes 6 to 25). Use our calculator or conversion chart below.
             </p>
 
             {/* Navigation Tabs */}
@@ -364,7 +364,7 @@ const ProductDetail = () => {
                 className={`sizer-tab ${sizerTab === 'chart' ? 'sizer-tab--active' : ''}`}
                 onClick={() => setSizerTab('chart')}
               >
-                📊 Indian Size Chart (6 - 25)
+                📊 Size Chart (6 - 25)
               </button>
             </div>
 
@@ -388,7 +388,7 @@ const ProductDetail = () => {
                   <div className="sizer-result">
                     <div className="sizer-result__num">
                       <span className="sizer-result__size">{calcResult.size}</span>
-                      <span className="sizer-result__sub">Indian Ring Size</span>
+                      <span className="sizer-result__sub">Ring Size</span>
                     </div>
                     <div className="sizer-result__details">
                       <p><strong>Inner Diameter:</strong> {calcResult.diameter}</p>
@@ -412,7 +412,7 @@ const ProductDetail = () => {
                   <div className="sizer-step"><span className="sizer-step__num">01</span><span>Cut a strip of paper or non-stretching string</span></div>
                   <div className="sizer-step"><span className="sizer-step__num">02</span><span>Wrap it snugly around the base of your ring finger</span></div>
                   <div className="sizer-step"><span className="sizer-step__num">03</span><span>Mark where the paper overlaps and measure with a ruler in mm</span></div>
-                  <div className="sizer-step"><span className="sizer-step__num">04</span><span>Enter the mm measurement above to get your exact Indian Ring Size</span></div>
+                  <div className="sizer-step"><span className="sizer-step__num">04</span><span>Enter the mm measurement above to get your exact Ring Size</span></div>
                 </div>
               </div>
             )}
@@ -422,7 +422,7 @@ const ProductDetail = () => {
                 <table className="sizer-table">
                   <thead>
                     <tr>
-                      <th>Indian Size</th>
+                      <th>Ring Size</th>
                       <th>Inner Diameter (mm)</th>
                       <th>Circumference (mm)</th>
                       <th>US Size</th>
