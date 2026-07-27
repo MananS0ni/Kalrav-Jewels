@@ -59,9 +59,12 @@ const OrderConfirmation = () => {
                   </div>
                   <div className="oc-item__info">
                     <p className="oc-item__name">{item.name}</p>
-                    <p className="oc-item__qty">
-                      Qty: {item.quantity} {item.size ? `· ${item.size}` : ''}
-                    </p>
+                    <p className="oc-item__qty">Qty: {item.quantity}</p>
+                    {item.size && (
+                      <span className="oc-item__size-badge">
+                        {item.size}
+                      </span>
+                    )}
                   </div>
                   <p className="oc-item__price">{formatted(item.price * item.quantity)}</p>
                 </li>
