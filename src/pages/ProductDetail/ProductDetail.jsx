@@ -7,10 +7,10 @@ import './ProductDetail.css';
 const API = import.meta.env.VITE_API_URL || (window.location.hostname === 'localhost' ? 'http://localhost:5000/api' : '/api');
 
 const INDIAN_RING_SIZES = [
-  { size: '6',  diameter: 14.5, circ: 45.5, us: '3.5' },
-  { size: '7',  diameter: 14.9, circ: 46.8, us: '4.0' },
-  { size: '8',  diameter: 15.3, circ: 48.0, us: '4.5' },
-  { size: '9',  diameter: 15.7, circ: 49.3, us: '5.0' },
+  { size: '6', diameter: 14.5, circ: 45.5, us: '3.5' },
+  { size: '7', diameter: 14.9, circ: 46.8, us: '4.0' },
+  { size: '8', diameter: 15.3, circ: 48.0, us: '4.5' },
+  { size: '9', diameter: 15.7, circ: 49.3, us: '5.0' },
   { size: '10', diameter: 16.1, circ: 50.6, us: '5.5' },
   { size: '11', diameter: 16.5, circ: 51.8, us: '6.0' },
   { size: '12', diameter: 16.9, circ: 53.1, us: '6.5' },
@@ -75,7 +75,9 @@ const ProductDetail = () => {
   }, [id]);
 
   const calcResult = circumference ? getIndianRingSizeFromMm(circumference) : null;
-  const isRing = product?.category === 'rings' || product?.name?.toLowerCase().includes('ring');
+  const categoryLower = (product?.category || '').toLowerCase();
+  const nameLower = (product?.name || '').toLowerCase();
+  const isRing = (categoryLower === 'rings' || /\brings?\b/i.test(nameLower)) && !categoryLower.includes('earring') && !nameLower.includes('earring');
   const activeRingObj = INDIAN_RING_SIZES.find((s) => s.size === selectedRingSize) || INDIAN_RING_SIZES[6];
 
   const handleAddToCart = () => {
@@ -146,34 +148,34 @@ const ProductDetail = () => {
         <div className="product-detail__gallery">
           <div className="product-detail__image-wrap">
             {product.images?.[activeMediaIndex]?.endsWith('.mp4') ? (
-              <video 
-                src={product.images[activeMediaIndex]} 
-                autoPlay loop muted playsInline 
-                className="product-detail__image" 
+              <video
+                src={product.images[activeMediaIndex]}
+                autoPlay loop muted playsInline
+                className="product-detail__image"
               />
             ) : (
-              <img 
-                src={product.images?.[activeMediaIndex] || '/ring_product.webp'} 
-                alt={product.name} 
-                className="product-detail__image" 
+              <img
+                src={product.images?.[activeMediaIndex] || '/ring_product.webp'}
+                alt={product.name}
+                className="product-detail__image"
               />
             )}
             {product.tags?.[0] && <span className="product-detail__tag">{product.tags[0]}</span>}
           </div>
-          
+
           {/* Thumbnails */}
           {product.images && product.images.length > 1 && (
             <div className="product-detail__thumbnails">
               {product.images.map((media, idx) => (
-                <button 
-                  key={idx} 
+                <button
+                  key={idx}
                   className={`thumbnail-btn ${idx === activeMediaIndex ? 'active' : ''}`}
                   onClick={() => setActiveMediaIndex(idx)}
                 >
                   {media.endsWith('.mp4') ? (
                     <video src={media} muted className="thumbnail-img" />
                   ) : (
-                    <img src={media} alt={`Thumbnail ${idx+1}`} className="thumbnail-img" />
+                    <img src={media} alt={`Thumbnail ${idx + 1}`} className="thumbnail-img" />
                   )}
                 </button>
               ))}
