@@ -459,20 +459,6 @@ const ProductDetail = () => {
           </div>
         </div>
       )}
-      {/* Mobile Sticky Buy Bar */}
-      <div className="mobile-sticky-buy-bar" id="mobile-sticky-buy-bar">
-        <div className="mobile-sticky-buy-bar__info">
-          <span className="mobile-sticky-buy-bar__name">{product.name}</span>
-          <span className="mobile-sticky-buy-bar__price">₹{product.price?.toLocaleString('en-IN')}</span>
-        </div>
-        <button
-          className={`btn-primary mobile-sticky-buy-bar__btn ${added ? 'added' : ''}`}
-          onClick={handleAddToCart}
-        >
-          <span>{added ? '✓ Added' : 'Add to Bag'}</span>
-        </button>
-      </div>
-
     </div>
   );
 };
