@@ -1,6 +1,7 @@
 import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
 import { AuthProvider } from './context/AuthContext';
 import { CartProvider } from './context/CartContext';
+import AnnouncementBar from './components/AnnouncementBar/AnnouncementBar';
 import Navbar from './components/Navbar/Navbar';
 import Footer from './components/Footer/Footer';
 import CartDrawer from './components/CartDrawer/CartDrawer';
@@ -27,6 +28,7 @@ const AppLayout = () => {
     <>
       <ScrollToTop />
       <PageTracking />
+      {!isAdmin && <AnnouncementBar />}
       {!isAdmin && <Navbar />}
       {!isAdmin && <CartDrawer />}
       <main>

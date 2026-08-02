@@ -1000,3 +1000,57 @@
   color: var(--gold-dark);
 }
 
+/* ── Mobile Sticky Purchase Bar ── */
+.mobile-sticky-buy-bar {
+  display: none;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: var(--white, #ffffff);
+  border-top: 1px solid var(--border, #e8dcc8);
+  padding: 12px 20px;
+  box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.1);
+  z-index: 999;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+}
+
+.mobile-sticky-buy-bar__info {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.mobile-sticky-buy-bar__name {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--charcoal, #1a1a1a);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 180px;
+}
+
+.mobile-sticky-buy-bar__price {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--gold-dark, #9e7b36);
+}
+
+.mobile-sticky-buy-bar__btn {
+  padding: 10px 20px;
+  font-size: 10px;
+  flex-shrink: 0;
+}
+
+@media (max-width: 768px) {
+  .mobile-sticky-buy-bar {
+    display: flex;
+  }
+}
+
+

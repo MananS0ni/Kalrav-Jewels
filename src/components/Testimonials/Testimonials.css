@@ -1,0 +1,99 @@
+.testimonials-section {
+  padding: 90px 0;
+  background: var(--off-white, #fafaf8);
+}
+
+.testimonials-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 32px;
+  margin-top: 48px;
+}
+
+.testimonial-card {
+  background: var(--white, #ffffff);
+  border: 1px solid var(--border, #e8dcc8);
+  padding: 32px 28px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  position: relative;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.testimonial-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 32px rgba(201, 168, 76, 0.12);
+  border-color: var(--gold, #c9a84c);
+}
+
+.testimonial-card__stars {
+  color: var(--gold, #c9a84c);
+  font-size: 16px;
+  letter-spacing: 3px;
+  margin-bottom: 14px;
+}
+
+.testimonial-card__title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 20px;
+  font-weight: 600;
+  color: var(--charcoal, #1a1a1a);
+  margin-bottom: 12px;
+  line-height: 1.3;
+}
+
+.testimonial-card__text {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 12.5px;
+  font-weight: 300;
+  color: var(--gray-mid, #666);
+  line-height: 1.8;
+  margin-bottom: 24px;
+  flex-grow: 1;
+}
+
+.testimonial-card__footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  border-top: 1px solid var(--cream, #f7f3ec);
+  padding-top: 16px;
+}
+
+.testimonial-card__author {
+  display: flex;
+  flex-direction: column;
+}
+
+.author-name {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--charcoal, #1a1a1a);
+}
+
+.author-city {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 10px;
+  color: var(--gray-light, #aaa);
+  letter-spacing: 0.5px;
+}
+
+.verified-badge {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 9.5px;
+  font-weight: 600;
+  color: #27ae60;
+  background: rgba(39, 174, 96, 0.08);
+  padding: 4px 8px;
+  border-radius: 3px;
+  letter-spacing: 0.3px;
+}
+
+@media (max-width: 900px) {
+  .testimonials-grid {
+    grid-template-columns: 1fr;
+    gap: 24px;
+  }
+}

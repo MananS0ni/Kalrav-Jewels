@@ -1,0 +1,77 @@
+.trust-bar {
+  background: var(--cream, #f7f3ec);
+  border-top: 1px solid var(--border, #e8dcc8);
+  border-bottom: 1px solid var(--border, #e8dcc8);
+  padding: 36px 0;
+}
+
+.trust-bar__grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 24px;
+}
+
+.trust-card {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 12px;
+}
+
+.trust-card__icon {
+  font-size: 26px;
+  line-height: 1;
+  flex-shrink: 0;
+}
+
+.trust-card__title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 17px;
+  font-weight: 600;
+  color: var(--charcoal, #1a1a1a);
+  margin-bottom: 2px;
+  line-height: 1.2;
+}
+
+.trust-card__sub {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 11px;
+  font-weight: 300;
+  color: var(--gray-mid, #666);
+  margin: 0;
+}
+
+@media (max-width: 900px) {
+  .trust-bar__grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+  }
+}
+
+@media (max-width: 500px) {
+  .trust-bar {
+    padding: 28px 0;
+  }
+
+  .trust-bar__grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px 12px;
+  }
+
+  .trust-card {
+    padding: 6px;
+    gap: 10px;
+  }
+
+  .trust-card__icon {
+    font-size: 22px;
+  }
+
+  .trust-card__title {
+    font-size: 15px;
+  }
+
+  .trust-card__sub {
+    font-size: 9.5px;
+  }
+}

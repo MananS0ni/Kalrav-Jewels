@@ -1,6 +1,8 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import SEO from '../../components/SEO/SEO';
+import TrustBar from '../../components/TrustBar/TrustBar';
+import Testimonials from '../../components/Testimonials/Testimonials';
 import './Home.css';
 
 
@@ -127,6 +129,9 @@ const Home = () => {
         </div>
       </section>
 
+      {/* ─── Trust & Guarantee Bar ─── */}
+      <TrustBar />
+
       {/* ─── Featured Products ─── */}
       <section className="featured" id="featured-section">
         <div className="container">
@@ -187,6 +192,9 @@ const Home = () => {
           ))}
         </div>
       </section>
+
+      {/* ─── Testimonials / Reviews ─── */}
+      <Testimonials />
 
     </div>
   );
