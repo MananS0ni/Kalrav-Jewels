@@ -63,9 +63,7 @@ const AuthModal = ({ onClose }) => {
 
         {/* Logo */}
         <div className="auth-modal__logo">
-          <span className="auth-logo-top">KALRAV</span>
-          <span className="auth-logo-line"></span>
-          <span className="auth-logo-bottom">JEWEL</span>
+          <img src="/kalrav_vertical_v2.png" alt="Kalrav Jewels" className="auth-logo-img" />
         </div>
 
         {/* Tabs */}

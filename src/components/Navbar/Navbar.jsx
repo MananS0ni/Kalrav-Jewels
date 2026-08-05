@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { Link, NavLink, useLocation } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import { useCart } from '../../context/CartContext';
+import { useWishlist } from '../../context/WishlistContext';
 import AuthModal from '../AuthModal/AuthModal';
 import './Navbar.css';
 
@@ -13,6 +14,7 @@ const Navbar = () => {
   const isHome = location.pathname === '/';
   const { user, logout, authOpen, setAuthOpen } = useAuth();
   const { totalItems, setCartOpen } = useCart();
+  const { wishlistCount } = useWishlist();
 
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 60);
@@ -102,6 +104,16 @@ const Navbar = () => {
               )}
             </div>
 
+            {/* Wishlist Icon */}
+            <NavLink to="/wishlist" className="navbar__icon-btn navbar__wishlist-btn" aria-label="View Wishlist">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z" />
+              </svg>
+              {wishlistCount > 0 && (
+                <span className="cart-badge" id="wishlist-badge">{wishlistCount}</span>
+              )}
+            </NavLink>
+
             {/* Cart Icon */}
             <button
               className="navbar__icon-btn navbar__cart-btn"
@@ -120,8 +132,14 @@ const Navbar = () => {
             </button>
           </nav>
 
-          {/* Mobile Right Controls (Cart) */}
+          {/* Mobile Right Controls (Wishlist + Cart) */}
           <div className="navbar__mobile-right">
+            <NavLink to="/wishlist" className="navbar__icon-btn" aria-label="Wishlist">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z" />
+              </svg>
+              {wishlistCount > 0 && <span className="cart-badge">{wishlistCount}</span>}
+            </NavLink>
             <button className="navbar__icon-btn navbar__cart-btn" onClick={() => setCartOpen(true)} aria-label="Open cart">
               <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
                 <path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z" />

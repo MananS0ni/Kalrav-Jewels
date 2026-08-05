@@ -311,6 +311,110 @@
   }
 }
 
+/* Filter Bar Controls */
+.filter-bar__controls {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.filter-search-wrap {
+  position: relative;
+  min-width: 180px;
+}
+
+.filter-search-input {
+  width: 100%;
+  padding: 9px 30px 9px 14px;
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  font-size: 11px;
+  font-family: 'Montserrat', sans-serif;
+  color: var(--charcoal);
+  transition: border-color 0.2s ease;
+}
+
+.filter-search-input:focus {
+  outline: none;
+  border-color: var(--gold);
+}
+
+.filter-search-clear {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  color: var(--gray-light);
+  cursor: pointer;
+  font-size: 12px;
+  padding: 0;
+}
+
+.products-grid-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+}
+
+.reset-filters-btn {
+  background: none;
+  border: none;
+  font-size: 11px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: var(--gold-dark);
+  cursor: pointer;
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 500;
+  text-decoration: underline;
+}
+
+.reset-filters-btn:hover {
+  color: var(--gold);
+}
+
+/* Product Card Wrap with Wishlist heart */
+.product-card-wrap {
+  position: relative;
+}
+
+.card-wishlist-btn {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.9);
+  backdrop-filter: blur(4px);
+  border: 1px solid var(--border);
+  color: var(--charcoal);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 2;
+  transition: all 0.25s ease;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+}
+
+.card-wishlist-btn:hover {
+  transform: scale(1.1);
+  border-color: var(--gold);
+  color: var(--gold-dark);
+}
+
+.card-wishlist-btn--active {
+  background: #ffffff;
+  border-color: var(--gold);
+  color: var(--gold-dark);
+}
+
 @media (max-width: 768px) {
   .products-section {
     padding: 48px 0 64px;

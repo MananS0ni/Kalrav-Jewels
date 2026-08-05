@@ -1,6 +1,7 @@
 import { useParams, Link } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import { useCart } from '../../context/CartContext';
+import { useWishlist } from '../../context/WishlistContext';
 import SEO from '../../components/SEO/SEO';
 import './ProductDetail.css';
 
@@ -53,6 +54,7 @@ const ProductDetail = () => {
   const [sendingEnquiry, setSendingEnquiry] = useState(false);
   const [added, setAdded] = useState(false);
   const { addToCart } = useCart();
+  const { toggleWishlist, isInWishlist } = useWishlist();
   const [sizerOpen, setSizerOpen] = useState(false);
   const [sizerTab, setSizerTab] = useState('calculator'); // 'calculator' | 'chart'
   const [circumference, setCircumference] = useState('');
@@ -256,14 +258,26 @@ const ProductDetail = () => {
             </div>
           )}
 
-          {/* Add to Cart */}
-          <button
-            className={`btn-primary add-to-cart-btn ${added ? 'add-to-cart-btn--added' : ''}`}
-            onClick={handleAddToCart}
-            id="add-to-cart-btn"
-          >
-            <span>{added ? '✓ Added to Bag' : `Add to Bag ${isRing ? `(Size ${selectedRingSize})` : ''}`}</span>
-          </button>
+          {/* Add to Cart & Wishlist */}
+          <div className="product-detail__actions">
+            <button
+              className={`btn-primary add-to-cart-btn ${added ? 'add-to-cart-btn--added' : ''}`}
+              onClick={handleAddToCart}
+              id="add-to-cart-btn"
+            >
+              <span>{added ? '✓ Added to Bag' : `Add to Bag ${isRing ? `(Size ${selectedRingSize})` : ''}`}</span>
+            </button>
+            <button
+              className={`wishlist-toggle-btn ${isInWishlist(product._id || product.id) ? 'wishlist-toggle-btn--active' : ''}`}
+              onClick={() => toggleWishlist(product)}
+              aria-label="Add to Wishlist"
+              title={isInWishlist(product._id || product.id) ? 'Saved to Wishlist' : 'Save to Wishlist'}
+            >
+              <svg width="20" height="20" viewBox="0 0 24 24" fill={isInWishlist(product._id || product.id) ? '#c9a84c' : 'none'} stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z" />
+              </svg>
+            </button>
+          </div>
 
           {/* Enquiry Form */}
           {!enquirySent ? (

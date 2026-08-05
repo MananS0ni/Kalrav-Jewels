@@ -1,6 +1,7 @@
 import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
 import { AuthProvider } from './context/AuthContext';
 import { CartProvider } from './context/CartContext';
+import { WishlistProvider } from './context/WishlistContext';
 import Navbar from './components/Navbar/Navbar';
 import Footer from './components/Footer/Footer';
 import CartDrawer from './components/CartDrawer/CartDrawer';
@@ -15,6 +16,7 @@ import Admin from './pages/Admin/Admin';
 import Checkout from './pages/Checkout/Checkout';
 import OrderConfirmation from './pages/OrderConfirmation/OrderConfirmation';
 import MyOrders from './pages/MyOrders/MyOrders';
+import Wishlist from './pages/Wishlist/Wishlist';
 import Legal from './pages/Legal/Legal';
 import ResetPassword from './pages/ResetPassword/ResetPassword';
 import './App.css';
@@ -36,6 +38,7 @@ const AppLayout = () => {
           <Route path="/collections/:id" element={<ProductDetail />} />
           <Route path="/about" element={<About />} />
           <Route path="/contact" element={<Contact />} />
+          <Route path="/wishlist" element={<Wishlist />} />
           <Route path="/admin-kalrav-panel" element={<Admin />} />
           <Route path="/checkout" element={<Checkout />} />
           <Route path="/order-confirmation/:orderId" element={<OrderConfirmation />} />
@@ -52,11 +55,13 @@ const AppLayout = () => {
 function App() {
   return (
     <CartProvider>
-      <AuthProvider>
-        <Router>
-          <AppLayout />
-        </Router>
-      </AuthProvider>
+      <WishlistProvider>
+        <AuthProvider>
+          <Router>
+            <AppLayout />
+          </Router>
+        </AuthProvider>
+      </WishlistProvider>
     </CartProvider>
   );
 }
