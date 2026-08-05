@@ -15,22 +15,34 @@ export const CartProvider = ({ children }) => {
   const [cartOpen, setCartOpen] = useState(false);
   const [token, setToken] = useState(() => localStorage.getItem('nh_token') || null);
 
-  // Called by AuthContext after login — syncs token into CartContext
-  const setCartToken = useCallback((t) => setToken(t), []);
+  // Called by AuthContext after login or logout
+  const setCartToken = useCallback((t) => {
+    setToken(t);
+    if (!t) {
+      // User logged out: clear cart items in memory and remove guest cart key
+      setItems([]);
+      try {
+        localStorage.removeItem('kalrav_cart');
+      } catch (e) {
+        console.error('Failed to clear cart on logout', e);
+      }
+    }
+  }, []);
 
-  // Save guest cart to localStorage whenever items change
+  // Save guest cart to localStorage whenever items change (only when not logged in)
   useEffect(() => {
     if (!token) {
-      localStorage.setItem('kalrav_cart', JSON.stringify(items));
+      try {
+        localStorage.setItem('kalrav_cart', JSON.stringify(items));
+      } catch (e) {
+        console.error('Failed to save guest cart', e);
+      }
     }
   }, [items, token]);
 
-  // Fetch or sync cart from backend whenever token changes (login/logout)
+  // Fetch or sync cart from backend whenever token changes (login)
   useEffect(() => {
-    if (!token) {
-      // Don't clear guest cart on logout here, AuthContext does it
-      return;
-    }
+    if (!token) return;
 
     const localItems = JSON.parse(localStorage.getItem('kalrav_cart')) || [];
     
