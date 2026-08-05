@@ -25,6 +25,10 @@ const AppLayout = () => {
   const location = useLocation();
   const isAdmin = location.pathname === '/admin-kalrav-panel';
 
+  if (location.search.includes('simulate_error=true')) {
+    throw new Error('Simulated Live ErrorBoundary Test');
+  }
+
   return (
     <>
       <ScrollToTop />
