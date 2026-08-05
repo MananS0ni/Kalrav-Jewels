@@ -44,9 +44,14 @@ export const CartProvider = ({ children }) => {
   useEffect(() => {
     if (!token) return;
 
-    const localItems = JSON.parse(localStorage.getItem('kalrav_cart')) || [];
+    let localItems = [];
+    try {
+      localItems = JSON.parse(localStorage.getItem('kalrav_cart')) || [];
+    } catch {
+      localItems = [];
+    }
     
-    if (localItems.length > 0) {
+    if (Array.isArray(localItems) && localItems.length > 0) {
       // User just logged in and has local items -> merge them
       fetch(`${API}/cart/sync`, {
         method: 'POST',
@@ -55,7 +60,7 @@ export const CartProvider = ({ children }) => {
       })
         .then((res) => res.json())
         .then((data) => {
-          setItems(data.items || []);
+          setItems(Array.isArray(data?.items) ? data.items : []);
           localStorage.removeItem('kalrav_cart'); // clear local after successful sync
         })
         .catch(() => setItems([]));
@@ -65,21 +70,23 @@ export const CartProvider = ({ children }) => {
         headers: { Authorization: `Bearer ${token}` },
       })
         .then((res) => res.json())
-        .then((data) => setItems(data.items || []))
+        .then((data) => setItems(Array.isArray(data?.items) ? data.items : []))
         .catch(() => setItems([]));
     }
   }, [token]);
 
   const addToCart = async (product, selectedSize = '') => {
+    if (!product) return;
     const productId = product._id || product.id;
-    const price = typeof product.price === 'number'
+    const rawPrice = typeof product.price === 'number'
       ? product.price
-      : parseInt(String(product.price).replace(/[^0-9]/g, ''));
+      : parseInt(String(product.price || 0).replace(/[^0-9]/g, '')) || 0;
+    const price = isNaN(rawPrice) ? 0 : rawPrice;
     const size = selectedSize || product.selectedSize || product.size || '';
 
     const payload = {
       productId,
-      name: product.name,
+      name: product.name || 'Sterling Silver Piece',
       image: product.images?.[0] || product.image || '/ring_product.webp',
       category: product.category || '',
       material: product.material || '',
@@ -90,21 +97,26 @@ export const CartProvider = ({ children }) => {
 
     if (token) {
       // Sync with backend
-      const res = await fetch(`${API}/cart/add`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
-        body: JSON.stringify(payload),
-      });
-      const data = await res.json();
-      if (res.ok) setItems(data.items);
+      try {
+        const res = await fetch(`${API}/cart/add`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
+          body: JSON.stringify(payload),
+        });
+        const data = await res.json();
+        if (res.ok && Array.isArray(data?.items)) setItems(data.items);
+      } catch (e) {
+        console.error('Add to cart failed', e);
+      }
     } else {
       // Not logged in — update locally only
       setItems((prev) => {
-        const existing = prev.find((i) => i.productId === productId && (i.size || '') === size);
+        const safePrev = Array.isArray(prev) ? prev : [];
+        const existing = safePrev.find((i) => i.productId === productId && (i.size || '') === size);
         if (existing) {
-          return prev.map((i) => (i.productId === productId && (i.size || '') === size) ? { ...i, qty: i.qty + 1 } : i);
+          return safePrev.map((i) => (i.productId === productId && (i.size || '') === size) ? { ...i, qty: (i.qty || 1) + 1 } : i);
         }
-        return [...prev, { ...payload, qty: 1 }];
+        return [...safePrev, { ...payload, qty: 1 }];
       });
     }
     setCartOpen(true);
@@ -112,45 +124,58 @@ export const CartProvider = ({ children }) => {
 
   const removeFromCart = async (productId, size = '') => {
     if (token) {
-      const url = size ? `${API}/cart/remove/${productId}?size=${encodeURIComponent(size)}` : `${API}/cart/remove/${productId}`;
-      const res = await fetch(url, {
-        method: 'DELETE',
-        headers: { Authorization: `Bearer ${token}` },
-      });
-      const data = await res.json();
-      if (res.ok) setItems(data.items);
+      try {
+        const url = size ? `${API}/cart/remove/${productId}?size=${encodeURIComponent(size)}` : `${API}/cart/remove/${productId}`;
+        const res = await fetch(url, {
+          method: 'DELETE',
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        const data = await res.json();
+        if (res.ok && Array.isArray(data?.items)) setItems(data.items);
+      } catch (e) {
+        console.error('Remove from cart failed', e);
+      }
     } else {
-      setItems((prev) => prev.filter((i) => !(i.productId === productId && (!size || (i.size || '') === size))));
+      setItems((prev) => (Array.isArray(prev) ? prev : []).filter((i) => !(i.productId === productId && (!size || (i.size || '') === size))));
     }
   };
 
   const updateQty = async (productId, qty, size = '') => {
     if (qty < 1) { removeFromCart(productId, size); return; }
     if (token) {
-      const res = await fetch(`${API}/cart/update`, {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
-        body: JSON.stringify({ productId, size, qty }),
-      });
-      const data = await res.json();
-      if (res.ok) setItems(data.items);
+      try {
+        const res = await fetch(`${API}/cart/update`, {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
+          body: JSON.stringify({ productId, size, qty }),
+        });
+        const data = await res.json();
+        if (res.ok && Array.isArray(data?.items)) setItems(data.items);
+      } catch (e) {
+        console.error('Update qty failed', e);
+      }
     } else {
-      setItems((prev) => prev.map((i) => (i.productId === productId && (i.size || '') === size) ? { ...i, qty } : i));
+      setItems((prev) => (Array.isArray(prev) ? prev : []).map((i) => (i.productId === productId && (i.size || '') === size) ? { ...i, qty } : i));
     }
   };
 
   const clearCart = async () => {
     if (token) {
-      await fetch(`${API}/cart/clear`, {
-        method: 'DELETE',
-        headers: { Authorization: `Bearer ${token}` },
-      });
+      try {
+        await fetch(`${API}/cart/clear`, {
+          method: 'DELETE',
+          headers: { Authorization: `Bearer ${token}` },
+        });
+      } catch (e) {
+        console.error('Clear cart failed', e);
+      }
     }
     setItems([]);
   };
 
-  const totalItems = items.reduce((sum, i) => sum + i.qty, 0);
-  const totalPrice = items.reduce((sum, i) => sum + i.price * i.qty, 0);
+  const safeItems = Array.isArray(items) ? items : [];
+  const totalItems = safeItems.reduce((sum, i) => sum + (i.qty || 0), 0);
+  const totalPrice = safeItems.reduce((sum, i) => sum + (Number(i.price) || 0) * (i.qty || 0), 0);
 
   return (
     <CartContext.Provider value={{ items, addToCart, removeFromCart, updateQty, clearCart, totalItems, totalPrice, cartOpen, setCartOpen, setCartToken }}>
