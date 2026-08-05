@@ -54,15 +54,15 @@ const AppLayout = () => {
 
 function App() {
   return (
-    <AuthProvider>
-      <CartProvider>
+    <CartProvider>
+      <AuthProvider>
         <WishlistProvider>
           <Router>
             <AppLayout />
           </Router>
         </WishlistProvider>
-      </CartProvider>
-    </AuthProvider>
+      </AuthProvider>
+    </CartProvider>
   );
 }
 
