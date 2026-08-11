@@ -102,18 +102,6 @@
 
   <!-- Google Analytics 4 (Production Only) -->
   <script src="/ga-init.js"></script>
-
-  <!-- Pure CSS Keyframe Animation Fail-Safe for Slow/Unresponsive Connections -->
-  <style>
-    @keyframes revealOfflineBtn {
-      0% { opacity: 0; display: none; }
-      99% { opacity: 0; display: inline-block; }
-      100% { opacity: 1; display: inline-block; }
-    }
-    .css-failsafe-btn {
-      animation: revealOfflineBtn 0.1s linear 4s forwards;
-    }
-  </style>
 </head>
 
 <body>
@@ -125,7 +113,13 @@
       <p style="font-size: 11px; letter-spacing: 2px; text-transform: uppercase; color: #C9A84C; margin-bottom: 8px;">Kalrav Jewels</p>
       <h1 id="static-offline-title" style="font-family: Georgia, serif; font-size: 28px; font-weight: 400; margin-bottom: 12px; color: #1A1A1A;">Loading Kalrav Jewels…</h1>
       <p id="static-offline-msg" style="font-size: 13px; color: #666666; max-width: 400px; line-height: 1.6; margin-bottom: 24px;">Please wait while we connect to our fine 925 sterling silver collection.</p>
-      <button id="static-offline-btn" class="css-failsafe-btn" onclick="window.location.reload()" style="display: none; padding: 12px 28px; background: #1A1A1A; color: #FFFFFF; border: none; border-radius: 2px; font-size: 12px; letter-spacing: 1px; text-transform: uppercase; cursor: pointer;">Try Again</button>
+      <button id="static-offline-btn" onclick="window.location.reload()" style="display: none; padding: 12px 28px; background: #1A1A1A; color: #FFFFFF; border: none; border-radius: 2px; font-size: 12px; letter-spacing: 1px; text-transform: uppercase; cursor: pointer;">Try Again</button>
+      <noscript>
+        <div style="margin-top: 8px;">
+          <p style="font-size: 12px; color: #888888; margin-bottom: 16px;">JavaScript is currently disabled or blocked.</p>
+          <button onclick="window.location.reload()" style="padding: 12px 28px; background: #1A1A1A; color: #FFFFFF; border: none; border-radius: 2px; font-size: 12px; letter-spacing: 1px; text-transform: uppercase; cursor: pointer;">Try Again</button>
+        </div>
+      </noscript>
     </div>
     <!-- Instant Hashed Inline Script (Runs synchronously before external JS download) -->
     <script>
