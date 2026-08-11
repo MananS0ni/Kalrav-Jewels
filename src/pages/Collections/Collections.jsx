@@ -138,20 +138,8 @@ const Collections = () => {
       {/* Combined Filter & Scrollable Categories Bar */}
       <div className="filter-bar" id="filter-bar">
         <div className="container filter-bar__inner">
+          {/* Left: Scrollable Category Tabs */}
           <div className="filter-bar__left">
-            <button className="filter-trigger-btn" onClick={openFilterDrawer} id="open-filters-btn">
-              <svg className="filter-funnel-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                <polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"></polygon>
-              </svg>
-              <span>Filters</span>
-              {activeFilterCount > 0 && (
-                <span className="filter-trigger-badge">{activeFilterCount}</span>
-              )}
-            </button>
-
-            <div className="filter-bar__divider"></div>
-
-            {/* Scrollable Category Tabs */}
             <div className="filter-bar__categories">
               {categories.map((cat) => (
                 <button
@@ -166,10 +154,20 @@ const Collections = () => {
             </div>
           </div>
 
+          {/* Right: Piece Count + Filters Button */}
           <div className="filter-bar__right">
             <span className="result-count-label">
               {filtered.length} {filtered.length === 1 ? 'Piece' : 'Pieces'}
             </span>
+            <button className="filter-trigger-btn" onClick={openFilterDrawer} id="open-filters-btn">
+              <svg className="filter-funnel-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"></polygon>
+              </svg>
+              <span>Filters</span>
+              {activeFilterCount > 0 && (
+                <span className="filter-trigger-badge">{activeFilterCount}</span>
+              )}
+            </button>
           </div>
         </div>
       </div>
