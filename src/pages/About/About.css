@@ -1,4 +1,302 @@
-/* Founder Section */
+/* ── Legacy Quote Section (Stitch UI Design) ── */
+.legacy-quote-section {
+  padding: 80px 20px;
+  background: var(--white);
+  border-bottom: 1px solid var(--border);
+}
+
+.quote-mark {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 32px;
+  color: var(--gold);
+  opacity: 0.7;
+  letter-spacing: -2px;
+  line-height: 1;
+  margin-bottom: 24px;
+}
+
+.legacy-quote-text {
+  font-family: 'Cormorant Garamond', serif;
+  font-style: italic;
+  font-size: clamp(24px, 3.5vw, 36px);
+  font-weight: 400;
+  color: var(--charcoal);
+  line-height: 1.4;
+  max-width: 680px;
+  margin: 0 auto 28px;
+  letter-spacing: 0;
+}
+
+.legacy-quote-author {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: var(--gold);
+}
+
+/* ── Era Slider Section (Then vs. Now) ── */
+.era-slider-section {
+  padding: 90px 0;
+  background: var(--charcoal);
+  color: var(--white);
+  position: relative;
+  overflow: hidden;
+}
+
+.era-slider-container {
+  position: relative;
+  width: 100%;
+  min-height: 440px;
+  background: #121212;
+  border: 1px solid rgba(201, 168, 76, 0.3);
+  border-radius: 4px;
+  overflow: hidden;
+  cursor: ew-resize;
+  user-select: none;
+  touch-action: pan-y;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+}
+
+.era-panel {
+  position: absolute;
+  inset: 0;
+  padding: 60px 80px;
+  display: flex;
+  align-items: center;
+}
+
+.era-panel--past {
+  background: linear-gradient(135deg, #1c140b 0%, #2e1d0f 50%, #150e06 100%);
+  color: #f4e8c1;
+}
+
+.era-panel--modern {
+  background: linear-gradient(135deg, #0d1218 0%, #151d26 50%, #0a0e13 100%);
+  color: var(--white);
+}
+
+.era-content {
+  max-width: 650px;
+}
+
+.era-year-badge {
+  display: inline-block;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 2px;
+  padding: 6px 16px;
+  border-radius: 20px;
+  margin-bottom: 20px;
+  text-transform: uppercase;
+}
+
+.era-year-badge--past {
+  background: rgba(201, 168, 76, 0.2);
+  color: #e5be65;
+  border: 1px solid rgba(201, 168, 76, 0.4);
+}
+
+.era-year-badge--modern {
+  background: rgba(255, 255, 255, 0.15);
+  color: #ffffff;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.era-heading {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(28px, 3.5vw, 42px);
+  font-weight: 400;
+  line-height: 1.2;
+  margin-bottom: 16px;
+}
+
+.era-body {
+  font-size: 14px;
+  font-weight: 300;
+  line-height: 1.8;
+  opacity: 0.9;
+  margin-bottom: 28px;
+}
+
+.era-tags {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.era-tags span {
+  font-size: 12px;
+  font-weight: 400;
+  background: rgba(0, 0, 0, 0.3);
+  padding: 6px 14px;
+  border-radius: 2px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* Draggable Divider Handle */
+.era-slider-divider {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  background: linear-gradient(to bottom, var(--gold-light), var(--gold), var(--gold-light));
+  box-shadow: 0 0 15px rgba(201, 168, 76, 0.8);
+  z-index: 10;
+  transform: translateX(-50%);
+  pointer-events: none;
+}
+
+.era-slider-handle {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: var(--gold);
+  color: #000;
+  padding: 8px 18px;
+  border-radius: 20px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.6), 0 0 12px rgba(201, 168, 76, 0.8);
+  white-space: nowrap;
+}
+
+.handle-arrow {
+  font-size: 9px;
+  opacity: 0.8;
+}
+
+/* ── Craftsmanship Evolution Grid Section ── */
+.craft-evolution-section {
+  padding: 90px 0;
+  background: var(--off-white);
+}
+
+.craft-stage-tabs {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  margin-bottom: 40px;
+  flex-wrap: wrap;
+}
+
+.craft-tab-btn {
+  background: var(--white);
+  border: 1px solid var(--border);
+  padding: 16px 28px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.craft-tab-btn:hover {
+  border-color: var(--gold);
+  background: var(--gold-pale);
+}
+
+.craft-tab-btn.active {
+  background: var(--charcoal);
+  color: var(--white);
+  border-color: var(--charcoal);
+}
+
+.craft-tab-num {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--gold);
+}
+
+.craft-tab-btn.active .craft-tab-num {
+  color: var(--gold-light);
+}
+
+.craft-tab-title {
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: 0.5px;
+}
+
+/* Craft Stage Card */
+.craft-stage-card {
+  display: grid;
+  grid-template-columns: 1fr 60px 1fr;
+  align-items: center;
+  background: var(--white);
+  border: 1px solid var(--border);
+  box-shadow: 0 10px 30px rgba(0,0,0,0.04);
+  overflow: hidden;
+  border-radius: 4px;
+}
+
+.craft-card-side {
+  padding: 50px 40px;
+}
+
+.craft-card-side--past {
+  background: var(--white);
+}
+
+.craft-card-side--modern {
+  background: #fbf9f4;
+}
+
+.craft-badge {
+  display: inline-block;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: var(--gray-mid);
+  margin-bottom: 14px;
+}
+
+.craft-badge--gold {
+  color: var(--gold);
+}
+
+.craft-card-side h3 {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 26px;
+  font-weight: 500;
+  color: var(--charcoal);
+  margin-bottom: 12px;
+}
+
+.craft-card-side p {
+  font-size: 13px;
+  font-weight: 300;
+  color: var(--gray-mid);
+  line-height: 1.8;
+}
+
+.craft-card-divider {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.divider-icon {
+  width: 40px;
+  height: 40px;
+  background: var(--gold);
+  color: #fff;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+}
+
+/* ── Founder Section ── */
 .founder-section {
   padding: 100px 0;
   background: var(--white);
@@ -26,34 +324,7 @@
   transform: scale(1.04);
 }
 
-.founder-badge {
-  position: absolute;
-  bottom: 30px;
-  right: -1px;
-  background: var(--gold);
-  padding: 18px 26px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
-.founder-badge-top {
-  font-size: 9px;
-  font-weight: 600;
-  letter-spacing: 3px;
-  text-transform: uppercase;
-  color: rgba(255,255,255,0.8);
-}
-
-.founder-badge-year {
-  font-family: 'Cormorant Garamond', serif;
-  font-size: 36px;
-  font-weight: 600;
-  color: var(--white);
-  line-height: 1.1;
-}
-
-/* Values */
+/* ── Values ── */
 .values-section {
   padding: 100px 0;
   background: var(--off-white);
@@ -106,7 +377,7 @@
   letter-spacing: 0.3px;
 }
 
-/* Timeline */
+/* ── Timeline ── */
 .timeline-section {
   padding: 100px 0;
   background: var(--cream);
@@ -125,8 +396,13 @@
   bottom: 0;
   left: 50%;
   transform: translateX(-50%);
-  width: 1px;
+  width: 2px;
   background: var(--border);
+}
+
+.timeline-line--glowing {
+  background: linear-gradient(to bottom, var(--gold), var(--gold-light), var(--gold));
+  box-shadow: 0 0 10px rgba(201, 168, 76, 0.4);
 }
 
 .timeline-item {
@@ -164,19 +440,19 @@
   left: 50%;
   top: 6px;
   transform: translateX(-50%);
-  width: 12px;
-  height: 12px;
+  width: 14px;
+  height: 14px;
   border-radius: 50%;
   background: var(--gold);
   border: 3px solid var(--cream);
-  box-shadow: 0 0 0 1px var(--gold);
+  box-shadow: 0 0 0 2px var(--gold);
   z-index: 1;
 }
 
 .timeline-year {
   font-family: 'Cormorant Garamond', serif;
-  font-size: 36px;
-  font-weight: 300;
+  font-size: 32px;
+  font-weight: 400;
   color: var(--gold);
   display: block;
   line-height: 1;
@@ -192,13 +468,13 @@
 }
 
 .timeline-desc {
-  font-size: 12px;
+  font-size: 13px;
   font-weight: 300;
   color: var(--gray-mid);
   line-height: 1.8;
 }
 
-/* About CTA */
+/* ── About CTA ── */
 .about-cta {
   background: var(--charcoal);
   padding: 100px 0;
@@ -247,11 +523,22 @@
   justify-content: center;
 }
 
-/* Responsive */
+/* ── Responsive Styling ── */
 @media (max-width: 900px) {
-  .founder-section__inner {
+  .era-panel {
+    padding: 40px 30px;
+  }
+
+  .craft-stage-card {
     grid-template-columns: 1fr;
-    gap: 40px;
+  }
+
+  .craft-card-divider {
+    padding: 15px 0;
+  }
+
+  .divider-icon {
+    transform: rotate(90deg);
   }
 
   .values-grid {
@@ -280,70 +567,20 @@
   }
 }
 
-@media (max-width: 768px) {
-  .founder-section {
-    padding: 72px 0;
-  }
-
-  .values-section {
-    padding: 72px 0;
-  }
-
-  .timeline-section {
-    padding: 72px 0;
-  }
-
-  .about-cta {
-    padding: 72px 0;
-  }
-
-  .founder-img {
-    height: 380px;
-  }
-
-  .about-cta__btns {
-    flex-direction: column;
-    align-items: center;
-    gap: 14px;
-  }
-}
-
 @media (max-width: 600px) {
+  .era-slider-container {
+    min-height: 520px;
+  }
+
+  .era-panel {
+    padding: 30px 20px;
+  }
+
+  .craft-stage-tabs {
+    flex-direction: column;
+  }
+
   .values-grid {
     grid-template-columns: 1fr;
-  }
-
-  .value-card {
-    padding: 32px 24px;
-  }
-}
-
-@media (max-width: 480px) {
-  .founder-section {
-    padding: 56px 0;
-  }
-
-  .values-section {
-    padding: 56px 0;
-  }
-
-  .timeline-section {
-    padding: 56px 0;
-  }
-
-  .founder-img {
-    height: 300px;
-  }
-
-  .timeline-year {
-    font-size: 28px;
-  }
-
-  .timeline-title {
-    font-size: 18px;
-  }
-
-  .about-cta {
-    padding: 56px 0;
   }
 }
