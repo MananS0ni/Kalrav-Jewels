@@ -98,19 +98,7 @@
   </script>
 
   <!-- Google Analytics 4 (Production Only) -->
-  <script>
-    if (window.location.hostname !== 'localhost' && window.location.hostname !== '127.0.0.1') {
-      const gaScript = document.createElement('script');
-      gaScript.async = true;
-      gaScript.src = "https://www.googletagmanager.com/gtag/js?id=G-1FP3Z9BGBV";
-      document.head.appendChild(gaScript);
-
-      window.dataLayer = window.dataLayer || [];
-      function gtag() { dataLayer.push(arguments); }
-      gtag('js', new Date());
-      gtag('config', 'G-1FP3Z9BGBV', { send_page_view: false });
-    }
-  </script>
+  <script src="/ga-init.js"></script>
 </head>
 
 <body>
@@ -124,18 +112,7 @@
       <p id="static-offline-msg" style="font-size: 13px; color: #666666; max-width: 400px; line-height: 1.6; margin-bottom: 24px;">Please wait while we connect to our fine 925 sterling silver collection.</p>
       <button id="static-offline-btn" onclick="window.location.reload()" style="display: none; padding: 12px 28px; background: #1A1A1A; color: #FFFFFF; border: none; border-radius: 2px; font-size: 12px; letter-spacing: 1px; text-transform: uppercase; cursor: pointer;">Try Again</button>
     </div>
-    <script>
-      (function() {
-        if (!navigator.onLine) {
-          var titleEl = document.getElementById('static-offline-title');
-          var msgEl = document.getElementById('static-offline-msg');
-          var btnEl = document.getElementById('static-offline-btn');
-          if (titleEl) titleEl.innerText = "You're Offline";
-          if (msgEl) msgEl.innerText = "You're offline. Please check your connection and try again.";
-          if (btnEl) btnEl.style.display = "inline-block";
-        }
-      })();
-    </script>
+    <script src="/offline-detect.js"></script>
   </div>
   <script type="module" src="/src/main.jsx"></script>
 </body>
