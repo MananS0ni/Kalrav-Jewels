@@ -3,6 +3,9 @@
 
 <head>
   <meta charset="UTF-8" />
+  <!-- CSP Meta Tag with exact sha256 hash for inline offline-detect script -->
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-typwb9HtL7ITCup1K+h1k0vY2g0QMS6Ne7GOzgK85fw=' https://www.googletagmanager.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self' https: http:; video-src 'self' data: https:;" />
+
   <!-- Favicon Tags for Google Search & Browsers -->
   <link rel="shortcut icon" href="/favicon.ico" />
   <link rel="icon" type="image/x-icon" href="/favicon.ico" />
@@ -99,20 +102,44 @@
 
   <!-- Google Analytics 4 (Production Only) -->
   <script src="/ga-init.js"></script>
+
+  <!-- Pure CSS Keyframe Animation Fail-Safe for Slow/Unresponsive Connections -->
+  <style>
+    @keyframes revealOfflineBtn {
+      0% { opacity: 0; display: none; }
+      99% { opacity: 0; display: inline-block; }
+      100% { opacity: 1; display: inline-block; }
+    }
+    .css-failsafe-btn {
+      animation: revealOfflineBtn 0.1s linear 4s forwards;
+    }
+  </style>
 </head>
 
 <body>
   <div id="root">
-    <!-- Static Pre-React Loading & Offline Fallback -->
+    <!-- Static Offline & Pre-React Fallback -->
     <div id="static-offline-fallback" style="display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 100vh; padding: 40px 20px; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; text-align: center; background: #FFFFFF; color: #1A1A1A;">
       <img src="/kalrav_vertical_v2.png" alt="Kalrav Jewels" style="max-width: 140px; height: auto; margin-bottom: 20px;" />
       <div style="width: 40px; height: 1px; background: #C9A84C; margin: 0 auto 20px;"></div>
       <p style="font-size: 11px; letter-spacing: 2px; text-transform: uppercase; color: #C9A84C; margin-bottom: 8px;">Kalrav Jewels</p>
       <h1 id="static-offline-title" style="font-family: Georgia, serif; font-size: 28px; font-weight: 400; margin-bottom: 12px; color: #1A1A1A;">Loading Kalrav Jewels…</h1>
       <p id="static-offline-msg" style="font-size: 13px; color: #666666; max-width: 400px; line-height: 1.6; margin-bottom: 24px;">Please wait while we connect to our fine 925 sterling silver collection.</p>
-      <button id="static-offline-btn" onclick="window.location.reload()" style="display: none; padding: 12px 28px; background: #1A1A1A; color: #FFFFFF; border: none; border-radius: 2px; font-size: 12px; letter-spacing: 1px; text-transform: uppercase; cursor: pointer;">Try Again</button>
+      <button id="static-offline-btn" class="css-failsafe-btn" onclick="window.location.reload()" style="display: none; padding: 12px 28px; background: #1A1A1A; color: #FFFFFF; border: none; border-radius: 2px; font-size: 12px; letter-spacing: 1px; text-transform: uppercase; cursor: pointer;">Try Again</button>
     </div>
-    <script src="/offline-detect.js"></script>
+    <!-- Instant Hashed Inline Script (Runs synchronously before external JS download) -->
+    <script>
+      (function() {
+        if (!navigator.onLine) {
+          var titleEl = document.getElementById('static-offline-title');
+          var msgEl = document.getElementById('static-offline-msg');
+          var btnEl = document.getElementById('static-offline-btn');
+          if (titleEl) titleEl.innerText = "You're Offline";
+          if (msgEl) msgEl.innerText = "You're offline. Please check your connection and try again.";
+          if (btnEl) btnEl.style.display = "inline-block";
+        }
+      })();
+    </script>
   </div>
   <script type="module" src="/src/main.jsx"></script>
 </body>
