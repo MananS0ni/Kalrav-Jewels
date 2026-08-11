@@ -407,10 +407,13 @@
   .product-detail__main {
     padding: 24px 16px 48px;
     gap: 24px;
+    width: 100%;
+    max-width: 100vw;
+    box-sizing: border-box;
   }
 
   .product-detail__name {
-    font-size: clamp(1.6rem, 6vw, 2.2rem);
+    font-size: clamp(1.5rem, 5.5vw, 2.2rem);
   }
 
   .product-detail__price {
@@ -419,16 +422,38 @@
 
   .product-detail__thumbnails {
     gap: 8px;
-    margin-top: 12px;
-    padding-bottom: 4px;
+    margin-top: 14px;
+    padding-bottom: 8px;
     padding-right: 8px;
+    width: 100%;
+    max-width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    touch-action: pan-x;
+    scrollbar-width: thin;
+    scrollbar-color: var(--gold) var(--cream);
+  }
+
+  .product-detail__thumbnails::-webkit-scrollbar {
+    height: 3px;
+  }
+
+  .product-detail__thumbnails::-webkit-scrollbar-track {
+    background: var(--cream);
+    border-radius: 2px;
+  }
+
+  .product-detail__thumbnails::-webkit-scrollbar-thumb {
+    background: var(--gold);
+    border-radius: 2px;
   }
 
   .thumbnail-btn {
-    flex: 0 0 54px;
-    width: 54px;
-    height: 54px;
+    flex: 0 0 52px;
+    width: 52px;
+    height: 52px;
     border-radius: 6px;
+    box-sizing: border-box;
   }
 
   .related-section {
