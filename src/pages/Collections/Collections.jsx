@@ -108,20 +108,8 @@ const Collections = () => {
             ))}
           </div>
 
-          {/* Search, Price & Sorting Bar */}
+          {/* Price & Sorting Bar */}
           <div className="filter-bar__controls">
-            <div className="filter-search-wrap">
-              <input
-                type="text"
-                placeholder="Search jewellery..."
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className="filter-search-input"
-              />
-              {searchQuery && (
-                <button className="filter-search-clear" onClick={() => setSearchQuery('')}>✕</button>
-              )}
-            </div>
 
             <select
               value={priceRange}
