@@ -135,7 +135,7 @@ const Collections = () => {
         </div>
       </div>
 
-      {/* Single Consolidated Filter Bar */}
+      {/* Combined Filter & Scrollable Categories Bar */}
       <div className="filter-bar" id="filter-bar">
         <div className="container filter-bar__inner">
           <div className="filter-bar__left">
@@ -149,30 +149,21 @@ const Collections = () => {
               )}
             </button>
 
-            {/* Active Filter Quick Chips */}
-            {activeFilterCount > 0 && (
-              <div className="active-chips-strip">
-                {activeCategory !== 'all' && (
-                  <span className="active-chip">
-                    {categories.find(c => c.slug === activeCategory)?.label}
-                    <button onClick={() => setActiveCategory('all')}>✕</button>
-                  </span>
-                )}
-                {priceRange !== 'all' && (
-                  <span className="active-chip">
-                    {priceRanges.find(p => p.slug === priceRange)?.label}
-                    <button onClick={() => setPriceRange('all')}>✕</button>
-                  </span>
-                )}
-                {sortBy !== 'default' && (
-                  <span className="active-chip">
-                    {sortOptions.find(s => s.slug === sortBy)?.label}
-                    <button onClick={() => setSortBy('default')}>✕</button>
-                  </span>
-                )}
-                <button className="clear-all-text-btn" onClick={clearAllFilters}>Clear All</button>
-              </div>
-            )}
+            <div className="filter-bar__divider"></div>
+
+            {/* Scrollable Category Tabs */}
+            <div className="filter-bar__categories">
+              {categories.map((cat) => (
+                <button
+                  key={cat.slug}
+                  className={`filter-btn ${activeCategory === cat.slug ? 'filter-btn--active' : ''}`}
+                  onClick={() => setActiveCategory(cat.slug)}
+                  id={`filter-${cat.slug}`}
+                >
+                  {cat.label}
+                </button>
+              ))}
+            </div>
           </div>
 
           <div className="filter-bar__right">

@@ -68,12 +68,63 @@
   display: flex;
   align-items: center;
   gap: 16px;
-  overflow-x: auto;
-  scrollbar-width: none;
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
 }
 
-.filter-bar__left::-webkit-scrollbar {
+.filter-bar__divider {
+  width: 1px;
+  height: 24px;
+  background: var(--border);
+  flex-shrink: 0;
+}
+
+.filter-bar__categories {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  overflow-x: auto;
+  flex: 1;
+  min-width: 0;
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+  -webkit-overflow-scrolling: touch;
+  touch-action: pan-x;
+}
+
+.filter-bar__categories::-webkit-scrollbar {
   display: none;
+}
+
+.filter-btn {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: var(--gray-mid);
+  padding: 8px 16px;
+  height: 36px;
+  white-space: nowrap;
+  border-radius: 20px;
+  border: 1px solid transparent;
+  transition: all 0.25s ease;
+  background: none;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+.filter-btn:hover {
+  color: var(--gold-dark);
+  background: var(--cream);
+}
+
+.filter-btn--active {
+  color: var(--gold-dark);
+  background: var(--gold-pale);
+  border-color: var(--gold);
+  font-weight: 600;
 }
 
 /* Filter Trigger Pill Button */
