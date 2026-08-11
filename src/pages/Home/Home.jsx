@@ -92,17 +92,6 @@ const Home = () => {
         </div>
       </div>
 
-      {/* ─── Legacy Quote Banner (Stitch Design) ─── */}
-      <section className="legacy-quote-section">
-        <div className="container text-center">
-          <div className="quote-mark">99</div>
-          <blockquote className="legacy-quote-text">
-            "Jewelry is more than an accessory;<br />it is a legacy you wear."
-          </blockquote>
-          <p className="legacy-quote-author">— THE KALRAV ARTISANS</p>
-        </div>
-      </section>
-
       {/* ─── Categories ─── */}
       <section className="categories" id="categories-section">
         <div className="container">

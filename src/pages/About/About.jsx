@@ -113,17 +113,6 @@ const About = () => {
         </div>
       </div>
 
-      {/* Legacy Quote Banner (Stitch Design) */}
-      <section className="legacy-quote-section">
-        <div className="container text-center">
-          <div className="quote-mark">99</div>
-          <blockquote className="legacy-quote-text">
-            "Jewelry is more than an accessory;<br />it is a legacy you wear."
-          </blockquote>
-          <p className="legacy-quote-author">— THE KALRAV ARTISANS</p>
-        </div>
-      </section>
-
       {/* Interactive "Then vs Now" Time-Slider */}
       <section className="era-slider-section" id="era-slider-section">
         <div className="container">
