@@ -406,7 +406,7 @@
 
   .product-detail__main {
     padding: 24px 16px 48px;
-    gap: 28px;
+    gap: 24px;
   }
 
   .product-detail__name {
@@ -415,6 +415,20 @@
 
   .product-detail__price {
     font-size: 22px;
+  }
+
+  .product-detail__thumbnails {
+    gap: 8px;
+    margin-top: 12px;
+    padding-bottom: 4px;
+    padding-right: 8px;
+  }
+
+  .thumbnail-btn {
+    flex: 0 0 54px;
+    width: 54px;
+    height: 54px;
+    border-radius: 6px;
   }
 
   .related-section {
