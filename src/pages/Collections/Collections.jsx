@@ -21,8 +21,14 @@ const priceRanges = [
   { slug: 'above-5000', label: 'Above ₹5,000' },
 ];
 
+const sortOptions = [
+  { slug: 'default', label: 'Featured' },
+  { slug: 'price-asc', label: 'Price: Low to High' },
+  { slug: 'price-desc', label: 'Price: High to Low' },
+];
+
 const Collections = () => {
-  const [searchParams] = useSearchParams();
+  const [searchParams, setSearchParams] = useSearchParams();
   const initialCat = searchParams.get('category') || 'all';
   const [activeCategory, setActiveCategory] = useState(initialCat);
   const [priceRange, setPriceRange] = useState('all');
@@ -33,12 +39,49 @@ const Collections = () => {
   const [error, setError] = useState('');
   const { toggleWishlist, isInWishlist } = useWishlist();
 
+  // Consolidated Filter Drawer State & Drafts
+  const [isFilterOpen, setIsFilterOpen] = useState(false);
+  const [draftCategory, setDraftCategory] = useState(initialCat);
+  const [draftPriceRange, setDraftPriceRange] = useState('all');
+  const [draftSortBy, setDraftSortBy] = useState('default');
+
   useEffect(() => {
     fetch(`${API}/products`)
       .then((res) => res.json())
       .then((data) => { setAllProducts(data); setLoading(false); })
       .catch(() => { setError('Failed to load products.'); setLoading(false); });
   }, []);
+
+  // Synchronize drafts when drawer opens
+  const openFilterDrawer = () => {
+    setDraftCategory(activeCategory);
+    setDraftPriceRange(priceRange);
+    setDraftSortBy(sortBy);
+    setIsFilterOpen(true);
+  };
+
+  const applyFilters = () => {
+    setActiveCategory(draftCategory);
+    setPriceRange(draftPriceRange);
+    setSortBy(draftSortBy);
+    setIsFilterOpen(false);
+  };
+
+  const clearAllFilters = () => {
+    setDraftCategory('all');
+    setDraftPriceRange('all');
+    setDraftSortBy('default');
+    setActiveCategory('all');
+    setPriceRange('all');
+    setSortBy('default');
+    setSearchQuery('');
+    setIsFilterOpen(false);
+  };
+
+  const activeFilterCount =
+    (activeCategory !== 'all' ? 1 : 0) +
+    (priceRange !== 'all' ? 1 : 0) +
+    (sortBy !== 'default' ? 1 : 0);
 
   const filtered = useMemo(() => {
     let list = activeCategory === 'all'
@@ -92,48 +135,127 @@ const Collections = () => {
         </div>
       </div>
 
-      {/* Filter Bar */}
+      {/* Single Consolidated Filter Bar */}
       <div className="filter-bar" id="filter-bar">
         <div className="container filter-bar__inner">
-          <div className="filter-bar__categories">
-            {categories.map((cat) => (
-              <button
-                key={cat.slug}
-                className={`filter-btn ${activeCategory === cat.slug ? 'filter-btn--active' : ''}`}
-                onClick={() => setActiveCategory(cat.slug)}
-                id={`filter-${cat.slug}`}
-              >
-                {cat.label}
-              </button>
-            ))}
+          <div className="filter-bar__left">
+            <button className="filter-trigger-btn" onClick={openFilterDrawer} id="open-filters-btn">
+              <svg className="filter-funnel-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"></polygon>
+              </svg>
+              <span>Filters</span>
+              {activeFilterCount > 0 && (
+                <span className="filter-trigger-badge">{activeFilterCount}</span>
+              )}
+            </button>
+
+            {/* Active Filter Quick Chips */}
+            {activeFilterCount > 0 && (
+              <div className="active-chips-strip">
+                {activeCategory !== 'all' && (
+                  <span className="active-chip">
+                    {categories.find(c => c.slug === activeCategory)?.label}
+                    <button onClick={() => setActiveCategory('all')}>✕</button>
+                  </span>
+                )}
+                {priceRange !== 'all' && (
+                  <span className="active-chip">
+                    {priceRanges.find(p => p.slug === priceRange)?.label}
+                    <button onClick={() => setPriceRange('all')}>✕</button>
+                  </span>
+                )}
+                {sortBy !== 'default' && (
+                  <span className="active-chip">
+                    {sortOptions.find(s => s.slug === sortBy)?.label}
+                    <button onClick={() => setSortBy('default')}>✕</button>
+                  </span>
+                )}
+                <button className="clear-all-text-btn" onClick={clearAllFilters}>Clear All</button>
+              </div>
+            )}
           </div>
 
-          {/* Price & Sorting Bar */}
-          <div className="filter-bar__controls">
-
-            <select
-              value={priceRange}
-              onChange={(e) => setPriceRange(e.target.value)}
-              className="sort-select"
-            >
-              {priceRanges.map((p) => (
-                <option key={p.slug} value={p.slug}>{p.label}</option>
-              ))}
-            </select>
-
-            <select
-              id="sort-select"
-              value={sortBy}
-              onChange={(e) => setSortBy(e.target.value)}
-              className="sort-select"
-            >
-              <option value="default">Sort By: Featured</option>
-              <option value="price-asc">Price: Low to High</option>
-              <option value="price-desc">Price: High to Low</option>
-            </select>
+          <div className="filter-bar__right">
+            <span className="result-count-label">
+              {filtered.length} {filtered.length === 1 ? 'Piece' : 'Pieces'}
+            </span>
           </div>
         </div>
       </div>
+
+      {/* Consolidated Filter Panel Drawer / Bottom Sheet */}
+      {isFilterOpen && (
+        <div className="filter-drawer-overlay" onClick={() => setIsFilterOpen(false)}>
+          <div className="filter-drawer-panel" onClick={(e) => e.stopPropagation()}>
+            <div className="filter-drawer__header">
+              <div>
+                <p className="filter-drawer__label">Refine Selection</p>
+                <h3 className="filter-drawer__title">Filters & Sorting</h3>
+              </div>
+              <button className="filter-drawer__close" onClick={() => setIsFilterOpen(false)}>✕</button>
+            </div>
+
+            <div className="filter-drawer__body">
+              {/* Category Group */}
+              <div className="filter-group">
+                <h4 className="filter-group__title">Category</h4>
+                <div className="filter-chips">
+                  {categories.map((cat) => (
+                    <button
+                      key={cat.slug}
+                      className={`filter-chip ${draftCategory === cat.slug ? 'filter-chip--active' : ''}`}
+                      onClick={() => setDraftCategory(cat.slug)}
+                    >
+                      {cat.label}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              {/* Price Range Group */}
+              <div className="filter-group">
+                <h4 className="filter-group__title">Price Range</h4>
+                <div className="filter-chips">
+                  {priceRanges.map((p) => (
+                    <button
+                      key={p.slug}
+                      className={`filter-chip ${draftPriceRange === p.slug ? 'filter-chip--active' : ''}`}
+                      onClick={() => setDraftPriceRange(p.slug)}
+                    >
+                      {p.label}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              {/* Sort By Group */}
+              <div className="filter-group">
+                <h4 className="filter-group__title">Sort By</h4>
+                <div className="filter-chips">
+                  {sortOptions.map((s) => (
+                    <button
+                      key={s.slug}
+                      className={`filter-chip ${draftSortBy === s.slug ? 'filter-chip--active' : ''}`}
+                      onClick={() => setDraftSortBy(s.slug)}
+                    >
+                      {s.label}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            </div>
+
+            <div className="filter-drawer__footer">
+              <button className="btn-outline" onClick={clearAllFilters} style={{ flex: 1 }}>
+                <span>Clear All</span>
+              </button>
+              <button className="btn-primary" onClick={applyFilters} style={{ flex: 2 }}>
+                <span>Apply ({filtered.length})</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Product Grid */}
       <div className="products-section">
@@ -144,36 +266,11 @@ const Collections = () => {
             <p style={{ textAlign: 'center', padding: '60px', color: '#c0392b' }}>{error}</p>
           ) : (
             <>
-              <div className="products-grid-header">
-                <p className="product-count">{filtered.length} {filtered.length === 1 ? 'Piece' : 'Pieces'}</p>
-                {(activeCategory !== 'all' || priceRange !== 'all' || searchQuery) && (
-                  <button
-                    className="reset-filters-btn"
-                    onClick={() => {
-                      setActiveCategory('all');
-                      setPriceRange('all');
-                      setSearchQuery('');
-                      setSortBy('default');
-                    }}
-                  >
-                    Reset Filters
-                  </button>
-                )}
-              </div>
-
               {filtered.length === 0 ? (
-                <div className="no-products">
-                  <p>No pieces match your search criteria.</p>
-                  <button
-                    className="btn-outline"
-                    onClick={() => {
-                      setActiveCategory('all');
-                      setPriceRange('all');
-                      setSearchQuery('');
-                    }}
-                  >
-                    Clear Filters
-                  </button>
+                <div style={{ textAlign: 'center', padding: '80px 20px' }}>
+                  <p style={{ fontFamily: 'Cormorant Garamond, serif', fontSize: '24px', color: 'var(--charcoal)' }}>No pieces match your filters</p>
+                  <p style={{ fontSize: '13px', color: 'var(--gray-mid)', marginTop: '8px', marginBottom: '24px' }}>Try selecting a different category or clearing active filters.</p>
+                  <button className="btn-primary" onClick={clearAllFilters}><span>Clear All Filters</span></button>
                 </div>
               ) : (
                 <div className="products-grid">
