@@ -43,7 +43,7 @@ app.use(
     contentSecurityPolicy: {
       directives: {
         defaultSrc: ["'self'"],
-        scriptSrc: ["'self'", "https://www.googletagmanager.com"],
+        scriptSrc: ["'self'", 'sha256-ItwmCU3/OmE009fx1IROjhqRLzBJ6vAs1IN4Sbi3CdM=', "https://www.googletagmanager.com"],
         styleSrc: ["'self'", "'unsafe-inline'", "https://fonts.googleapis.com"],
         fontSrc: ["'self'", "https://fonts.gstatic.com"],
         imgSrc: ["'self'", "data:", "https:"],
