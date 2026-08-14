@@ -37,8 +37,23 @@ const sanitizeObject = (obj) => {
   }
 };
 
-// Middleware
-app.use(helmet());
+// Middleware - Single Authoritative Content Security Policy (CSP)
+app.use(
+  helmet({
+    contentSecurityPolicy: {
+      directives: {
+        defaultSrc: ["'self'"],
+        scriptSrc: ["'self'", "https://www.googletagmanager.com"],
+        styleSrc: ["'self'", "'unsafe-inline'", "https://fonts.googleapis.com"],
+        fontSrc: ["'self'", "https://fonts.gstatic.com"],
+        imgSrc: ["'self'", "data:", "https:"],
+        connectSrc: ["'self'", "https:", "http:"],
+        mediaSrc: ["'self'", "data:", "https:"],
+        frameSrc: ["'self'"],
+      },
+    },
+  })
+);
 app.use(cors({ origin: process.env.CLIENT_URL, credentials: true }));
 app.use(express.json());         // parse body FIRST
 
