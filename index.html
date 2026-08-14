@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8" />
   <!-- Single Authoritative Content Security Policy (CSP) Meta Tag -->
-  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-ItwmCU3/OmE009fx1IROjhqRLzBJ6vAs1IN4Sbi3CdM=' https://www.googletagmanager.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self' https: http:; media-src 'self' data: https:; frame-src 'self';" />
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://www.googletagmanager.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self' https: http:; media-src 'self' data: https:; frame-src 'self';" />
 
   <!-- Favicon Tags for Google Search & Browsers -->
   <link rel="shortcut icon" href="/favicon.ico" />
@@ -115,11 +115,7 @@
       <p id="static-offline-msg" style="font-size: 13px; color: #666666; max-width: 400px; line-height: 1.6; margin-bottom: 24px;">Please wait while we connect to our fine 925 sterling silver collection.</p>
       <button id="static-offline-btn" style="display: none; padding: 12px 28px; background: #1A1A1A; color: #FFFFFF; border: none; border-radius: 2px; font-size: 12px; letter-spacing: 1px; text-transform: uppercase; cursor: pointer;">Try Again</button>
     </div>
-    <!-- Synchronous CSP-Hashed Inline Script for Zero-Network Offline Check & Text Swap -->
-    <script>if(!navigator.onLine){document.getElementById('static-offline-title').innerText="You're Offline";document.getElementById('static-offline-msg').innerText="You're offline. Please check your connection and try again.";document.getElementById('static-offline-btn').style.display="inline-block";}</script>
-    <script src="/offline-handler.js"></script>
-  </div>
-  <script type="module" src="/src/main.jsx"></script>
+    <script type="module" src="/src/main.jsx"></script>
 </body>
 
 </html>

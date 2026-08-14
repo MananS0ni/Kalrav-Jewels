@@ -1,9 +1,8 @@
-const CACHE_NAME = 'kalrav-offline-v4';
+const CACHE_NAME = 'kalrav-offline-v5';
 const OFFLINE_URLS = [
   '/',
   '/index.html',
   '/ga-init.js',
-  '/offline-handler.js',
   '/kalrav_vertical_v2.png',
   '/favicon.ico'
 ];
