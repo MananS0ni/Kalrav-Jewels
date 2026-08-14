@@ -43,17 +43,73 @@ const craftStages = [
 ];
 
 const milestones = [
-  { year: 'Generation 1', title: 'The Genesis — Founding Patriarch', desc: 'Our family heritage began with our founding patriarch at a single hand-hammering workbench, establishing our sacred commitment to purity and trust.' },
-  { year: 'Generation 2', title: 'Atelier Expansion', desc: 'Expanding our family artistry across precious gold and silver jewellery, building lifelong bonds with generations of families.' },
-  { year: 'Generation 3', title: 'Mastery & Technique', desc: 'Refining intricate filigree, hand-setting gemstones, and traditional metalworking techniques passed down from our patriarch.' },
-  { year: 'Generation 4', title: 'The Digital Horizon — Kalrav Jewels', desc: 'Continuing four generations of family legacy with Kalrav Jewels online, specializing exclusively in hallmarked 925 sterling silver for the modern world.' }
+  {
+    gen: '01',
+    year: 'GENERATION 1',
+    title: 'The Beginning — Founding Patriarch',
+    desc: 'Our family heritage began with our founding patriarch at a single hand-hammering workbench, establishing our sacred commitment to metal purity and trust.',
+    badge: 'HANDCRAFT ERA • EST. 1952',
+    iconType: 'gen1'
+  },
+  {
+    gen: '02',
+    year: 'GENERATION 2',
+    title: 'Artisan Expansion & Filigree',
+    desc: 'Expanding our family artistry across precious gold and silver jewellery, building lifelong bonds with local families through intricate hand filigree.',
+    badge: 'EXPANDED ATELIER',
+    iconType: 'gen2'
+  },
+  {
+    gen: '03',
+    year: 'GENERATION 3',
+    title: 'Mastery, Gemstones & Technique',
+    desc: 'Refining micro-chisel setting, optic loupe stone inspection, and traditional metalworking techniques passed down directly from our patriarch.',
+    badge: 'GEMSTONE MASTERY',
+    iconType: 'gen3'
+  },
+  {
+    gen: '04',
+    year: 'GENERATION 4',
+    title: 'Retail Excellence & Storefront',
+    desc: 'Solidifying our physical presence with trusted storefront craftsmanship, personalized family service, and 100% certified hallmarked purity.',
+    badge: 'TRUSTED STOREFRONT',
+    iconType: 'gen4'
+  },
+  {
+    gen: '05',
+    year: 'GENERATION 5 (2026)',
+    title: 'The Digital Horizon — Kalrav Jewels',
+    desc: 'Carrying four generations of family legacy into the digital age with Kalrav Jewels online, specializing exclusively in hallmarked 925 sterling silver for the modern world.',
+    badge: 'DIGITAL INNOVATION',
+    iconType: 'gen5'
+  }
 ];
 
-const values = [
-  { title: 'Certified Purity', desc: 'Every 925 sterling silver piece is hallmarked for lifetime authenticity and trust.' },
-  { title: 'Artisanal Heritage', desc: 'Each design honours four generations of handmade metalworking tradition passed from our patriarch to present day.' },
-  { title: 'Modern Precision', desc: 'Combining old-world forging with laser technology to build jewellery engineered for daily wear.' },
-  { title: 'Unbroken Trust', desc: 'Four generations of family integrity, transparent pricing, and direct-to-customer care.' }
+const pillars = [
+  {
+    num: '01',
+    title: 'Certified Purity',
+    desc: 'Every 925 sterling silver piece is hallmarked for lifetime authenticity and trust.',
+    tag: 'HALLMARKED 925'
+  },
+  {
+    num: '02',
+    title: 'Artisanal Heritage',
+    desc: 'Each design honours four generations of handmade metalworking tradition passed from our founding patriarch to present day.',
+    tag: 'FOUR GENERATIONS'
+  },
+  {
+    num: '03',
+    title: 'Modern Precision',
+    desc: 'Combining old-world forging with laser technology to build jewellery engineered for daily wear.',
+    tag: 'MICRON ACCURACY'
+  },
+  {
+    num: '04',
+    title: 'Unbroken Trust',
+    desc: 'Four generations of family integrity, transparent pricing, and direct-to-customer care.',
+    tag: 'FAMILY INTEGRITY'
+  }
 ];
 
 const About = () => {
@@ -62,8 +118,12 @@ const About = () => {
   const [isDragging, setIsDragging] = useState(false);
   const [activeStage, setActiveStage] = useState(0);
   const [beginningVisible, setBeginningVisible] = useState(false);
+  const [activeTimelineNodes, setActiveTimelineNodes] = useState([]);
+  const [activePillars, setActivePillars] = useState([]);
+
   const sliderRef = useRef(null);
   const beginningRef = useRef(null);
+  const timelineRef = useRef(null);
 
   const handleMove = (clientX) => {
     if (!sliderRef.current) return;
@@ -103,10 +163,44 @@ const About = () => {
       observer.observe(beginningRef.current);
     }
 
+    // Part 2 Timeline Node Observer
+    const timelineNodes = document.querySelectorAll('.timeline-node');
+    const nodeObserver = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            const index = parseInt(entry.target.dataset.index);
+            setActiveTimelineNodes((prev) => [...new Set([...prev, index])]);
+          }
+        });
+      },
+      { threshold: 0.3 }
+    );
+
+    timelineNodes.forEach((node) => nodeObserver.observe(node));
+
+    // Part 2 Pillar Observer
+    const pillarCards = document.querySelectorAll('.pillar-card');
+    const pillarObserver = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            const index = parseInt(entry.target.dataset.index);
+            setActivePillars((prev) => [...new Set([...prev, index])]);
+          }
+        });
+      },
+      { threshold: 0.2 }
+    );
+
+    pillarCards.forEach((card) => pillarObserver.observe(card));
+
     return () => {
       window.removeEventListener('mouseup', handleUp);
       window.removeEventListener('touchend', handleUp);
       observer.disconnect();
+      nodeObserver.disconnect();
+      pillarObserver.disconnect();
     };
   }, []);
 
@@ -250,6 +344,184 @@ const About = () => {
         </div>
       </section>
 
+      {/* Part 2: Section 3 — Generations Timeline */}
+      <section className="timeline-redesign-section" id="timeline" ref={timelineRef}>
+        <div className="container">
+          <div className="timeline-header text-center">
+            <span className="timeline-eyebrow">FOUR GENERATIONS OF PASSION</span>
+            <h2 className="timeline-heading">From Generation to Generation</h2>
+            <div className="heritage-hero__gold-divider" style={{ margin: '16px auto 0', width: '120px' }}>
+              <span className="gold-divider-diamond">◆</span>
+            </div>
+            <p className="timeline-subtitle">
+              Follow our family journey as traditional hand-hammering evolves into modern 925 sterling silver mastery.
+            </p>
+          </div>
+
+          <div className="timeline-wrapper">
+            {/* Antique Gold Central Progress Line */}
+            <div className="timeline-central-line">
+              <div
+                className="timeline-progress-bar"
+                style={{
+                  height: `${Math.min(100, (activeTimelineNodes.length / milestones.length) * 100)}%`
+                }}
+              ></div>
+            </div>
+
+            {milestones.map((m, idx) => {
+              const isActive = activeTimelineNodes.includes(idx);
+              const isEven = idx % 2 === 0;
+
+              return (
+                <div
+                  key={idx}
+                  data-index={idx}
+                  className={`timeline-node ${isEven ? 'timeline-node--left' : 'timeline-node--right'} ${isActive ? 'active' : ''}`}
+                >
+                  {/* Node Content Card */}
+                  <div className="timeline-node-card">
+                    <div className="node-card-header">
+                      <span className="node-gen-badge">{m.year}</span>
+                      <span className="node-tag">{m.badge}</span>
+                    </div>
+                    <h3 className="node-title">{m.title}</h3>
+                    <p className="node-desc">{m.desc}</p>
+                  </div>
+
+                  {/* Central Node Marker */}
+                  <div className="timeline-node-marker">
+                    <div className="marker-ring">
+                      <span className="marker-num">{m.gen}</span>
+                    </div>
+                  </div>
+
+                  {/* Evolving Vector Craftsmanship Visual */}
+                  <div className="timeline-node-visual">
+                    <div className="node-svg-box">
+                      {m.iconType === 'gen1' && (
+                        <svg viewBox="0 0 160 120" fill="none" className="node-svg">
+                          <path d="M20 90 H140 V100 H20 Z" stroke="#C9A646" strokeWidth="1.2" />
+                          <path d="M50 90 V50 H110 V90" stroke="#8A877F" strokeWidth="1" strokeDasharray="2 2" opacity="0.6" />
+                          <path d="M70 90 C70 65 90 65 90 90 Z" stroke="#C9A646" strokeWidth="1.2" />
+                          <path d="M80 62 C83 50 77 42 80 35 C83 42 86 50 80 62 Z" fill="#D8C58A" opacity="0.8" />
+                        </svg>
+                      )}
+                      {m.iconType === 'gen2' && (
+                        <svg viewBox="0 0 160 120" fill="none" className="node-svg">
+                          <circle cx="80" cy="60" r="40" stroke="#C9A646" strokeWidth="1" strokeDasharray="3 3" />
+                          <circle cx="80" cy="60" r="28" stroke="#D8C58A" strokeWidth="1.2" />
+                          <path d="M80 20 V100 M20 60 H140" stroke="#8A877F" strokeWidth="0.5" opacity="0.5" />
+                          <path d="M60 60 Q80 40 100 60 Q80 80 60 60 Z" stroke="#C9A646" strokeWidth="1" fill="none" />
+                        </svg>
+                      )}
+                      {m.iconType === 'gen3' && (
+                        <svg viewBox="0 0 160 120" fill="none" className="node-svg">
+                          <circle cx="80" cy="55" r="30" stroke="#C9A646" strokeWidth="1.5" />
+                          <polygon points="80,15 90,35 80,55 70,35" stroke="#D8C58A" strokeWidth="1.2" fill="none" />
+                          <line x1="80" y1="55" x2="80" y2="105" stroke="#8A877F" strokeWidth="1" />
+                          <path d="M60 95 L80 105 L100 95" stroke="#C9A646" strokeWidth="1.2" />
+                        </svg>
+                      )}
+                      {m.iconType === 'gen4' && (
+                        <svg viewBox="0 0 160 120" fill="none" className="node-svg">
+                          <rect x="30" y="30" width="100" height="60" rx="4" stroke="#415136" strokeWidth="1.5" />
+                          <circle cx="80" cy="60" r="18" stroke="#C9A646" strokeWidth="1.2" />
+                          <path d="M72 60 L78 66 L88 54" stroke="#D8C58A" strokeWidth="1.5" />
+                          <text x="80" y="105" fontSize="8" fill="#415136" textAnchor="middle" fontFamily="Montserrat" letterSpacing="1">HALLMARK</text>
+                        </svg>
+                      )}
+                      {m.iconType === 'gen5' && (
+                        <svg viewBox="0 0 160 120" fill="none" className="node-svg">
+                          <circle cx="80" cy="60" r="38" stroke="#C9A646" strokeWidth="1.5" strokeDasharray="4 2" />
+                          <circle cx="80" cy="60" r="26" stroke="#D8C58A" strokeWidth="1.2" />
+                          <polygon points="80,24 88,40 80,56 72,40" fill="#C9A646" opacity="0.9" />
+                          <path d="M40 60 H120 M80 20 V100" stroke="#D8C58A" strokeWidth="0.5" opacity="0.4" />
+                          <text x="80" y="112" fontSize="7" fill="#C9A646" textAnchor="middle" fontFamily="Montserrat" letterSpacing="2">2026 DIGITAL</text>
+                        </svg>
+                      )}
+                    </div>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      </section>
+
+      {/* Part 2: Section 4 — Four Pillars of Evolution */}
+      <section className="pillars-section" id="pillars">
+        <div className="container">
+          <div className="section-header text-center" style={{ marginBottom: '60px' }}>
+            <span className="beginning-eyebrow">OUR UNWAVERING PROMISE</span>
+            <h2 className="section-title" style={{ marginTop: '12px' }}>The Four Pillars of Evolution</h2>
+            <div className="heritage-hero__gold-divider" style={{ margin: '16px auto 0', width: '120px' }}>
+              <span className="gold-divider-diamond">◆</span>
+            </div>
+            <p className="section-subtitle" style={{ maxWidth: '600px', margin: '14px auto 0' }}>
+              Four fundamental principles passed down from our founding patriarch, defining every piece of Kalrav Jewels jewellery.
+            </p>
+          </div>
+
+          <div className="pillars-grid">
+            {pillars.map((p, i) => {
+              const isActive = activePillars.includes(i);
+
+              return (
+                <div
+                  key={i}
+                  data-index={i}
+                  className={`pillar-card ${isActive ? 'active' : ''}`}
+                >
+                  <div className="pillar-card__top">
+                    <span className="pillar-number">{p.num}</span>
+                    <span className="pillar-tag">{p.tag}</span>
+                  </div>
+
+                  <h3 className="pillar-title">{p.title}</h3>
+                  <div className="pillar-gold-line"></div>
+                  <p className="pillar-desc">{p.desc}</p>
+
+                  {/* Emerging Vector SVG Motif on Hover / Touch */}
+                  <div className="pillar-svg-wrap">
+                    {i === 0 && (
+                      <svg viewBox="0 0 100 100" fill="none" className="pillar-svg">
+                        <circle cx="50" cy="50" r="40" stroke="#C9A646" strokeWidth="1" strokeDasharray="3 3" />
+                        <circle cx="50" cy="50" r="28" stroke="#D8C58A" strokeWidth="1.2" />
+                        <polygon points="50,22 58,38 50,54 42,38" fill="#C9A646" opacity="0.8" />
+                        <text x="50" y="85" fontSize="7" fill="#415136" textAnchor="middle" fontFamily="Montserrat" letterSpacing="1">925</text>
+                      </svg>
+                    )}
+                    {i === 1 && (
+                      <svg viewBox="0 0 100 100" fill="none" className="pillar-svg">
+                        <path d="M20 75 H80 V82 H20 Z" stroke="#C9A646" strokeWidth="1.2" />
+                        <path d="M40 75 V45 H60 V75" stroke="#8A877F" strokeWidth="1" />
+                        <path d="M50 45 C50 25 65 25 65 45 Z" stroke="#D8C58A" strokeWidth="1.2" fill="none" />
+                      </svg>
+                    )}
+                    {i === 2 && (
+                      <svg viewBox="0 0 100 100" fill="none" className="pillar-svg">
+                        <circle cx="50" cy="50" r="36" stroke="#C9A646" strokeWidth="1" />
+                        <line x1="10" y1="50" x2="90" y2="50" stroke="#D8C58A" strokeWidth="0.75" strokeDasharray="2 2" />
+                        <line x1="50" y1="10" x2="50" y2="90" stroke="#D8C58A" strokeWidth="0.75" strokeDasharray="2 2" />
+                        <rect x="38" y="38" width="24" height="24" stroke="#415136" strokeWidth="1" fill="none" />
+                      </svg>
+                    )}
+                    {i === 3 && (
+                      <svg viewBox="0 0 100 100" fill="none" className="pillar-svg">
+                        <path d="M50 15 L80 30 V60 L50 85 L20 60 V30 Z" stroke="#C9A646" strokeWidth="1.2" fill="none" />
+                        <circle cx="50" cy="48" r="14" stroke="#D8C58A" strokeWidth="1" />
+                        <path d="M45 48 L48 52 L56 42" stroke="#415136" strokeWidth="1.5" />
+                      </svg>
+                    )}
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      </section>
+
       {/* Interactive "Then vs Now" Time-Slider */}
       <section className="era-slider-section" id="era-slider-section">
         <div className="container">
@@ -258,7 +530,7 @@ const About = () => {
             <div className="gold-line-center" style={{ marginTop: '12px' }}></div>
             <h2 className="section-title">The Evolution of the Craft</h2>
             <p className="section-subtitle" style={{ maxWidth: '640px', margin: '14px auto 0' }}>
-              Drag the slider below to scrub through time — see how our traditional 1952 hand forging morphed into modern 2026 precision technology.
+              Drag the slider below to scrub through time — see how our traditional hand forging morphed into modern 2026 precision technology.
             </p>
           </div>
 
@@ -276,10 +548,10 @@ const About = () => {
             }}
             onTouchMove={handleTouchMove}
           >
-            {/* 1952 Heritage Side (Underneath / Background) */}
+            {/* Heritage Side (Underneath / Background) */}
             <div className="era-panel era-panel--past">
               <div className="era-content">
-                <span className="era-year-badge era-year-badge--past">1952 • THE HANDCRAFT ERA</span>
+                <span className="era-year-badge era-year-badge--past">HERITAGE ERA • EST. GENERATION 1</span>
                 <h3 className="era-heading">Flame, Crucible & Anvil</h3>
                 <p className="era-body">
                   Raw gold & silver melted in clay crucibles over glowing embers. Every ingot was hammered by hand, shaped with patience, and polished with artisan pride in a small local atelier.
@@ -298,7 +570,7 @@ const About = () => {
               style={{ clipPath: `polygon(${sliderPos}% 0, 100% 0, 100% 100%, ${sliderPos}% 100%)` }}
             >
               <div className="era-content">
-                <span className="era-year-badge era-year-badge--modern">2026 • THE MODERN HORIZON</span>
+                <span className="era-year-badge era-year-badge--modern">2026 • THE DIGITAL HORIZON</span>
                 <h3 className="era-heading">3D CAD & Laser Precision</h3>
                 <p className="era-body">
                   Modern induction furnaces, micron-level 3D CAD modeling, and micro-laser setting — creating flawless 925 sterling silver delivered to customers globally via our digital storefront.
@@ -316,9 +588,9 @@ const About = () => {
               className="era-slider-divider"
               style={{ left: `${sliderPos}%` }}
             >
-              <div className="era-slider-handle" title="Drag to compare 1952 vs 2026">
+              <div className="era-slider-handle" title="Drag to compare Heritage vs 2026">
                 <span className="handle-arrow">◄</span>
-                <span className="handle-text">1952 | 2026</span>
+                <span className="handle-text">HERITAGE | 2026</span>
                 <span className="handle-arrow">►</span>
               </div>
             </div>
@@ -334,7 +606,7 @@ const About = () => {
             <div className="gold-line-center" style={{ marginTop: '12px' }}></div>
             <h2 className="section-title">The Four Pillars of Evolution</h2>
             <p className="section-subtitle" style={{ maxWidth: '600px', margin: '14px auto 0' }}>
-              Explore how each fundamental stage of making Kalrav Jewels evolved across 70+ years of family dedication.
+              Explore how each fundamental stage of making Kalrav Jewels evolved across four generations of family dedication.
             </p>
           </div>
 
@@ -355,7 +627,7 @@ const About = () => {
           {/* Active Stage Display Card */}
           <div className="craft-stage-card">
             <div className="craft-card-side craft-card-side--past">
-              <div className="craft-badge">1952 Traditional Method</div>
+              <div className="craft-badge">Patriarch Traditional Method</div>
               <h3>{craftStages[activeStage].pastTitle}</h3>
               <p>{craftStages[activeStage].pastDesc}</p>
             </div>
@@ -371,75 +643,13 @@ const About = () => {
         </div>
       </section>
 
-      {/* Founder Story Text */}
-      <section className="founder-section" id="founder-section">
-        <div className="container founder-section__inner">
-          <div className="founder-content">
-            <p className="section-label">Our Family Story</p>
-            <div className="gold-line-center" style={{ marginTop: '14px' }}></div>
-            <h2 className="section-title">A Legacy Forged in Flame & Integrity</h2>
-            <p className="section-subtitle" style={{ marginTop: '20px' }}>
-              Our family journey started in 1952 when my grandfather set up a small atelier with a single workbench. Armed with clay crucibles, hand hammers, and a passion for metalworking, he established a sacred trust with local families that endured for decades.
-            </p>
-            <p className="section-subtitle" style={{ marginTop: '14px' }}>
-              Our craft has evolved across generations of dedicated family artisans. Today, as the <strong>5th generation</strong>, I established <strong>Kalrav Jewels online</strong> to take 5 generations of family heritage forward into the digital age — specializing exclusively in premium, hallmarked 925 sterling silver with the same uncompromised dedication our ancestors established in 1952.
-            </p>
-          </div>
-        </div>
-      </section>
-
-      {/* Timeline Section */}
-      <section className="timeline-section" id="timeline-section">
-        <div className="container">
-          <div className="section-header text-center" style={{ marginBottom: '70px' }}>
-            <p className="section-label">70+ Years of History</p>
-            <div className="gold-line-center" style={{ marginTop: '14px' }}></div>
-            <h2 className="section-title">Our Timeline Journey</h2>
-          </div>
-          <div className="timeline">
-            {milestones.map((m, i) => (
-              <div key={i} className={`timeline-item ${i % 2 === 0 ? 'timeline-item--left' : 'timeline-item--right'}`} id={`milestone-${i}`}>
-                <div className="timeline-content">
-                  <span className="timeline-year">{m.year}</span>
-                  <h3 className="timeline-title">{m.title}</h3>
-                  <p className="timeline-desc">{m.desc}</p>
-                </div>
-                <div className="timeline-dot"></div>
-              </div>
-            ))}
-            <div className="timeline-line timeline-line--glowing"></div>
-          </div>
-        </div>
-      </section>
-
-      {/* Values Section */}
-      <section className="values-section" id="values-section">
-        <div className="container">
-          <div className="section-header text-center" style={{ marginBottom: '60px' }}>
-            <p className="section-label">Our Pillars</p>
-            <div className="gold-line-center" style={{ marginTop: '14px' }}></div>
-            <h2 className="section-title">Why Kalrav Jewels</h2>
-          </div>
-          <div className="values-grid">
-            {values.map((v, i) => (
-              <div key={i} className="value-card" id={`value-${i}`}>
-                <div className="value-number">0{i + 1}</div>
-                <h3 className="value-title">{v.title}</h3>
-                <div className="gold-line" style={{ margin: '16px 0' }}></div>
-                <p className="value-desc">{v.desc}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
       {/* CTA Section */}
       <section className="about-cta" id="about-cta-section">
         <div className="container about-cta__inner">
           <div>
             <p className="section-label" style={{ color: 'var(--gold-light)' }}>Explore The Craft</p>
             <div className="gold-line-center" style={{ margin: '14px auto' }}></div>
-            <h2 className="about-cta__title">Experience 70+ Years of Artistry</h2>
+            <h2 className="about-cta__title">Experience Four Generations of Artistry</h2>
             <p className="about-cta__subtitle">
               Discover our exclusive 925 sterling silver collections or contact our team for custom inquiries.
             </p>
