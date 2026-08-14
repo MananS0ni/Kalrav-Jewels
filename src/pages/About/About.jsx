@@ -9,7 +9,7 @@ const craftStages = [
     stage: '01',
     title: 'Melting & Refining',
     pastTitle: 'Clay Crucibles & Open Flames',
-    pastDesc: 'In 1952, gold and silver were melted in hand-held clay crucibles over roaring ember flames. Artisans judged purity by color and temperature by sight.',
+    pastDesc: 'Over hand-held clay crucibles and ember flames, our founding patriarch judged gold and silver purity by color and temperature by sight.',
     modernTitle: 'Precision Induction Furnaces',
     modernDesc: 'Today, temperature-controlled electromagnetic furnaces ensure zero impurity loss, exact 925 sterling silver hallmarked purity, and zero emissions.'
   },
@@ -35,26 +35,25 @@ const craftStages = [
     id: 'storefront',
     stage: '04',
     title: 'The Storefront',
-    pastTitle: 'The Local Atelier (1952)',
+    pastTitle: 'The Local Atelier',
     pastDesc: 'A humble wooden counter serving local families across generations, built entirely on word-of-mouth trust, cup of chai, and personal bonds.',
-    modernTitle: 'Global Digital Platform (2026)',
-    modernDesc: 'Kalrav Jewels online brings the family legacy directly to your doorstep worldwide, offering 100% hallmarked silver with modern ecommerce ease.'
+    modernTitle: 'Global Digital Platform',
+    modernDesc: 'Kalrav Jewels online brings four generations of family legacy directly to your doorstep worldwide, offering 100% hallmarked silver with modern ecommerce ease.'
   }
 ];
 
 const milestones = [
-  { year: 'Generation 1', title: 'The Genesis', desc: 'Our family heritage began with traditional goldsmithing and handcrafted metalworking, laying down the sacred values of purity and trust.' },
-  { year: 'Generation 2', title: 'Atelier Expansion', desc: 'Expanding our artistry across precious gold and silver jewelry, catering to families and building lifelong bonds.' },
-  { year: 'Generation 3', title: 'Mastery & Technique', desc: 'Refining intricate hand filigree, stone setting, and traditional hand-hammering techniques passed down through decades.' },
-  { year: 'Generation 4', title: 'Retail Excellence', desc: 'Solidifying our physical presence with trusted storefront craftsmanship and dedicated family service across generations.' },
-  { year: 'Generation 5 (2026)', title: 'The Digital Horizon — Kalrav Jewels', desc: 'Taking 5 generations of family legacy digital with Kalrav Jewels online, specializing exclusively in hallmarked 925 sterling silver for the modern world.' }
+  { year: 'Generation 1', title: 'The Genesis — Founding Patriarch', desc: 'Our family heritage began with our founding patriarch at a single hand-hammering workbench, establishing our sacred commitment to purity and trust.' },
+  { year: 'Generation 2', title: 'Atelier Expansion', desc: 'Expanding our family artistry across precious gold and silver jewellery, building lifelong bonds with generations of families.' },
+  { year: 'Generation 3', title: 'Mastery & Technique', desc: 'Refining intricate filigree, hand-setting gemstones, and traditional metalworking techniques passed down from our patriarch.' },
+  { year: 'Generation 4', title: 'The Digital Horizon — Kalrav Jewels', desc: 'Continuing four generations of family legacy with Kalrav Jewels online, specializing exclusively in hallmarked 925 sterling silver for the modern world.' }
 ];
 
 const values = [
   { title: 'Certified Purity', desc: 'Every 925 sterling silver piece is hallmarked for lifetime authenticity and trust.' },
-  { title: 'Artisanal Heritage', desc: 'Each design honours 5 generations of handmade metalworking tradition passed from ancestors to present day.' },
-  { title: 'Modern Precision', desc: 'Combining old-world forging with laser technology to build jewelry engineered for daily wear.' },
-  { title: 'Unbroken Trust', desc: 'Five generations of family integrity, transparent pricing, and direct-to-customer care.' }
+  { title: 'Artisanal Heritage', desc: 'Each design honours four generations of handmade metalworking tradition passed from our patriarch to present day.' },
+  { title: 'Modern Precision', desc: 'Combining old-world forging with laser technology to build jewellery engineered for daily wear.' },
+  { title: 'Unbroken Trust', desc: 'Four generations of family integrity, transparent pricing, and direct-to-customer care.' }
 ];
 
 const About = () => {
@@ -62,7 +61,9 @@ const About = () => {
   const [sliderPos, setSliderPos] = useState(50);
   const [isDragging, setIsDragging] = useState(false);
   const [activeStage, setActiveStage] = useState(0);
+  const [beginningVisible, setBeginningVisible] = useState(false);
   const sliderRef = useRef(null);
+  const beginningRef = useRef(null);
 
   const handleMove = (clientX) => {
     if (!sliderRef.current) return;
@@ -88,30 +89,166 @@ const About = () => {
     const handleUp = () => setIsDragging(false);
     window.addEventListener('mouseup', handleUp);
     window.addEventListener('touchend', handleUp);
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setBeginningVisible(true);
+        }
+      },
+      { threshold: 0.15 }
+    );
+
+    if (beginningRef.current) {
+      observer.observe(beginningRef.current);
+    }
+
     return () => {
       window.removeEventListener('mouseup', handleUp);
       window.removeEventListener('touchend', handleUp);
+      observer.disconnect();
     };
   }, []);
 
   return (
     <div className="about-page">
       <SEO
-        title="Our Heritage & Story | 1952 to Today"
-        description="Explore 70+ years of Kalrav Jewels heritage. From 1952 handcrafted gold & silver hammering in crucibles to modern 925 sterling silver digital precision."
+        title="Four Generations of Craftsmanship | Kalrav Jewels Heritage"
+        description="Discover four generations of Kalrav Jewels heritage. From the hands of our founding patriarch to digital precision in hallmarked 925 sterling silver."
       />
-      {/* Page Header */}
-      <div className="page-header">
-        <div className="page-header__overlay"></div>
-        <div className="container page-header__content">
-          <p className="section-label" style={{ color: 'var(--gold-light)' }}>70+ Years of Craftsmanship</p>
-          <div className="gold-line-center" style={{ marginTop: '14px' }}></div>
-          <h1 className="page-header__title">Our Story & Heritage</h1>
-          <p className="page-header__subtitle">
-            From hand-beating raw silver on an anvil in 1952 to 3D laser precision in 2026.
+
+      {/* Part 1: Redesigned Hero Section */}
+      <header className="heritage-hero">
+        <div className="heritage-hero__bg-shimmer"></div>
+        <div className="heritage-hero__texture"></div>
+
+        {/* Gold Thin Line SVG Animation */}
+        <svg className="heritage-hero__line-svg" viewBox="0 0 1200 4" fill="none" preserveAspectRatio="none">
+          <path d="M0 2 H1200" stroke="url(#heroGoldGrad)" strokeWidth="1.5" className="hero-animated-path" />
+          <defs>
+            <linearGradient id="heroGoldGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+              <stop offset="0%" stopColor="#171717" />
+              <stop offset="25%" stopColor="#C9A646" />
+              <stop offset="50%" stopColor="#D8C58A" />
+              <stop offset="75%" stopColor="#C9A646" />
+              <stop offset="100%" stopColor="#171717" />
+            </linearGradient>
+          </defs>
+        </svg>
+
+        <div className="container heritage-hero__content">
+          <span className="heritage-hero__eyebrow">FOUR GENERATIONS OF CRAFTSMANSHIP</span>
+
+          <h1 className="heritage-hero__title">
+            Four Generations.<br className="hero-br-desktop" /> One Legacy.
+          </h1>
+
+          <div className="heritage-hero__gold-divider">
+            <span className="gold-divider-diamond">◆</span>
+          </div>
+
+          <p className="heritage-hero__subtitle">
+            From the hands of our founding patriarch to the craftsmen of today, Kalrav Jewels continues a tradition built on trust, precision and timeless craftsmanship.
           </p>
+
+          {/* Craftsmanship Detail Motif */}
+          <div className="heritage-hero__emblem">
+            <svg width="64" height="64" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <circle cx="32" cy="32" r="30" stroke="#D8C58A" strokeWidth="1" strokeDasharray="3 3" opacity="0.6" />
+              <circle cx="32" cy="32" r="22" stroke="#C9A646" strokeWidth="1" opacity="0.8" />
+              <path d="M32 14 V50 M14 32 H50" stroke="#D8C58A" strokeWidth="0.75" opacity="0.5" />
+              <polygon points="32,20 35,28 32,36 29,28" fill="#C9A646" opacity="0.9" />
+              <polygon points="32,28 40,32 32,36 24,32" fill="#D8C58A" opacity="0.7" />
+            </svg>
+            <span className="emblem-caption">ARTISANAL HERITAGE • 925 HALLMARKED</span>
+          </div>
         </div>
-      </div>
+      </header>
+
+      {/* Part 1: Section 2 — "The Beginning" */}
+      <section className="beginning-section" id="the-beginning" ref={beginningRef}>
+        <div className="container beginning-section__inner">
+          <div className={`beginning-text-col ${beginningVisible ? 'visible' : ''}`}>
+            <div className="beginning-eyebrow-wrap">
+              <span className="beginning-eyebrow">ARCHIVAL ORIGINS • EST. GENERATION 1</span>
+            </div>
+            <h2 className="beginning-title">Where It All Began</h2>
+            <p className="beginning-lead">
+              Forged at the workbench of our founding patriarch.
+            </p>
+
+            <div className="beginning-divider"></div>
+
+            <p className="beginning-body">
+              Our story opens in the quiet atelier of our founding patriarch. Long before mass manufacturing or automated assembly, every creation was born at a single wooden workbench, illuminated by the ember glow of open-flame crucibles and guided by absolute devotion to raw metal purity.
+            </p>
+
+            <p className="beginning-body">
+              He believed that fine jewellery is never merely an object — it is a sacred bond between the master craftsman and the family who treasures it across generations. Armed with hand hammers, magnifying loupes, and unyielding integrity, he established a standard of 925 sterling hallmarked purity that remains the soul of Kalrav Jewels today.
+            </p>
+
+            <div className="beginning-highlights">
+              <div className="highlight-item">
+                <span className="highlight-label">PATRIARCH WORKBENCH</span>
+                <span className="highlight-val">Original Atelier</span>
+              </div>
+              <div className="highlight-sep"></div>
+              <div className="highlight-item">
+                <span className="highlight-label">HAND-FORGED METALS</span>
+                <span className="highlight-val">Pure Gold & 925 Silver</span>
+              </div>
+              <div className="highlight-sep"></div>
+              <div className="highlight-item">
+                <span className="highlight-label">UNBROKEN INTEGRITY</span>
+                <span className="highlight-val">Four Generations</span>
+              </div>
+            </div>
+          </div>
+
+          {/* Archival Craftsmanship Illustration / Vector Workbench Sketch */}
+          <div className={`beginning-visual-col ${beginningVisible ? 'visible' : ''}`}>
+            <div className="archival-card">
+              <div className="archival-card__border"></div>
+              <div className="archival-card__header">
+                <span className="archival-tag">ARCHIVAL DRAFT • PATRIARCH WORKBENCH</span>
+                <span className="archival-no">PLATE 01 / GEN I</span>
+              </div>
+
+              <div className="archival-sketch-wrap">
+                <svg className={`archival-svg ${beginningVisible ? 'draw' : ''}`} viewBox="0 0 400 260" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  {/* Bench Outline */}
+                  <path d="M30 220 H370 V240 H30 Z" stroke="#C9A646" strokeWidth="1.5" strokeDasharray="600" strokeDashoffset={beginningVisible ? "0" : "600"} className="svg-draw-path" />
+                  <path d="M70 220 V110 H330 V220" stroke="#8A877F" strokeWidth="1" strokeDasharray="500" opacity="0.6" className="svg-draw-path" />
+
+                  {/* Crucible & Flame Illustration */}
+                  <path d="M110 220 C110 180 150 180 150 220 Z" stroke="#C9A646" strokeWidth="1.5" fill="none" className="svg-draw-path" />
+                  <path d="M130 175 C135 160 125 150 130 140 C135 150 140 160 130 175 Z" fill="#D8C58A" opacity="0.8" />
+
+                  {/* Precision Jewel Ring Sketch */}
+                  <circle cx="260" cy="155" r="32" stroke="#C9A646" strokeWidth="1.5" strokeDasharray="3 3" />
+                  <circle cx="260" cy="155" r="25" stroke="#D8C58A" strokeWidth="1" />
+                  <polygon points="260,112 267,127 260,142 253,127" stroke="#C9A646" strokeWidth="1.2" fill="none" />
+
+                  {/* Hand-drawn Grid Lines */}
+                  <line x1="190" y1="40" x2="190" y2="240" stroke="#8A877F" strokeWidth="0.5" strokeDasharray="2 2" opacity="0.4" />
+                  <line x1="40" y1="155" x2="340" y2="155" stroke="#8A877F" strokeWidth="0.5" strokeDasharray="2 2" opacity="0.4" />
+
+                  {/* Archival Stamp Motif */}
+                  <circle cx="330" cy="50" r="18" stroke="#415136" strokeWidth="1" opacity="0.7" />
+                  <text x="330" y="54" fontSize="7" fill="#415136" textAnchor="middle" fontFamily="Montserrat" letterSpacing="1">GEN I</text>
+                </svg>
+              </div>
+
+              <div className="archival-card__footer">
+                <p className="archival-caption">
+                  "Purity is not measured by sight alone, but by the integrity embedded in every strike of the hammer."
+                </p>
+                <span className="archival-author">— Founding Patriarch, Kalrav Atelier</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
 
       {/* Interactive "Then vs Now" Time-Slider */}
       <section className="era-slider-section" id="era-slider-section">
