@@ -3,7 +3,7 @@ const mongoose = require('mongoose');
 const cors = require('cors');
 const dns = require('dns');
 const path = require('path');
-require('dotenv').config();
+require('dotenv').config({ path: path.join(__dirname, '.env') });
 const helmet = require('helmet');
 
 // Fix: Windows DNS blocks SRV queries — use Google DNS instead
@@ -74,8 +74,11 @@ app.use('/api/users', userRoutes);
 // Serve static assets in production
 if (process.env.NODE_ENV === 'production') {
   app.use(express.static(path.join(__dirname, '../dist')));
-  app.get('*', (req, res) => {
-    res.sendFile(path.resolve(__dirname, '../dist', 'index.html'));
+  app.use((req, res, next) => {
+    if (req.method === 'GET' && !req.path.startsWith('/api/')) {
+      return res.sendFile(path.resolve(__dirname, '../dist', 'index.html'));
+    }
+    next();
   });
 }
 
