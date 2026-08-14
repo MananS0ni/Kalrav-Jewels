@@ -121,9 +121,15 @@ const About = () => {
   const [activeTimelineNodes, setActiveTimelineNodes] = useState([]);
   const [activePillars, setActivePillars] = useState([]);
 
+  const [counterTriggered, setCounterTriggered] = useState(false);
+  const [counts, setCounts] = useState({ gens: 0, legacy: 0, years: 0, hallmarked: 0 });
+  const [activeAtelierStage, setActiveAtelierStage] = useState(0);
+
   const sliderRef = useRef(null);
   const beginningRef = useRef(null);
   const timelineRef = useRef(null);
+  const counterRef = useRef(null);
+  const transitionRef = useRef(null);
 
   const handleMove = (clientX) => {
     if (!sliderRef.current) return;
@@ -195,6 +201,42 @@ const About = () => {
 
     pillarCards.forEach((card) => pillarObserver.observe(card));
 
+    // Part 3 Heritage Counter Observer & Count-Up
+    if (counterRef.current) {
+      const counterObserver = new IntersectionObserver(
+        ([entry]) => {
+          if (entry.isIntersecting && !counterTriggered) {
+            setCounterTriggered(true);
+            const duration = 1600;
+            const startTime = performance.now();
+
+            const animate = (currentTime) => {
+              const elapsed = currentTime - startTime;
+              const progress = Math.min(elapsed / duration, 1);
+              const easeOut = 1 - Math.pow(1 - progress, 3);
+
+              setCounts({
+                gens: Math.floor(easeOut * 4),
+                legacy: Math.floor(easeOut * 1),
+                years: Math.floor(easeOut * 70),
+                hallmarked: Math.floor(easeOut * 100)
+              });
+
+              if (progress < 1) {
+                requestAnimationFrame(animate);
+              } else {
+                setCounts({ gens: 4, legacy: 1, years: 70, hallmarked: 100 });
+              }
+            };
+
+            requestAnimationFrame(animate);
+          }
+        },
+        { threshold: 0.3 }
+      );
+      counterObserver.observe(counterRef.current);
+    }
+
     return () => {
       window.removeEventListener('mouseup', handleUp);
       window.removeEventListener('touchend', handleUp);
@@ -202,7 +244,7 @@ const About = () => {
       nodeObserver.disconnect();
       pillarObserver.disconnect();
     };
-  }, []);
+  }, [counterTriggered]);
 
   return (
     <div className="about-page">
@@ -522,122 +564,172 @@ const About = () => {
         </div>
       </section>
 
-      {/* Interactive "Then vs Now" Time-Slider */}
-      <section className="era-slider-section" id="era-slider-section">
+      {/* Part 3: Section 5 — Inside The Atelier */}
+      <section className="atelier-redesign-section" id="atelier">
         <div className="container">
-          <div className="section-header text-center" style={{ marginBottom: '40px' }}>
-            <p className="section-label">Interactive Experience</p>
-            <div className="gold-line-center" style={{ marginTop: '12px' }}></div>
-            <h2 className="section-title">The Evolution of the Craft</h2>
+          <div className="section-header text-center" style={{ marginBottom: '60px' }}>
+            <span className="beginning-eyebrow">CRAFTSMANSHIP SEQUENCE</span>
+            <h2 className="section-title" style={{ marginTop: '12px' }}>Inside The Atelier</h2>
+            <div className="heritage-hero__gold-divider" style={{ margin: '16px auto 0', width: '120px' }}>
+              <span className="gold-divider-diamond">◆</span>
+            </div>
             <p className="section-subtitle" style={{ maxWidth: '640px', margin: '14px auto 0' }}>
-              Drag the slider below to scrub through time — see how our traditional hand forging morphed into modern 2026 precision technology.
+              Trace the five essential stages of crafting Kalrav Jewels — transforming raw precious silver into enduring masterpieces.
             </p>
           </div>
 
-          <div
-            className="era-slider-container"
-            ref={sliderRef}
-            onMouseDown={(e) => {
-              setIsDragging(true);
-              handleMove(e.clientX);
-            }}
-            onMouseMove={handleMouseMove}
-            onTouchStart={(e) => {
-              setIsDragging(true);
-              handleMove(e.touches[0].clientX);
-            }}
-            onTouchMove={handleTouchMove}
-          >
-            {/* Heritage Side (Underneath / Background) */}
-            <div className="era-panel era-panel--past">
-              <div className="era-content">
-                <span className="era-year-badge era-year-badge--past">HERITAGE ERA • EST. GENERATION 1</span>
-                <h3 className="era-heading">Flame, Crucible & Anvil</h3>
-                <p className="era-body">
-                  Raw gold & silver melted in clay crucibles over glowing embers. Every ingot was hammered by hand, shaped with patience, and polished with artisan pride in a small local atelier.
-                </p>
-                <div className="era-tags">
-                  <span>🔥 Open Flame Crucible</span>
-                  <span>🔨 Heavy Hammer & Anvil</span>
-                  <span>👁️ Hand-Eye Purity Mastery</span>
-                </div>
+          {/* 5 Stages Sequence Cards */}
+          <div className="atelier-sequence-track">
+            <div className="atelier-stage-card">
+              <div className="stage-num-tag">01 • RAW MATERIAL</div>
+              <h3 className="stage-card-title">Silver Ingot & Ore</h3>
+              <p className="stage-card-desc">Certified 925 pure silver ingots selected for zero impurity tolerance and optimal metallurgical density.</p>
+              <div className="stage-svg-wrap">
+                <svg viewBox="0 0 200 120" fill="none" className="stage-svg">
+                  <path d="M30 70 L100 40 L170 70 L100 100 Z" stroke="#C9A646" strokeWidth="1.5" fill="rgba(201, 166, 70, 0.05)" />
+                  <path d="M30 70 V85 L100 115 V100 Z" stroke="#C9A646" strokeWidth="1.2" fill="rgba(201, 166, 70, 0.1)" />
+                  <path d="M170 70 V85 L100 115 V100 Z" stroke="#C9A646" strokeWidth="1.2" fill="rgba(201, 166, 70, 0.15)" />
+                </svg>
               </div>
             </div>
 
-            {/* 2026 Modern Side (Clipped Overlay) */}
-            <div
-              className="era-panel era-panel--modern"
-              style={{ clipPath: `polygon(${sliderPos}% 0, 100% 0, 100% 100%, ${sliderPos}% 100%)` }}
-            >
-              <div className="era-content">
-                <span className="era-year-badge era-year-badge--modern">2026 • THE DIGITAL HORIZON</span>
-                <h3 className="era-heading">3D CAD & Laser Precision</h3>
-                <p className="era-body">
-                  Modern induction furnaces, micron-level 3D CAD modeling, and micro-laser setting — creating flawless 925 sterling silver delivered to customers globally via our digital storefront.
-                </p>
-                <div className="era-tags">
-                  <span>⚡ 3D CAD & Laser Cutting</span>
-                  <span>✨ 925 Sterling Hallmarked</span>
-                  <span>🌐 Global Online Storefront</span>
-                </div>
+            <div className="atelier-stage-card">
+              <div className="stage-num-tag">02 • CRAFT</div>
+              <h3 className="stage-card-title">Forging & Filigree</h3>
+              <p className="stage-card-desc">Hand beating over heavy steel anvils, forming seamless curves and delicate wire filigree with unyielding patience.</p>
+              <div className="stage-svg-wrap">
+                <svg viewBox="0 0 200 120" fill="none" className="stage-svg">
+                  <path d="M40 85 H160 V95 H40 Z" stroke="#C9A646" strokeWidth="1.5" />
+                  <path d="M70 85 V55 H130 V85" stroke="#8A877F" strokeWidth="1" strokeDasharray="2 2" />
+                  <path d="M100 55 C100 35 120 35 120 55 Z" stroke="#D8C58A" strokeWidth="1.2" fill="none" />
+                </svg>
               </div>
             </div>
 
-            {/* Draggable Divider Handle */}
-            <div
-              className="era-slider-divider"
-              style={{ left: `${sliderPos}%` }}
-            >
-              <div className="era-slider-handle" title="Drag to compare Heritage vs 2026">
-                <span className="handle-arrow">◄</span>
-                <span className="handle-text">HERITAGE | 2026</span>
-                <span className="handle-arrow">►</span>
+            <div className="atelier-stage-card">
+              <div className="stage-num-tag">03 • PRECISION</div>
+              <h3 className="stage-card-title">Gemstone Setting</h3>
+              <p className="stage-card-desc">Microscopic optic loupe stone inspection and high-powered laser claw setting with mathematical stability.</p>
+              <div className="stage-svg-wrap">
+                <svg viewBox="0 0 200 120" fill="none" className="stage-svg">
+                  <circle cx="100" cy="55" r="32" stroke="#C9A646" strokeWidth="1.5" />
+                  <polygon points="100,12 112,35 100,58 88,35" stroke="#D8C58A" strokeWidth="1.2" fill="rgba(216, 197, 138, 0.1)" />
+                  <line x1="100" y1="58" x2="100" y2="108" stroke="#8A877F" strokeWidth="1" />
+                </svg>
+              </div>
+            </div>
+
+            <div className="atelier-stage-card">
+              <div className="stage-num-tag">04 • POLISHING</div>
+              <h3 className="stage-card-title">Mirror Hand-Buffing</h3>
+              <p className="stage-card-desc">Multi-stage cotton wheel hand polishing to achieve a radiant, scratch-resistant sterling mirror shine.</p>
+              <div className="stage-svg-wrap">
+                <svg viewBox="0 0 200 120" fill="none" className="stage-svg">
+                  <circle cx="100" cy="60" r="42" stroke="#C9A646" strokeWidth="1" strokeDasharray="4 2" />
+                  <circle cx="100" cy="60" r="28" stroke="#D8C58A" strokeWidth="1.2" />
+                  <path d="M100 18 V102 M58 60 H142" stroke="#8A877F" strokeWidth="0.5" opacity="0.4" />
+                </svg>
+              </div>
+            </div>
+
+            <div className="atelier-stage-card atelier-stage-card--hero">
+              <div className="stage-num-tag">05 • MASTERPIECE</div>
+              <h3 className="stage-card-title">Finished Jewellery</h3>
+              <p className="stage-card-desc">100% certified 925 hallmarked sterling silver, packaged in luxury boxes for generations of wearers.</p>
+              <div className="stage-img-wrap">
+                <img src="/hero_jewelry.png" alt="Kalrav Jewels Masterpiece" className="atelier-real-img" loading="lazy" />
               </div>
             </div>
           </div>
         </div>
       </section>
 
-      {/* Craftsmanship Evolution Grid */}
-      <section className="craft-evolution-section">
+      {/* Part 3: Heritage Counter */}
+      <section className="heritage-counter-section" ref={counterRef}>
         <div className="container">
-          <div className="section-header text-center" style={{ marginBottom: '50px' }}>
-            <p className="section-label">Inside The Atelier</p>
-            <div className="gold-line-center" style={{ marginTop: '12px' }}></div>
-            <h2 className="section-title">The Four Pillars of Evolution</h2>
-            <p className="section-subtitle" style={{ maxWidth: '600px', margin: '14px auto 0' }}>
-              Explore how each fundamental stage of making Kalrav Jewels evolved across four generations of family dedication.
+          <div className="counter-header text-center">
+            <span className="counter-eyebrow">VERIFIABLE HERITAGE</span>
+            <h2 className="counter-title">Our Legacy in Numbers</h2>
+            <div className="heritage-hero__gold-divider" style={{ margin: '16px auto 0', width: '120px' }}>
+              <span className="gold-divider-diamond">◆</span>
+            </div>
+          </div>
+
+          <div className="counter-grid">
+            <div className="counter-card">
+              <span className="counter-val">{counts.gens}</span>
+              <span className="counter-label">GENERATIONS OF CRAFTSMANSHIP</span>
+              <p className="counter-sub">From our founding patriarch to modern digital artisans.</p>
+            </div>
+            <div className="counter-card">
+              <span className="counter-val">{counts.legacy}</span>
+              <span className="counter-label">UNBROKEN FAMILY LEGACY</span>
+              <p className="counter-sub">Dedicated to metal purity, trust, and family integrity.</p>
+            </div>
+            <div className="counter-card">
+              <span className="counter-val">{counts.years}+</span>
+              <span className="counter-label">YEARS OF HISTORY</span>
+              <p className="counter-sub">Decades of hand-hammering and jewellery innovation.</p>
+            </div>
+            <div className="counter-card">
+              <span className="counter-val">{counts.hallmarked}%</span>
+              <span className="counter-label">HALLMARKED 925 STERLING</span>
+              <p className="counter-sub">Certified lifetime authenticity on every single piece.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Part 3: Heritage-to-Future Transition */}
+      <section className="heritage-transition-section" ref={transitionRef}>
+        <div className="container">
+          <div className="transition-header text-center">
+            <span className="beginning-eyebrow">THE CONTINUUM OF ARTISTRY</span>
+            <h2 className="transition-title">Built on Tradition. Designed for Tomorrow.</h2>
+            <p className="transition-subtitle">
+              We honour where we came from while building where we are going.
             </p>
           </div>
 
-          {/* Stage Tabs */}
-          <div className="craft-stage-tabs">
-            {craftStages.map((st, idx) => (
-              <button
-                key={st.id}
-                className={`craft-tab-btn ${activeStage === idx ? 'active' : ''}`}
-                onClick={() => setActiveStage(idx)}
-              >
-                <span className="craft-tab-num">{st.stage}</span>
-                <span className="craft-tab-title">{st.title}</span>
-              </button>
-            ))}
-          </div>
+          <div className="transition-split-card">
+            {/* Heritage Left Side */}
+            <div className="transition-side transition-side--past">
+              <div className="transition-side-tag">HERITAGE ERA • EST. GENERATION 1</div>
+              <h3 className="transition-side-title">Hand-Hammered Artistry</h3>
+              <p className="transition-side-desc">
+                Rooted in open-flame crucibles, hand-hammered steel anvils, and sacred family trust established at the patriarch workbench.
+              </p>
+              <div className="transition-svg-sketch">
+                <svg viewBox="0 0 240 140" fill="none" className="transition-svg">
+                  <path d="M30 110 H210 V120 H30 Z" stroke="#C9A646" strokeWidth="1.5" />
+                  <path d="M60 110 V60 H180 V110" stroke="#8A877F" strokeWidth="1" strokeDasharray="3 3" />
+                  <circle cx="120" cy="60" r="24" stroke="#D8C58A" strokeWidth="1.2" />
+                </svg>
+              </div>
+            </div>
 
-          {/* Active Stage Display Card */}
-          <div className="craft-stage-card">
-            <div className="craft-card-side craft-card-side--past">
-              <div className="craft-badge">Patriarch Traditional Method</div>
-              <h3>{craftStages[activeStage].pastTitle}</h3>
-              <p>{craftStages[activeStage].pastDesc}</p>
+            {/* Center Golden Seal */}
+            <div className="transition-center-seal">
+              <div className="seal-diamond">
+                <span className="seal-icon">◆</span>
+                <span className="seal-text">HERITAGE EVOLUTION</span>
+              </div>
             </div>
-            <div className="craft-card-divider">
-              <div className="divider-icon">➔</div>
-            </div>
-            <div className="craft-card-side craft-card-side--modern">
-              <div className="craft-badge craft-badge--gold">2026 Modern Innovation</div>
-              <h3>{craftStages[activeStage].modernTitle}</h3>
-              <p>{craftStages[activeStage].modernDesc}</p>
+
+            {/* Future Right Side */}
+            <div className="transition-side transition-side--future">
+              <div className="transition-side-tag">2026 DIGITAL HORIZON • GENERATION 5</div>
+              <h3 className="transition-side-title">Contemporary 925 Precision</h3>
+              <p className="transition-side-desc">
+                Powered by 3D CAD modeling, micron-level laser setting, and 100% hallmarked 925 sterling silver delivered worldwide online.
+              </p>
+              <div className="transition-svg-geometry">
+                <svg viewBox="0 0 240 140" fill="none" className="transition-svg">
+                  <circle cx="120" cy="70" r="46" stroke="#C9A646" strokeWidth="1.5" strokeDasharray="4 2" />
+                  <circle cx="120" cy="70" r="32" stroke="#D8C58A" strokeWidth="1.2" />
+                  <polygon points="120,24 130,48 120,72 110,48" fill="#C9A646" opacity="0.85" />
+                </svg>
+              </div>
             </div>
           </div>
         </div>
